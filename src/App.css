@@ -7,6 +7,35 @@
   pointer-events: none;
 }
 
+#AllStatesTable {
+  overflow: auto;
+  overflow-y: auto;
+  display: block;
+  /* table-layout: auto; */
+  max-height: 30em;
+  position: relative;
+  }
+
+
+  /* .table-fixed tbody > tr > th {
+    position: sticky;
+    left: 0;
+    background: white;
+  } */
+#AllStatesTable thead > tr > th {
+  position: sticky;
+  top: 0;
+  background: white;
+  border-top: thick;
+}
+#AllStatesTable thead {
+  position: sticky;
+  top: 0;
+  background: white;
+}
+
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
