@@ -34,13 +34,12 @@ class App extends React.Component {
     let startTime = (+ new Date())
 
 
-    fetch("//127.0.0.1:3000/api/v1/states", {
+    fetch(process.env.REACT_APP_FETCH_LOCATION + "states", {
       method: "GET",
       headers: {
         "content-type": "application/json",
         accepts: "application/json",
-        // FetchPW: `${token}`
-        FetchPW: `mcnafetchpassword`
+        FetchPW: process.env.REACT_APP_FETCH_PASSWORD
       }
     })
     .then(resp => resp.json())
@@ -53,13 +52,13 @@ class App extends React.Component {
         console.log("Processing Time for Full Fetch = ", ((+ new Date()) - startTime)/1000 )
       })
     
-    fetch("//127.0.0.1:3000/api/v1/processed_stats", {
+    fetch(process.env.REACT_APP_FETCH_LOCATION + "processed_stats", {
       method: "GET",
       headers: {
         "content-type": "application/json",
         accepts: "application/json",
         // FetchPW: `${token}`
-        FetchPW: `Tom`
+        FetchPW: process.env.REACT_APP_FETCH_PASSWORD
       }
     })  
     .then(resp => resp.json())
@@ -135,7 +134,6 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <h1>{process.env.REACT_APP_API_URL} </h1>
         <Container>
           <Row > 
             <Col md={12} >
