@@ -137,7 +137,7 @@ class App extends React.Component {
         <Container>
           <Row > 
             <Col md={12} >
-              <h1>Corona Virus Data</h1>
+              <h1>Corona Virus in the US: by the numbers</h1>
             </Col>
           </Row>
           <Row>
