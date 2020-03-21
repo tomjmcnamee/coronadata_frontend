@@ -143,7 +143,7 @@ class App extends React.Component {
           <Row>
             <Col md={3}>
             </Col>
-            <Col className="justify-content-center" md={3}>
+            <Col  md={3}>
               <Form >
                 <Form.Row>
                   <Form.Group  >
