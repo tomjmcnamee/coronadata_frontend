@@ -31,7 +31,7 @@ function GridBuilder(props) {
         let US_SumsGridline
         if (props.gridLinesArray.length > 0 ) {
 
-            xAxisDates = props.allDatesArr.map(date => <th  style={{position: "sticky", top: "0"}}>{getMonthDayFromYYYYMMDD(date)} </th> )
+            xAxisDates = props.allDatesArr.map(date => <th  key={date} style={{position: "sticky", top: "0"}}>{getMonthDayFromYYYYMMDD(date)} </th> )
             GridLines = props.gridLinesArray.map((gridLineObj, index) => <GridLinesBuilder 
                         key={index} 
                         mappedArrIndex={index} 
@@ -80,7 +80,6 @@ function GridBuilder(props) {
                 </tfoot>
               </Table>
           ) // ends "AccountDetails-SavedVehicles" RETURN
-        break 
       default:
         break
     } // ends switch

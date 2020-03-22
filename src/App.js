@@ -3,6 +3,7 @@ import GridBuilder from './components/GridBuilder'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
+import loadingMap from './assets/USSpreadMap.gif'
 
 
 
@@ -11,7 +12,6 @@ class App extends React.Component {
   // AUTOLOGIN Check and Fetch
 
   state = {
-    allStates: [],
     allDatesArr: [],
     newPositive: {},
     newNegative: {},
@@ -34,7 +34,7 @@ class App extends React.Component {
     let startTime = (+ new Date())
 
 
-    fetch(process.env.REACT_APP_FETCH_LOCATION + "states", {
+    fetch(process.env.REACT_APP_FETCH_LOCATION + "total_stats", {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -44,43 +44,38 @@ class App extends React.Component {
     })
     .then(resp => resp.json())
     .then((response) => {
-
-        console.log("coronaData---RESP ", response)
-        this.setState({
-          allStates: response.allStates
-        })
-        console.log("Processing Time for Full Fetch = ", ((+ new Date()) - startTime)/1000 )
-      })
-    
-    fetch(process.env.REACT_APP_FETCH_LOCATION + "processed_stats", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        accepts: "application/json",
-        // FetchPW: `${token}`
-        FetchPW: process.env.REACT_APP_FETCH_PASSWORD
-      }
-    })  
-    .then(resp => resp.json())
-    .then((response) => {
-
         console.log("coronaData---RESP ", response)
         this.setState({
           allDatesArr: response.allDatesArr,
-          allTOTALStats: response.allTOTALStats,
-          allNEWStats: response. allNEWStats,
-          newPositive: response.newPositive,
-          newNegative: response.newNegative,
-          newDeath: response.newDeath,
-          newTotal: response.newTotal,
-          totalPositive: response.totalPositive,
           totalNegative: response.totalNegative,
           totalPending: response.totalPending,
           totalDeath: response.totalDeath,
-          totalTotal: response.totalTotal
+          totalTotal: response.totalTotal,
+          totalPositive: response.totalPositive          
         })
-        console.log("Processing Time for Full Fetch = ", ((+ new Date()) - startTime)/1000 )
+        console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
+        fetch(process.env.REACT_APP_FETCH_LOCATION + "new_stats", {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            accepts: "application/json",
+            // FetchPW: `${token}`
+            FetchPW: process.env.REACT_APP_FETCH_PASSWORD
+          }
+        })  
+        .then(resp => resp.json())
+        .then((response) => {
+          console.log("coronaData---RESP ", response)
+          this.setState({
+            newPositive: response.newPositive,
+            newNegative: response.newNegative,
+            newDeath: response.newDeath,
+            newTotal: response.newTotal
+          })
+          console.log("Processing Time for NEW Fetch = ", ((+ new Date()) - startTime)/1000 )
+        })
       })
+    
       // .catch((error) => {
       //   debugger 
       //   console.log("Fetch Full Data errors - ", error)
@@ -179,16 +174,21 @@ class App extends React.Component {
               <h3>{tableDescription()}</h3>
             </Col>
           </Row>
-          <Row>  
-            <GridBuilder
-              gridType="AllStates-PerDay"
-              allDatesArr={this.state.allDatesArr}
-              gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
-              selectedStatType={this.state.selectedStatType}
-            />
+          <Row>
+            {this.state.totalPositive.length > 0
+              ?  
+                <GridBuilder
+                  gridType="AllStates-PerDay"
+                  allDatesArr={this.state.allDatesArr}
+                  gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
+                  selectedStatType={this.state.selectedStatType}
+                />
+              :
+                <img src={loadingMap} alt="Loading gif - outbreak map" ></img>
+             }
           </Row>
         </Container>
-
+        <h6>Updated once daily at 4:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/">CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data">this article</a>).</h6>
 
       </div>
     ) //ends return

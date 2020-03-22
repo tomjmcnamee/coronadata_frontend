@@ -1,6 +1,6 @@
 import React from 'react'
 // import { claimAndUnclaimRide } from '../../actions'
-import { Button, Form } from 'react-bootstrap'
+// import { Button, Form } from 'react-bootstrap'
 import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething' 
 
 
@@ -15,7 +15,7 @@ class GridLinesBuilder extends React.Component {
       switch (this.props.gridType) {
 
         case "AllStates-PerDay":
-          let dateData = this.props.allDatesArr.map( date => <td>{this.props.gridLineObj[date]}</td>)
+          let dateData = this.props.allDatesArr.map( date => <td key={date}>{this.props.gridLineObj[date]}</td>)
           // debugger
             return(
             <tr >

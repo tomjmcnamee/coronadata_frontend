@@ -14,13 +14,13 @@ const getMonthDayFromYYYYMMDD = (YYYYMMDDint) => {
 };
 
 
-const mapStateIdToStateAbbreviation = (id) => {
-  switch (id) {
-    case 56: return "MP"
+// const mapStateIdToStateAbbreviation = (id) => {
+//   switch (id) {
+//     case 56: return "MP"
 
-    default: return "Correct State Name switch  case in HelperFunctions/mappingIDtoSomething.js"
-  } // ends switch/case 
-} // ends mapStateIdToStateAbbreviation function
+//     default: return "Correct State Name switch  case in HelperFunctions/mappingIDtoSomething.js"
+//   } // ends switch/case 
+// } // ends mapStateIdToStateAbbreviation function
 
 
 

@@ -22,7 +22,10 @@
     left: 0;
     background: white;
   } */
-#AllStatesTable thead > tr > th {
+#AllStatesTable thead > tr > th 
+/* #AllStatesTable thead > tr,  */
+/* #AllStatesTable thead  */
+{
   position: sticky;
   top: 0;
   background: white;
