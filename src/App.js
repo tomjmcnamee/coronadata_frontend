@@ -131,14 +131,14 @@ class App extends React.Component {
       <div className="App">
         <Container>
           <Row > 
-            <Col md={12} >
+            <Col sm={12} >
               <h1>Corona Virus in the US: by the numbers</h1>
             </Col>
           </Row>
           <Row>
-            <Col md={3}>
+            <Col sm={3}>
             </Col>
-            <Col  md={3}>
+            <Col  sm={3}>
               <Form >
                 <Form.Row>
                   <Form.Group  >
@@ -154,7 +154,7 @@ class App extends React.Component {
                 </Form.Row>
               </Form>
             </Col>
-            <Col className="justify-content-center" md={3}>
+            <Col className="justify-content-center" sm={3}>
               <Form >
                 <Form.Row>
                   <Form.Group  >
@@ -166,11 +166,11 @@ class App extends React.Component {
                 </Form.Row>
               </Form>
             </Col>
-            <Col md={3}>
+            <Col sm={3}>
             </Col>
           </Row>
           <Row>
-            <Col md={12} >
+            <Col sm={12} >
               <h3>{tableDescription()}</h3>
             </Col>
           </Row>

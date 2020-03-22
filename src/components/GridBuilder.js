@@ -63,7 +63,7 @@ function GridBuilder(props) {
                       />)
           } // ends GridLines IF statement
           return( 
-              <Table striped bordered hover id="AllStatesTable" className="table table-fixed" >
+              <Table striped bordered hover responsive id="AllStatesTable" className="table table-fixed" >
                 <thead >
                   <tr >
                     <th ></th>
