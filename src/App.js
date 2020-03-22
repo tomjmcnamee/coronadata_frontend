@@ -184,7 +184,7 @@ class App extends React.Component {
                   selectedStatType={this.state.selectedStatType}
                 />
               :
-                <img src={loadingMap} alt="Loading gif - outbreak map" ></img>
+                <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
              }
           </Row>
         </Container>

@@ -16,6 +16,15 @@
   position: relative;
   }
 
+  #outbreak_map_gif {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 90%;
+  margin: 20px auto;
+}
+
 
   /* .table-fixed tbody > tr > th {
     position: sticky;
