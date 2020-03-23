@@ -170,7 +170,7 @@ class App extends React.Component {
         <Container>
           <Row > 
             <Col sm={12} >
-              <h1>Coronavirus in the US: by the numbers</h1>
+              <h3>Coronavirus in the US: by the numbers</h3>
             </Col>
           </Row>
           <Row>
@@ -229,7 +229,7 @@ class App extends React.Component {
           </Row>
           <Row>
             <Col sm={12} >
-              <h3>{tableDescription()}</h3>
+              <h5>{tableDescription()}</h5>
             </Col>
           </Row>
           <Row>
