@@ -200,7 +200,7 @@ class App extends React.Component {
                   <Form.Group  >
                     {this.state.newOrTotal === "new"
                     ?
-                      <Button className="typeButton" appearance="primary" size="md" name="new" active onClick={this.formChangeHandler}>
+                      <Button className="typeButton" appearance="primary" size="md" name="new" active>
                         New Per Day
                       </Button>
                     :
@@ -210,7 +210,7 @@ class App extends React.Component {
                     }
                     {this.state.newOrTotal === "total"
                     ?
-                      <Button className="typeButton"  appearance="primary" size="md" name="total" active onClick={this.formChangeHandler}>
+                      <Button className="typeButton"  appearance="primary" size="md" name="total" active >
                         Total
                     </Button>
                     :
