@@ -27,7 +27,8 @@ class App extends React.Component {
     totalTotal: {},
 
     selectedStatType: "Positive",
-    newOrTotal: "total"
+    newOrTotal: "total",
+    sortORder: "OldToNew"
   }
 
 
@@ -104,6 +105,40 @@ class App extends React.Component {
     }
   }
 
+  dateSortOrder = () => {
+    let sortOrder
+    if (this.state.sortOrder === "NewToOld"){
+      sortOrder = "OldToNew"
+    } else {
+      sortOrder = "NewToOld"
+    }
+
+    let newOrder = this.state.allDatesArr.reverse()
+    this.setState({
+      allDatesArr: newOrder,
+      sortOrder: sortOrder
+    })
+
+
+    // fetch(process.env.REACT_APP_FETCH_LOCATION + "date_order", {
+    //       method: "GET",
+    //       headers: {
+    //         "content-type": "application/json",
+    //         accepts: "application/json",
+    //         FetchPW: process.env.REACT_APP_FETCH_PASSWORD,
+    //         SortOrder: sortOrder
+    //       }
+    //     })  
+    //     .then(resp => resp.json())
+    //     .then((response) => {
+    //       console.log("coronaData---RESP ", response)
+    //       this.setState({
+    //         sortOrder: sortOrder,
+    //         newNegative: response.allDatesArr
+    //       })
+    //     })
+  }
+
 
 
   render() {
@@ -135,7 +170,7 @@ class App extends React.Component {
         <Container>
           <Row > 
             <Col sm={12} >
-              <h1>Corona Virus in the US: by the numbers</h1>
+              <h1>Coronavirus in the US: by the numbers</h1>
             </Col>
           </Row>
           <Row>
@@ -212,6 +247,22 @@ class App extends React.Component {
               :
                 <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
              }
+          </Row>
+          <Row>
+            {this.state.totalPositive.length > 0
+            ?
+              this.state.sortOrder === "NewToOld"
+              ?
+                <Button className="typeButton"  appearance="primary" size="md" name="sortOrder" active onClick={this.dateSortOrder}>
+                  Reorder Dates: Oldest To Newest
+                </Button> 
+              :
+                <Button className="typeButton"  appearance="primary" size="md" name="sortOrder" active onClick={this.dateSortOrder}>
+                  Reorder Dates: Newest To Oldest
+                </Button>
+            :
+            null
+            }
           </Row>
         </Container>
         <h6>Updated once daily at 4:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/">CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data">this article</a>).</h6>
