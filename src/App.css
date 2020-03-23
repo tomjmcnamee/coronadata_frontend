@@ -31,7 +31,9 @@
   font-size: 20px;
 }
   
-
+.typeButton {
+  margin: 3px;
+}
 
 
 @media (prefers-reduced-motion: no-preference) {
