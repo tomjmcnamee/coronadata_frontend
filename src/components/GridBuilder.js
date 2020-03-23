@@ -29,7 +29,7 @@ function GridBuilder(props) {
 
           xAxisDates = props.allDatesArr.map((date, index) => (
 
-            <Column width={60} key={index}>
+            <Column width={80} key={index}>
               <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
               <Cell dataKey={date.toString()} />
             </Column>
