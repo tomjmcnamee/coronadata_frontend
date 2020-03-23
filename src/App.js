@@ -1,7 +1,8 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'rsuite-table/dist/css/rsuite-table.css'
 import { Form, Col, Container, Row} from 'react-bootstrap'
 import loadingMap from './assets/USSpreadMap.gif'
 
@@ -177,12 +178,15 @@ class App extends React.Component {
           <Row>
             {this.state.totalPositive.length > 0
               ?  
+              <div id="statesTable" >
                 <GridBuilder
                   gridType="AllStates-PerDay"
                   allDatesArr={this.state.allDatesArr}
                   gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
                   selectedStatType={this.state.selectedStatType}
                 />
+              </div>
+
               :
                 <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
              }

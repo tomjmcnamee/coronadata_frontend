@@ -1,83 +1,66 @@
 import React from 'react'
-import GridLinesBuilder from './GridLinesBuilder'
-import Table  from 'react-bootstrap/Table'
-import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
+// import Table  from 'react-bootstrap/Table'
+import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
 
+import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
+import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething' 
 
 
 
 function GridBuilder(props) {
 
-  // const variableEditSelectedButtons = (callback) => {
-  //   if (props.checkedId === "") {
-  //     return <td><button type="button" className="btn btn-sm outline-primary"  disabled  >Edit Selected</button></td>
-  //   } else {
-  //     return <td><button type="button" className="btn btn-sm btn-primary"   onClick={props.editSelectedGridLine} >Edit Selected</button></td>
-  //   }
-  // }
-  // const variableDeleteSelectedButtons = (callback) => {
-  //   if (props.checkedId === "") {
-  //     return <td><button type="button" className="btn btn-sm outline-primary" disabled >Delete Selected</button></td>
-  //   } else {
-  //     return <td><button type="button" className="btn btn-sm btn-primary" onClick={props.deleteSelectedGridLine} >Delete Selected</button></td>
+  
 
-  //   }
-  // }
-
-    let GridLines = []
+    let formattedGridLinesArr = [...props.gridLinesArray]
     switch(props.gridType) {
       case "AllStates-PerDay":
         let xAxisDates
-        let US_SumsGridline
+        
         if (props.gridLinesArray.length > 0 ) {
 
-            xAxisDates = props.allDatesArr.map(date => <th  key={date} style={{position: "sticky", top: "0"}}>{getMonthDayFromYYYYMMDD(date)} </th> )
-            GridLines = props.gridLinesArray.map((gridLineObj, index) => <GridLinesBuilder 
-                        key={index} 
-                        mappedArrIndex={index} 
-                        gridLineObj={gridLineObj} 
-                        gridType="AllStates-PerDay"
-                        history={props.history}
-                        allDatesArr={props.allDatesArr}
-                        // checkboxHandler={props.checkboxHandler}
-                        // checkedId={props.checkedId}
-                      />)
+          // This builds the line for US SUMS   
+          let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
+          for (let day of props.allDatesArr) {
+            US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
+              function(prev, curr) {
+                return prev + curr[day]
+              }, 0)
+          } // ends FOR OF Loop
 
-              // This builds the line for US SUMS   
-              let US_Totals_Gridline = {state_id: 99}
-              for (let day of props.allDatesArr) {
-                US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
-                  function(prev, curr) {
-                    return prev + curr[day]
-                  }, 0)
-              } // ends FOR OF Loop
+          xAxisDates = props.allDatesArr.map((date, index) => (
 
-      US_SumsGridline = (<GridLinesBuilder 
-                        key={99} 
-                        gridLineObj={US_Totals_Gridline} 
-                        gridType="AllStates-PerDay"
-                        history={props.history}
-                        allDatesArr={props.allDatesArr}
-                        // checkboxHandler={props.checkboxHandler}
-                        // checkedId={props.checkedId}
-                      />)
+            <Column width={130}  key={index} className="max820">
+              <HeaderCell >{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
+              <Cell dataKey={date.toString()} />
+            </Column>
+
+          ))
+
+          formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
+          formattedGridLinesArr.unshift(US_Totals_Gridline)
+          
           } // ends GridLines IF statement
           return( 
-              <Table striped bordered hover responsive id="AllStatesTable" className="table table-fixed" >
-                <thead >
-                  <tr >
-                    <th ></th>
-                    {xAxisDates}
-                    <th ></th>
-                  </tr>
-                </thead>
-                <tbody>
+              <Table 
+                data={formattedGridLinesArr}
+                rowHeight={30}
+                height={275}
+              >
+                <Column width={90} align="left" fixed >
+                  <HeaderCell></HeaderCell>
+                  <Cell dataKey="state_name" />
+                </Column>
+               
+                
+                {xAxisDates}
+
+                {/* <tbody>
                   {US_SumsGridline}
                   {GridLines}
                 </tbody>
                 <tfoot>
 
-                </tfoot>
+                </tfoot> */}
               </Table>
           ) // ends "AccountDetails-SavedVehicles" RETURN
       default:

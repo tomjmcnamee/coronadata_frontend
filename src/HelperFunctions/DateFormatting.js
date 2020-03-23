@@ -6,10 +6,11 @@ const getMonthDayFromYYYYMMDD = (YYYYMMDDint) => {
     let [ year, month, day ] = reformat1.split("-")
   
     // Create a list of names for the months
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',	'Nov', 'Dec'];
+    // var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',	'Nov', 'Dec'];
   
     // return a formatted date
-    return months[parseInt(month) -1 ] + " " + day;
+    // return months[parseInt(month) -1 ] + " " + day;
+    return month + "/" + day;
   }
 };
 

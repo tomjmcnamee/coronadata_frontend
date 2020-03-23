@@ -7,14 +7,7 @@
   pointer-events: none;
 }
 
-#AllStatesTable {
-  overflow: auto;
-  overflow-y: auto;
-  display: block;
-  /* table-layout: auto; */
-  max-height: 30em;
-  position: relative;
-  }
+
 
   #outbreak_map_gif {
   display: block;
@@ -25,26 +18,15 @@
   margin: 20px auto;
 }
 
+#statesTable {
+  padding-left: 2%;
+  padding-right: 2%;
+}
 
-  /* .table-fixed tbody > tr > th {
-    position: sticky;
-    left: 0;
-    background: white;
-  } */
-#AllStatesTable thead > tr > th 
-/* #AllStatesTable thead > tr,  */
-/* #AllStatesTable thead  */
-{
-  position: sticky;
-  top: 0;
-  background: white;
-  border-top: thick;
+.rs-table-cell-content {
+  font-size: 17px;
 }
-#AllStatesTable thead {
-  position: sticky;
-  top: 0;
-  background: white;
-}
+  
 
 
 
@@ -69,6 +51,10 @@
   color: #61dafb;
 }
 
+/* .max820{
+  display: none;
+} */
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -76,4 +62,52 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@media only screen and (max-width: 820px) {
+      
+  .columnL{
+    float: left;
+    width: 100%;
+  }
+  .columnR { 
+    float: left;
+    width: 100%;
+  }
+
+  .row {
+    max-width: 820px;
+    margin: 2px auto 4px;
+
+  }
+  .title {
+    font-size: 25px;
+  }
+
+  
+}
+
+@media only screen and (max-width: 376px) {
+#TopOfPage img {
+display: none;
+}
+.columnL{
+float: left;
+width: 100%;
+}
+.columnR{
+float: left;
+width: 100%;
+}
+
+.row {
+max-width: 370px;
+margin: 2px auto 4px;
+
+}
+.title {
+font-size: 25px;
+}
+
+
 }
