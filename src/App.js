@@ -5,6 +5,8 @@ import './App.css';
 import 'rsuite-table/dist/css/rsuite-table.css'
 import { Form, Col, Container, Row} from 'react-bootstrap'
 import loadingMap from './assets/USSpreadMap.gif'
+import 'rsuite/dist/styles/rsuite-default.css';
+import { Button } from 'rsuite';
 
 
 
@@ -138,6 +140,7 @@ class App extends React.Component {
           </Row>
           <Row>
             <Col sm={3}>
+            
             </Col>
             <Col  sm={3}>
               <Form >
@@ -154,13 +157,32 @@ class App extends React.Component {
                   </Form.Group  >
                 </Form.Row>
               </Form>
+              
             </Col>
             <Col className="justify-content-center" sm={3}>
               <Form >
                 <Form.Row>
                   <Form.Group  >
-                    <Form.Check type="radio" name="new" label="New Per Day" checked={this.state.newOrTotal === "new"} onChange={this.formChangeHandler} />
-                    <Form.Check type="radio" name="total" label="Total" checked={this.state.newOrTotal === "total"} onChange={this.formChangeHandler} /> 
+                    {this.state.newOrTotal === "new"
+                    ?
+                      <Button appearance="primary" size="md" name="new" active onClick={this.formChangeHandler}>
+                        New Per Day
+                      </Button>
+                    :
+                      <Button appearance="ghost" size="md" name="new"  onClick={this.formChangeHandler}>
+                        New Per Day
+                      </Button>
+                    }
+                    {this.state.newOrTotal === "total"
+                    ?
+                      <Button appearance="primary" size="md" name="total" active onClick={this.formChangeHandler}>
+                        Total
+                    </Button>
+                    :
+                      <Button appearance="ghost" size="md" name="total"  onClick={this.formChangeHandler}>
+                        Total
+                    </Button>
+                    }
                   </Form.Group  >
                   {/* <Form.Group  > */}
                   {/* </Form.Group  > */}
