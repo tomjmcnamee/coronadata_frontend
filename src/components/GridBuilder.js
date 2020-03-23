@@ -29,8 +29,8 @@ function GridBuilder(props) {
 
           xAxisDates = props.allDatesArr.map((date, index) => (
 
-            <Column width={130}  key={index} className="max820">
-              <HeaderCell >{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
+            <Column width={60} key={index}>
+              <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
               <Cell dataKey={date.toString()} />
             </Column>
 
@@ -43,10 +43,10 @@ function GridBuilder(props) {
           return( 
               <Table 
                 data={formattedGridLinesArr}
-                rowHeight={30}
+                rowHeight={32}
                 height={275}
               >
-                <Column width={90} align="left" fixed >
+                <Column width={90} align="left"  fixed >
                   <HeaderCell></HeaderCell>
                   <Cell dataKey="state_name" />
                 </Column>
