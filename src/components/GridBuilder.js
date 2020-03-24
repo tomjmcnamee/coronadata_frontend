@@ -46,7 +46,7 @@ function GridBuilder(props) {
                 rowHeight={32}
                 height={275}
               >
-                <Column width={90} align="left"  fixed >
+                <Column width={115} align="left"  fixed >
                   <HeaderCell></HeaderCell>
                   <Cell dataKey="state_name" />
                 </Column>
