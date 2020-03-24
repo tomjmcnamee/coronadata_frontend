@@ -1,9 +1,12 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
+import ChartBuilder from './components/ChartBuilder'
 import './App.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import 'rsuite-table/dist/css/rsuite-table.css'
-import { Form, Col, Container, Row} from 'react-bootstrap'
+import { Form, Col, Container, Row, Tabs, Tab} from 'react-bootstrap'
+// import Tabs from 'react-bootstrap/Tabs'
+// import Tab  from 'react-bootstrap/Tab'
+
 import loadingMap from './assets/USSpreadMap.gif'
 import 'rsuite/dist/styles/rsuite-default.css';
 import { Button } from 'rsuite';
@@ -28,7 +31,10 @@ class App extends React.Component {
 
     selectedStatType: "Positive",
     newOrTotal: "total",
-    sortORder: "OldToNew"
+    sortOrder: "OldToNew",
+
+    displayType: "table"
+
   }
 
 
@@ -88,17 +94,20 @@ class App extends React.Component {
   }
 
   formChangeHandler = (event) => {
-    if (event.target.name === "new" || event.target.name === "total") {
-      let newVal = event.target.name
-      if (this.state.selectedStatType === "Pending" ) {
+    // debugger
+    if (event.target.dataset.buttontype) {
+      // let newVal = event.target.name
+      if (event.target.name === "new" &&this.state.selectedStatType === "Pending" ) {
         this.setState({
           selectedStatType: "Positive"
         })
-      } 
+      }
+      // This handles the BUTTONS
       this.setState({
-        newOrTotal: newVal
+        [event.target.dataset.buttontype]: event.target.name
       })
     } else {
+      // This handles the Dropdowns
       this.setState({
         [event.target.name]: event.target.value
       })
@@ -174,9 +183,6 @@ class App extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col sm={3}>
-            
-            </Col>
             <Col  sm={3}>
               <Form >
                 <Form.Row>
@@ -194,27 +200,29 @@ class App extends React.Component {
               </Form>
               
             </Col>
+          </Row>
+          <Row>
             <Col className="justify-content-center" sm={3}>
               <Form >
                 <Form.Row>
                   <Form.Group  >
                     {this.state.newOrTotal === "new"
                     ?
-                      <Button className="typeButton" appearance="primary" size="md" name="new" active>
+                      <Button className="typebutton" data-buttontype="newOrTotal" appearance="primary" size="md" name="new" active>
                         New Per Day
                       </Button>
                     :
-                      <Button className="typeButton" appearance="ghost" size="md" name="new"  onClick={this.formChangeHandler}>
+                      <Button className="typebutton" data-buttontype="newOrTotal" appearance="ghost" size="md" name="new"  onClick={this.formChangeHandler}>
                         New Per Day
                       </Button>
                     }
                     {this.state.newOrTotal === "total"
                     ?
-                      <Button className="typeButton"  appearance="primary" size="md" name="total" active >
+                      <Button className="typebutton"  data-buttontype="newOrTotal" appearance="primary" size="md" name="total" active >
                         Total
                     </Button>
                     :
-                      <Button className="typeButton"  appearance="ghost" size="md" name="total"  onClick={this.formChangeHandler}>
+                      <Button className="typebutton"  data-buttontype="newOrTotal" appearance="ghost" size="md" name="total"  onClick={this.formChangeHandler}>
                         Total
                     </Button>
                     }
@@ -224,8 +232,44 @@ class App extends React.Component {
                 </Form.Row>
               </Form>
             </Col>
-            <Col sm={3}>
-            </Col>
+          </Row>
+          <Row>
+            <Form >
+              <Form.Row>
+                <Form.Group  >
+                  {this.state.displayType === "table"
+                  ?
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="table" active >
+                      Raw Numbers Table
+                    </Button>
+                  :
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="table"  onClick={this.formChangeHandler}>
+                      Raw Numbers Table
+                    </Button>
+                  }
+                  {this.state.displayType === "allStates"
+                  ?
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="allStates" active >
+                      Grid of All States
+                    </Button>
+                  :
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="allStates"  onClick={this.formChangeHandler}>
+                      Grid of All States
+                    </Button>
+                  }
+                  {this.state.displayType === "singleState"
+                  ?
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="singleState" active >
+                      Single State Grid
+                    </Button>
+                  :
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="singleState"  onClick={this.formChangeHandler}>
+                      Single State Grid
+                    </Button>
+                  }            
+                </Form.Group  >
+              </Form.Row>
+            </Form >
           </Row>
           <Row>
             <Col sm={12} >
@@ -233,31 +277,32 @@ class App extends React.Component {
             </Col>
           </Row>
           <Row>
-            {this.state.totalPositive.length > 0
-              ?  
-              <div id="statesTable" >
-                <GridBuilder
-                  gridType="AllStates-PerDay"
-                  allDatesArr={this.state.allDatesArr}
-                  gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
-                  selectedStatType={this.state.selectedStatType}
-                />
-              </div>
+                {this.state.totalPositive.length > 0
+                ?  
+                  <div id="statesTable" >
+                    {/* <ChartBuilder /> */}
+                    <GridBuilder
+                      gridType="AllStates-PerDay"
+                      allDatesArr={this.state.allDatesArr}
+                      gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
+                      selectedStatType={this.state.selectedStatType}
+                    />
+                  </div>
 
-              :
-                <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
-             }
+                :
+                  <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
+                }
           </Row>
           <Row>
             {this.state.totalPositive.length > 0
             ?
               this.state.sortOrder === "NewToOld"
               ?
-                <Button className="typeButton"  appearance="primary" size="md" name="sortOrder" active onClick={this.dateSortOrder}>
+                <Button className="typebutton" data-buttontype="sortOrder"  appearance="primary" size="md" name="OldToNew" active onClick={this.dateSortOrder}>
                   Reorder Dates: Oldest To Newest
                 </Button> 
               :
-                <Button className="typeButton"  appearance="primary" size="md" name="sortOrder" active onClick={this.dateSortOrder}>
+                <Button className="typebutton" data-buttontype="sortOrder"  appearance="primary" size="md" name="NewToOld" active onClick={this.dateSortOrder}>
                   Reorder Dates: Newest To Oldest
                 </Button>
             :

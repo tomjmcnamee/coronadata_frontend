@@ -1,14 +1,13 @@
 import React from 'react'
 // import Table  from 'react-bootstrap/Table'
-import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
-import 'rsuite-table/dist/css/rsuite-table.css'
+// import LineChart from "@rsuite/charts/lib/charts/LineChart";
 
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething' 
 
 
 
-function GridBuilder(props) {
+function ChartBuilder(props) {
 
   
 
@@ -28,45 +27,25 @@ function GridBuilder(props) {
               }, 0)
           } // ends FOR OF Loop
 
-          xAxisDates = props.allDatesArr.map((date, index) => (
+          // xAxisDates = props.allDatesArr.map((date, index) => (
 
-            <Column width={80} key={index}>
-              <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
-              <Cell dataKey={date.toString()} />
-            </Column>
+          //   <Column width={80} key={index}>
+          //     <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
+          //     <Cell dataKey={date.toString()} />
+          //   </Column>
 
-          ))
+          // ))
 
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
           formattedGridLinesArr.unshift(US_Totals_Gridline)
           
           } // ends GridLines IF statement
           return( 
-              <Table 
-                data={formattedGridLinesArr}
-                rowHeight={32}
-                height={275}
-              >
-                <Column width={115} align="left"  fixed >
-                  <HeaderCell></HeaderCell>
-                  <Cell dataKey="state_name" />
-                </Column>
-               
-                
-                {xAxisDates}
-
-                {/* <tbody>
-                  {US_SumsGridline}
-                  {GridLines}
-                </tbody>
-                <tfoot>
-
-                </tfoot> */}
-              </Table>
+              <h1>hi</h1>
           ) // ends "AccountDetails-SavedVehicles" RETURN
       default:
         break
     } // ends switch
-}  // ends GridBuilder class
-export default GridBuilder
+}  // ends ChartBuilder class
+export default ChartBuilder
 
