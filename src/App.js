@@ -270,7 +270,8 @@ class App extends React.Component {
           <img src="https://hitwebcounter.com/counter/counter.php?page=7213589&style=0005&nbdigits=6&type=page&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" >
         </a>                
         <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
-<img src="https://hitwebcounter.com/counter/counter.php?page=7213591&style=0005&nbdigits=6&type=ip&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" >              
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7213591&style=0005&nbdigits=6&type=ip&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" >              
+        </a> 
       </div>
     ) //ends return
   } // ends render
