@@ -166,7 +166,7 @@ class App extends React.Component {
     if (this.state.idOfStateInSingleStateGrid === "99") {
       let count_types = ["new-total","new-positive","new-negative","new-death","total-total","total-positive","total-negative","total-death"]
       let state_type = ["newTotal","newPositive","newNegative","newDeath","totalTotal","totalPositive","totalNegative","totalDeath"]
-      let chartColumnName = [ "Total Tested - New", "Tested Positive - New", "Tested Negative - New","Deaths - New", "Total Tested - Cumulative", "Tested Positive - Cumulative", "Tested Negative - Cumulative", "Deaths - Cumulative"]
+      let chartColumnName = [ "Day Tested", "Day Positive", "Day Negative", "Day Deaths", "Total Tested", "Total Positive", "Total Negative", "Total Deaths"]
 
       for (let day of this.state.allDatesArr) { 
         let tempObj = {date: day, state_id: 99}
@@ -229,6 +229,7 @@ class App extends React.Component {
     }
 
     return (
+      
       <div className="App">
         <Container>
           <Row > 
@@ -295,6 +296,7 @@ class App extends React.Component {
             <Form >
               <Form.Row>
                 <Form.Group  >
+                  
                   {this.state.displayType === "table"
                   ?
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="table" active >

@@ -9,13 +9,45 @@ import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../Helpe
 
 
 
-function ChartBuilder(props) {
+class ChartBuilder extends React.Component {
 
+  state = {
+    width: {
+      "Day Positive": 2,
+      "Day Negative": 2,
+      "Day Tested": 2,
+      "Day Deaths" : 2,
+      "Total Tested": 2,
+      "Total Positive": 2,
+      "Total Negative": 2,
+      "Total Deaths" :2
+    },
+  };
+
+  handleMouseEnter = (o) => {
+    const { dataKey } = o;
+    const { width } = this.state;
+
+    this.setState({
+      width: { ...width, [dataKey]: 4 },
+    });
+  }
+
+  handleMouseLeave = (o) => {
+    const { dataKey } = o;
+    const { width } = this.state;
+
+    this.setState({
+      width: { ...width, [dataKey]: 2 },
+    });
+  }
   
+  render () {
+
+    const { width } = this.state
     let chartData = []
-    let formattedGridLinesArr = [...props.gridLinesArray]
-    
-    switch(props.gridType) {
+    let formattedGridLinesArr = [...this.props.gridLinesArray]
+    switch(this.props.gridType) {
       case "AllStatesChart":
 
         // const chartData = [
@@ -31,10 +63,10 @@ function ChartBuilder(props) {
         
         if (formattedGridLinesArr.length > 0 ) {
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
-          for ( let date1 of props.allDatesArr) { chartData.push({date: date1})}
+          for ( let date1 of this.props.allDatesArr) { chartData.push({date: date1})}
           chartData.forEach((dataObject, index) => 
             formattedGridLinesArr.forEach(stateDataObj =>
-              dataObject[stateDataObj.state_name] = stateDataObj[props.allDatesArr[index]]
+              dataObject[stateDataObj.state_name] = stateDataObj[this.props.allDatesArr[index]]
             )
           )
           console.log("This is the chart data ----" , chartData)
@@ -121,10 +153,10 @@ function ChartBuilder(props) {
           if (formattedGridLinesArr[0].state_id == 99) {
             chartData = formattedGridLinesArr
           } else {
-            for ( let date1 of props.allDatesArr) { chartData.push({date: date1})}
+            for ( let date1 of this.props.allDatesArr) { chartData.push({date: date1})}
             chartData.forEach((dataObject, index) => 
               formattedGridLinesArr.forEach(stateTypeObj =>
-                dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[props.allDatesArr[index]]
+                dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
               )
             )
           }
@@ -142,7 +174,7 @@ function ChartBuilder(props) {
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
-              {/* <Legend /> */}
+              <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} />
               {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" />
               <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
               {/* <Line type="monotone" dataKey="Alabama" stroke="#8884d8" /> */}
@@ -150,14 +182,14 @@ function ChartBuilder(props) {
 
 
 
-<Line type="monotone" dataKey="Tested Positive - New" stroke="#8884d8" />
-<Line type="monotone" dataKey="Tested Negative - New" stroke="#8884d8" />
-<Line type="monotone" dataKey="Total Tested - New" stroke="#8884d8" />
-<Line type="monotone" dataKey="Deaths - New" stroke="#8884d8" />
-<Line type="monotone" dataKey="Total Tested - Cumulative" stroke="#8884d8" />
-<Line type="monotone" dataKey="Tested Positive - Cumulative" stroke="#8884d8" />
-<Line type="monotone" dataKey="Tested Negative - Cumulative" stroke="#8884d8" />
-<Line type="monotone" dataKey="Deaths - Cumulative" stroke="#8884d8" />
+<Line type="monotone" dataKey="Day Positive" strokeWidth={width["Day Positive"]} stroke="pink"   />
+<Line type="monotone" dataKey="Day Negative" strokeWidth={width["Day Negative"]} stroke="#E5A419"   />
+<Line type="monotone" dataKey="Day Tested" strokeWidth={width["Day Tested"]} stroke="##1973E5"   />
+<Line type="monotone" dataKey="Day Deaths" strokeWidth={width["Day Deaths"]} stroke="grey"   />
+<Line type="monotone" dataKey="Total Tested" strokeWidth={width["Total Tested"]} stroke="#2F19E5"   />
+<Line type="monotone" dataKey="Total Positive" strokeWidth={width["Total Positive"]} stroke="#E51919"   />
+<Line type="monotone" dataKey="Total Negative" strokeWidth={width["Total Negative"]} stroke="#229954"   />
+<Line type="monotone" dataKey="Total Deaths" strokeWidth={width["Total Deaths"]} stroke="black"   />
 
 {/* <Line type="monotone" dataKey="new-total" stroke="#8884d8" />
 <Line type="monotone" dataKey="new-positive" stroke="#8884d8" />
@@ -178,6 +210,7 @@ function ChartBuilder(props) {
       default:
         break
     } // ends switch
+  }
 }  // ends ChartBuilder class
 export default ChartBuilder
 
