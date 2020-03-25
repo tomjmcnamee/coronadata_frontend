@@ -23,6 +23,12 @@
   padding-right: 2%;
 }
 
+#LineChart {
+  padding-left: 2%;
+  padding-right: 2%;
+  width: 100%
+}
+
 .rs-table-cell-content {
   font-size: 15px;
 }

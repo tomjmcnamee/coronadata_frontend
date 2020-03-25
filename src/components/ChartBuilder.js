@@ -13,14 +13,14 @@ class ChartBuilder extends React.Component {
 
   state = {
     width: {
-      "Day Positive": 2,
-      "Day Negative": 2,
-      "Day Tested": 2,
-      "Day Deaths" : 2,
-      "Total Tested": 2,
-      "Total Positive": 2,
-      "Total Negative": 2,
-      "Total Deaths" :2
+      "Positive": 2,
+      "Negative": 2,
+      "Tested": 2,
+      "Deaths" : 2,
+      // "Total Tested": 2,
+      // "Total Positive": 2,
+      // "Total Negative": 2,
+      // "Total Deaths" :2
     },
   };
 
@@ -182,6 +182,11 @@ class ChartBuilder extends React.Component {
 
 
 
+<Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   />
+<Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="#E5A419"   />
+<Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/>
+<Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="grey"   />
+{/* 
 <Line type="monotone" dataKey="Day Positive" strokeWidth={width["Day Positive"]} stroke="pink"   />
 <Line type="monotone" dataKey="Day Negative" strokeWidth={width["Day Negative"]} stroke="#E5A419"   />
 <Line type="monotone" dataKey="Day Tested" strokeWidth={width["Day Tested"]} stroke="#1973E5"/>
@@ -189,7 +194,7 @@ class ChartBuilder extends React.Component {
 <Line type="monotone" dataKey="Total Tested" strokeWidth={width["Total Tested"]} stroke="#2F19E5"   />
 <Line type="monotone" dataKey="Total Positive" strokeWidth={width["Total Positive"]} stroke="#E51919"   />
 <Line type="monotone" dataKey="Total Negative" strokeWidth={width["Total Negative"]} stroke="#229954"   />
-<Line type="monotone" dataKey="Total Deaths" strokeWidth={width["Total Deaths"]} stroke="black"   />
+<Line type="monotone" dataKey="Total Deaths" strokeWidth={width["Total Deaths"]} stroke="black"   /> */}
 
 {/* <Line type="monotone" dataKey="new-total" stroke="#8884d8" />
 <Line type="monotone" dataKey="new-positive" stroke="#8884d8" />

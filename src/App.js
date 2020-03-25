@@ -163,11 +163,21 @@ class App extends React.Component {
   singleStateData = () => {
     // debugger
     let output = []
+    let count_types = []
+    let state_type = []
+    let chartColumnName = []
     if (this.state.displayType === "allOfUSGraph") {
-      let count_types = ["new-total","new-positive","new-negative","new-death","total-total","total-positive","total-negative","total-death"]
-      let state_type = ["newTotal","newPositive","newNegative","newDeath","totalTotal","totalPositive","totalNegative","totalDeath"]
-      let chartColumnName = [ "Day Tested", "Day Positive", "Day Negative", "Day Deaths", "Total Tested", "Total Positive", "Total Negative", "Total Deaths"]
+      if (this.state.newOrTotal === "new") {
+         count_types = ["new-total","new-positive","new-negative","new-death"]
+         state_type =  ["newTotal","newPositive","newNegative","newDeath"]
+         chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
+      }else {
+         count_types = ["total-total","total-positive","total-negative","total-death"]
+         state_type =  ["totalTotal","totalPositive","totalNegative","totalDeath"]
+         chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
+      }
 
+      
       for (let day of this.state.allDatesArr) { 
         let tempObj = {date: day, state_id: 99}
         let index = 0
@@ -181,14 +191,17 @@ class App extends React.Component {
         output.push(tempObj)
       }
     } else {
-      output.push(this.state.newDeath.find((obj) => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)  ))
-      output.push(this.state.newTotal.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state.newPositive.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state.newNegative.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state.totalDeath.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state.totalTotal.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state.totalPositive.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state.totalNegative.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      if (this.state.newOrTotal === "new") {
+        output.push(this.state.newDeath.find((obj) => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)  ))
+        output.push(this.state.newTotal.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+        output.push(this.state.newPositive.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+        output.push(this.state.newNegative.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      } else {
+        output.push(this.state.totalDeath.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+        output.push(this.state.totalTotal.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+        output.push(this.state.totalPositive.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+        output.push(this.state.totalNegative.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      }
     }
     return output
   }
@@ -375,12 +388,14 @@ class App extends React.Component {
 
                   (this.state.displayType === "allOfUSGraph" || this.state.displayType === "singleStateChart")
                   ?
+                    <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="singleStateChart"
                                           allDatesArr={this.state.allDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                     />
+                    </div>
                   :
                   null
                 :

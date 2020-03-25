@@ -139,14 +139,14 @@ const mapStateIdToStateName = (id) => {
 
 const mapCountTypeToHumanReadableType = (counttype) => {
   switch (counttype) {
-    case "new-total": return "Day Tested"
-    case "new-positive": return "Day Positive"
-    case "new-negative": return "Day Negative"
-    case "new-death": return "Day Deaths"
-    case "total-total": return "Total Tested"
-    case "total-positive": return "Total Positive"
-    case "total-negative": return "Total Negative"
-    case "total-death": return "Total Deaths"
+    case "new-total": return "Tested"
+    case "new-positive": return "Positive"
+    case "new-negative": return "Negative"
+    case "new-death": return "Deaths"
+    case "total-total": return "Tested"
+    case "total-positive": return "Positive"
+    case "total-negative": return "Negative"
+    case "total-death": return "Deaths"
     default: return "mapCountTypeToHumanReadableType switch  case in HelperFunctions/mappingIDtoSomething.js"
   } // ends switch/case 
 }
