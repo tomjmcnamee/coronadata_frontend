@@ -155,7 +155,6 @@ class App extends React.Component {
       // Runs 5 times, with values of step 0 through 4.
       output.push(<option value={id}>{mapStateIdToStateName(parseInt(id))}</option>);
     }
-    output.push(<option value={99}>Combined US Stats</option>)
     console.log("State Dropdownb Option = ", output)
     return output
   }
@@ -355,7 +354,6 @@ class App extends React.Component {
                 <Form.Row>
                   <Form.Group  >
                       <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.state.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} > 
-                        <option value="99">Combined US Stats</option>
                         {this.dropdownOptionsForStates()}
                       </Form.Control>
                   </Form.Group  >
