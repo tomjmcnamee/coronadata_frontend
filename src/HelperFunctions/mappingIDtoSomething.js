@@ -137,8 +137,21 @@ const mapStateIdToStateName = (id) => {
   } // ends switch/case 
 } // ends mapStateIdToStateName function
 
-
+const mapCountTypeToHumanReadableType = (counttype) => {
+  switch (counttype) {
+    case "new-total": return "Total Tested - New"
+    case "new-positive": return "Tested Positive - New"
+    case "new-negative": return "Tested Negative - New"
+    case "new-death": return "Deaths - New"
+    case "total-total": return "Total Tested - Cumulative"
+    case "total-positive": return "Tested Positive - Cumulative"
+    case "total-negative": return "Tested Negative - Cumulative"
+    case "total-death": return "Deaths - Cumulative"
+    default: return "mapCountTypeToHumanReadableType switch  case in HelperFunctions/mappingIDtoSomething.js"
+  } // ends switch/case 
+}
 
 export { 
   // mapStateIdToStateAbbreviation,
-  mapStateIdToStateName  }
+  mapStateIdToStateName,
+  mapCountTypeToHumanReadableType  }

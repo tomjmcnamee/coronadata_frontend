@@ -13,6 +13,7 @@ function GridBuilder(props) {
   
 
     let formattedGridLinesArr = [...props.gridLinesArray]
+    // debugger
     switch(props.gridType) {
       case "AllStates-PerDay":
         let xAxisDates
