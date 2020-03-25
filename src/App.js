@@ -35,7 +35,7 @@ class App extends React.Component {
     sortOrder: "OldToNew",
 
     displayType: "table",
-    idOfStateInSingleStateGrid: 10
+    idOfStateInSingleStateGrid: "35"
   }
 
 
@@ -163,7 +163,7 @@ class App extends React.Component {
   singleStateData = () => {
     // debugger
     let output = []
-    if (this.state.idOfStateInSingleStateGrid === "99") {
+    if (this.state.displayType === "allOfUSGraph") {
       let count_types = ["new-total","new-positive","new-negative","new-death","total-total","total-positive","total-negative","total-death"]
       let state_type = ["newTotal","newPositive","newNegative","newDeath","totalTotal","totalPositive","totalNegative","totalDeath"]
       let chartColumnName = [ "Day Tested", "Day Positive", "Day Negative", "Day Deaths", "Total Tested", "Total Positive", "Total Negative", "Total Deaths"]
@@ -199,28 +199,32 @@ class App extends React.Component {
 
 
     let tableDescription = () => {
-      if (this.state.displayType === "singleStateChart"){
-        return `All data for ${mapStateIdToStateName(this.state.idOfStateInSingleStateGrid)}`
-      } else {
-      let newOrCumulative = () => {
-        switch (this.state.newOrTotal) {
-          case "new": return "Daily"
-          case "total": return "Cumulative"
-          default: return
-        }
-      }
-      let tableDesc = () => {
-
-          switch (this.state.selectedStatType) {
-            case "Positive": return "Positive Tests"
-            case "Negative": return "Negative Tests"
-            case "Pending": return "Pending Tests"
-            case "Death": return "Deaths"
-            case "Total": return "Tests Submitted"
+      if (this.state.displayType === "table"){
+        let newOrCumulative = () => {
+          switch (this.state.newOrTotal) {
+            case "new": return "Daily"
+            case "total": return "Cumulative"
             default: return
           }
         }
-        return `${newOrCumulative()} count of ${tableDesc()}`
+        let tableDesc = () => {
+  
+            switch (this.state.selectedStatType) {
+              case "Positive": return "Positive Tests"
+              case "Negative": return "Negative Tests"
+              case "Pending": return "Pending Tests"
+              case "Death": return "Deaths"
+              case "Total": return "Tests Submitted"
+              default: return
+            }
+          }
+          return `${newOrCumulative()} count of ${tableDesc()}`
+        } else {
+          if (this.state.displayType === "allOfUSGraph") {
+            return `All data for the entire U.S.`
+          } else {
+            return `All data for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
+          }
       }
 
       
@@ -242,10 +246,8 @@ class App extends React.Component {
               <Form >
                 <Form.Row>
                   <Form.Group  >
-                    {this.state.displayType === "singleStateChart"
+                    {this.state.displayType === "table"
                     ?
-                    null
-                    :
                       <Form.Control as="select" name="selectedStatType" value={this.state.selectedStatType} onChange={this.formChangeHandler} > 
                         <option value="Positive">Test Results: Positive</option>
                         <option value="Negative">Test Results: Negative</option>
@@ -253,6 +255,8 @@ class App extends React.Component {
                         <option value="Death">Corona Deaths</option>
                         <option value="Total">Total Tested</option>
                       </Form.Control>
+                    :
+                    null
                     }
                   </Form.Group  >
                 </Form.Row>
@@ -307,24 +311,24 @@ class App extends React.Component {
                       Raw Numbers Table
                     </Button>
                   }
-                  {this.state.displayType === "allStatesChart"
+                  {this.state.displayType === "allOfUSGraph"
                   ?
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="allStatesChart" active >
-                      Grid of All States
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="allOfUSGraph" active >
+                      All of U.S. Graph
                     </Button>
                   :
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="allStatesChart"  onClick={this.formChangeHandler}>
-                      Grid of All States
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="allOfUSGraph"  onClick={this.formChangeHandler}>
+                      All of U.S. Graph
                     </Button>
                   }
                   {this.state.displayType === "singleStateChart"
                   ?
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="singleStateChart" active >
-                      Single State Grid
+                      Single State Graph
                     </Button>
                   :
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State Grid
+                      Single State Graph
                     </Button>
                   }            
                 </Form.Group  >
@@ -369,18 +373,7 @@ class App extends React.Component {
                   :
 
 
-                  this.state.displayType === "allStatesChart"
-                  ?
-                    <ChartBuilder 
-                                          gridType="AllStatesChart"
-                                          allDatesArr={this.state.allDatesArr}
-                                          gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
-                                          selectedStatType={this.state.selectedStatType}
-                    />
-                  :
-
-
-                  this.state.displayType === "singleStateChart"
+                  (this.state.displayType === "allOfUSGraph" || this.state.displayType === "singleStateChart")
                   ?
                     <ChartBuilder 
                                           gridType="singleStateChart"
@@ -395,7 +388,7 @@ class App extends React.Component {
                 }
           </Row>
           <Row>
-            {this.state.totalPositive.length > 0
+            {(this.state.totalPositive.length > 0 && this.state.displayType === "table" )
             ?
               this.state.sortOrder === "NewToOld"
               ?

@@ -184,7 +184,7 @@ class ChartBuilder extends React.Component {
 
 <Line type="monotone" dataKey="Day Positive" strokeWidth={width["Day Positive"]} stroke="pink"   />
 <Line type="monotone" dataKey="Day Negative" strokeWidth={width["Day Negative"]} stroke="#E5A419"   />
-<Line type="monotone" dataKey="Day Tested" strokeWidth={width["Day Tested"]} stroke="##1973E5"   />
+<Line type="monotone" dataKey="Day Tested" strokeWidth={width["Day Tested"]} stroke="#1973E5"/>
 <Line type="monotone" dataKey="Day Deaths" strokeWidth={width["Day Deaths"]} stroke="grey"   />
 <Line type="monotone" dataKey="Total Tested" strokeWidth={width["Total Tested"]} stroke="#2F19E5"   />
 <Line type="monotone" dataKey="Total Positive" strokeWidth={width["Total Positive"]} stroke="#E51919"   />
