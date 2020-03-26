@@ -13,10 +13,10 @@ class ChartBuilder extends React.Component {
 
   state = {
     width: {
-      "Positive": 2,
-      "Negative": 2,
-      "Tested": 2,
-      "Deaths" : 2,
+      "Positive": 3,
+      "Negative": 3,
+      "Tested": 3,
+      "Deaths" : 3,
       // "Total Tested": 2,
       // "Total Positive": 2,
       // "Total Negative": 2,
@@ -29,7 +29,7 @@ class ChartBuilder extends React.Component {
     const { width } = this.state;
 
     this.setState({
-      width: { ...width, [dataKey]: 4 },
+      width: { ...width, [dataKey]: 6 },
     });
   }
 
@@ -38,7 +38,7 @@ class ChartBuilder extends React.Component {
     const { width } = this.state;
 
     this.setState({
-      width: { ...width, [dataKey]: 2 },
+      width: { ...width, [dataKey]: 3 },
     });
   }
   
@@ -184,7 +184,7 @@ class ChartBuilder extends React.Component {
 
 {this.props.includeTestedAndNegatives 
 ?
-  <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="#E5A419"   />
+  <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   />
 :
 null
 }
@@ -194,9 +194,14 @@ null
 :
 null
 }
-
+{this.props.includePositives 
+?
 <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   />
-<Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="grey"   />
+:
+null
+}
+
+<Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
 {/* 
 <Line type="monotone" dataKey="Day Positive" strokeWidth={width["Day Positive"]} stroke="pink"   />
 <Line type="monotone" dataKey="Day Negative" strokeWidth={width["Day Negative"]} stroke="#E5A419"   />

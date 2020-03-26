@@ -10,6 +10,7 @@ import { Form, Col, Container, Row, Tabs, Tab} from 'react-bootstrap'
 import loadingMap from './assets/USSpreadMap.gif'
 import 'rsuite/dist/styles/rsuite-default.css';
 import { mapStateIdToStateName } from './HelperFunctions/mappingIDtoSomething'
+import { getMonthDayFromYYYYMMDD } from './HelperFunctions/DateFormatting' 
 import { Button } from 'rsuite';
 
 
@@ -36,7 +37,8 @@ class App extends React.Component {
 
     displayType: "table",
     idOfStateInSingleStateGrid: "35",
-    includeTestedAndNegatives: false
+    includeTestedAndNegatives: false,
+    includePositives: true
   }
 
 
@@ -183,14 +185,13 @@ class App extends React.Component {
          state_type =  ["totalTotal","totalPositive","totalNegative","totalDeath"]
          chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       }
-
-      
       for (let day of this.state.allDatesArr) { 
-        let tempObj = {date: day, state_id: 99}
+        let tempObj = {date: getMonthDayFromYYYYMMDD(day), state_id: 99}
         let index = 0
         for (let ct of count_types) {
           tempObj[chartColumnName[index]] = this.state[state_type[index]].reduce( 
                     function(prev, curr) {
+                      // debugger
                       return prev + curr[day]
                     }, 0)
           index++
@@ -382,6 +383,11 @@ class App extends React.Component {
                     <Form.Check type="checkbox" name="includeTestedAndNegatives" checked={this.state.includeTestedAndNegatives} label="Include 'Total Tested' and 'Negative Results'" onChange={this.formToggleHandler}/>
                   </Form.Group  >
                 </Form.Row>
+                <Form.Row>
+                  <Form.Group  >
+                    <Form.Check type="checkbox" name="includePositives" checked={this.state.includePositives} label="Include 'Positive Results'" onChange={this.formToggleHandler}/>
+                  </Form.Group  >
+                </Form.Row>
               </Form>
           </Row>  
 
@@ -417,6 +423,7 @@ class App extends React.Component {
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                                           includeTestedAndNegatives={this.state.includeTestedAndNegatives}
+                                          includePositives={this.state.includePositives}
                     />
                     // </div>
                   :
@@ -444,12 +451,12 @@ class App extends React.Component {
           </Row>
         </Container>
         <h6>Updated once daily at 5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/">CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data">this article</a>).</h6>
-        <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
+        {/* <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
           <img src="https://hitwebcounter.com/counter/counter.php?page=7213589&style=0005&nbdigits=6&type=page&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />
         </a>                
         <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
           <img src="https://hitwebcounter.com/counter/counter.php?page=7213591&style=0005&nbdigits=6&type=ip&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />              
-        </a> 
+        </a>  */}
       </div>
     ) //ends return
   } // ends render
