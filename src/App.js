@@ -21,6 +21,7 @@ class App extends React.Component {
 
   state = {
     allDatesArr: [],
+    staticDatesArr: [],
     newPositive: [],
     newNegative: [],
     newDeath: [],
@@ -61,6 +62,7 @@ class App extends React.Component {
         console.log("coronaData---RESP ", response)
         this.setState({
           allDatesArr: response.allDatesArr,
+          staticDatesArr: [...response.allDatesArr],
           totalNegative: response.totalNegative,
           totalPending: response.totalPending,
           totalDeath: response.totalDeath,
@@ -185,7 +187,7 @@ class App extends React.Component {
          state_type =  ["totalTotal","totalPositive","totalNegative","totalDeath"]
          chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       }
-      for (let day of this.state.allDatesArr) { 
+      for (let day of this.state.staticDatesArr) { 
         let tempObj = {date: getMonthDayFromYYYYMMDD(day), state_id: 99}
         let index = 0
         for (let ct of count_types) {
@@ -419,7 +421,7 @@ class App extends React.Component {
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="singleStateChart"
-                                          allDatesArr={this.state.allDatesArr}
+                                          allDatesArr={this.state.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                                           includeTestedAndNegatives={this.state.includeTestedAndNegatives}
@@ -451,12 +453,17 @@ class App extends React.Component {
           </Row>
         </Container>
         <h6>Updated once daily at 5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/">CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data">this article</a>).</h6>
-        {/* <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
-          <img src="https://hitwebcounter.com/counter/counter.php?page=7213589&style=0005&nbdigits=6&type=page&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />
-        </a>                
-        <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
-          <img src="https://hitwebcounter.com/counter/counter.php?page=7213591&style=0005&nbdigits=6&type=ip&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />              
-        </a>  */}
+        {process.env.REACT_APP_VIEW_TRACKER == "true"
+        ?
+          <>
+            <a  style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
+              <img src="https://hitwebcounter.com/counter/counter.php?page=7213589&style=0005&nbdigits=6&type=page&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />
+            </a>                
+            <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
+              <img src="https://hitwebcounter.com/counter/counter.php?page=7213591&style=0005&nbdigits=6&type=ip&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />              
+            </a>
+          </> 
+        : null}
       </div>
     ) //ends return
   } // ends render
