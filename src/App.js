@@ -337,21 +337,21 @@ class App extends React.Component {
                   {this.state.displayType === "allOfUSGraph"
                   ?
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="allOfUSGraph" active >
-                      All of U.S. Graph
+                      All of U.S. Chart
                     </Button>
                   :
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="allOfUSGraph"  onClick={this.formChangeHandler}>
-                      All of U.S. Graph
+                      All of U.S. Chart
                     </Button>
                   }
                   {this.state.displayType === "singleStateChart"
                   ?
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="singleStateChart" active >
-                      Single State Graph
+                      Single State Chart
                     </Button>
                   :
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State Graph
+                      Single State Chart
                     </Button>
                   }            
                 </Form.Group  >
