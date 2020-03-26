@@ -2,7 +2,7 @@ import React from 'react'
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
@@ -153,7 +153,7 @@ class ChartBuilder extends React.Component {
           if (formattedGridLinesArr[0].state_id == 99) {
             chartData = formattedGridLinesArr
           } else {
-            for ( let date1 of this.props.allDatesArr) { chartData.push({date: date1})}
+            for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
               formattedGridLinesArr.forEach(stateTypeObj =>
                 dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
@@ -167,9 +167,10 @@ class ChartBuilder extends React.Component {
           } // ends GridLines IF statement
 
 // debugger
-          return(                         
-            <LineChart width={730} height={300} data={chartData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          return( 
+            <ResponsiveContainer width="95%" height={300}>                        
+            <LineChart  data={chartData}
+              margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -181,10 +182,20 @@ class ChartBuilder extends React.Component {
 
 
 
+{this.props.includeTestedAndNegatives 
+?
+  <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="#E5A419"   />
+:
+null
+}
+{this.props.includeTestedAndNegatives 
+?
+  <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/>
+:
+null
+}
 
 <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   />
-<Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="#E5A419"   />
-<Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/>
 <Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="grey"   />
 {/* 
 <Line type="monotone" dataKey="Day Positive" strokeWidth={width["Day Positive"]} stroke="pink"   />
@@ -209,6 +220,8 @@ class ChartBuilder extends React.Component {
 
 
             </LineChart>
+            </ResponsiveContainer>                        
+
 
           ) // ends "singleStateChart" RETURN
 

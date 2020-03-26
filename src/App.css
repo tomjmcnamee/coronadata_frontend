@@ -23,11 +23,11 @@
   padding-right: 2%;
 }
 
-#LineChart {
-  padding-left: 2%;
-  padding-right: 2%;
-  width: 100%
-}
+/* .recharts-surface{
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+} */
 
 .rs-table-cell-content {
   font-size: 15px;

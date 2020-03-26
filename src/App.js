@@ -35,7 +35,8 @@ class App extends React.Component {
     sortOrder: "OldToNew",
 
     displayType: "table",
-    idOfStateInSingleStateGrid: "35"
+    idOfStateInSingleStateGrid: "35",
+    includeTestedAndNegatives: false
   }
 
 
@@ -115,6 +116,13 @@ class App extends React.Component {
     }
   }
 
+  formToggleHandler = (event) => {
+    let newVal = !this.state[event.target.name]
+    this.setState({
+      [event.target.name]: newVal
+    })
+  }
+  
   dateSortOrder = () => {
     let sortOrder
     if (this.state.sortOrder === "NewToOld"){
@@ -363,12 +371,28 @@ class App extends React.Component {
           :
           null
           }
+          {this.state.displayType === "table"
+          ?
+          null
+          :
+          <Row>
+            <Form >
+                <Form.Row>
+                  <Form.Group  >
+                    <Form.Check type="checkbox" name="includeTestedAndNegatives" checked={this.state.includeTestedAndNegatives} label="Include 'Total Tested' and 'Negative Results'" onChange={this.formToggleHandler}/>
+                  </Form.Group  >
+                </Form.Row>
+              </Form>
+          </Row>  
+
+          }
           <Row>
             <Col sm={12} >
               <h5>{tableDescription()}</h5>
             </Col>
           </Row>
-          <Row>
+          <Row  className="justify-content-md-center" >
+            <Col md="auto" >
                 {this.state.totalPositive.length > 0
                 ?  
                   this.state.displayType === "table"
@@ -386,19 +410,21 @@ class App extends React.Component {
 
                   (this.state.displayType === "allOfUSGraph" || this.state.displayType === "singleStateChart")
                   ?
-                    <div id="LineChart" >
+                    // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="singleStateChart"
                                           allDatesArr={this.state.allDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
+                                          includeTestedAndNegatives={this.state.includeTestedAndNegatives}
                     />
-                    </div>
+                    // </div>
                   :
                   null
                 :
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                 }
+              </Col>
           </Row>
           <Row>
             {(this.state.totalPositive.length > 0 && this.state.displayType === "table" )
