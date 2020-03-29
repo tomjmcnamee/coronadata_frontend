@@ -48,7 +48,7 @@ class ChartBuilder extends React.Component {
     if (this.props.newOrTotal==="new") {
       return 'RoG = (current - previous) / previous'
     } else {
-      return 'RoG = (current - total) / total'
+      return 'RoG = (present - past) / past'
     }
   }
 
