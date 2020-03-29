@@ -37,7 +37,7 @@ class App extends React.Component {
     sortOrder: "OldToNew",
 
     displayType: "table",
-    idOfStateInSingleStateGrid: "35",
+    idOfStateInSingleStateGrid: "99",
     includeTestedAndNegatives: false,
     includePositives: true
   }
@@ -177,41 +177,39 @@ class App extends React.Component {
     let count_types = []
     let state_type = []
     let chartColumnName = []
-    if (this.state.displayType === "allOfUSGraph") {
-      if (this.state.newOrTotal === "new") {
-         count_types = ["new-total","new-positive","new-negative","new-death"]
-         state_type =  ["newTotal","newPositive","newNegative","newDeath"]
-         chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
-      }else {
-         count_types = ["total-total","total-positive","total-negative","total-death"]
-         state_type =  ["totalTotal","totalPositive","totalNegative","totalDeath"]
-         chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
-      }
-      for (let day of this.state.staticDatesArr) { 
-        let tempObj = {date: getMonthDayFromYYYYMMDD(day), state_id: 99}
+    if (this.state.idOfStateInSingleStateGrid === "99") {
+      /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
+        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death"]
+        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death"]
+        chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
+      // for (let day of this.state.staticDatesArr) { 
+        // debugger
         let index = 0
-        for (let ct of count_types) {
-          tempObj[chartColumnName[index]] = this.state[state_type[index]].reduce( 
-                    function(prev, curr) {
-                      // debugger
-                      return prev + curr[day]
-                    }, 0)
+        let tempObj
+        for (let countT of count_types) {
+          tempObj = {state_id: 99, "count_type": countT}
+          for (let day of this.state.staticDatesArr) {
+            tempObj[day] = this.state[state_type[index]].reduce(
+              function(prev, curr) {
+                return prev + curr[day]
+              }, 0)
+            }
           index++
+          output.push(tempObj)
         }
-        output.push(tempObj)
-      }
+        //     tempObj[chartColumnName[index]] = this.state[state_type[index]].reduce( 
+          //               function(prev, curr) {
+      //                 // debugger
+      //                 return prev + curr[day]
+      //               }, 0)
+      //     index++
+      //   }
+      //   output.push(tempObj)
     } else {
-      if (this.state.newOrTotal === "new") {
-        output.push(this.state.newDeath.find((obj) => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)  ))
-        output.push(this.state.newTotal.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-        output.push(this.state.newPositive.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-        output.push(this.state.newNegative.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      } else {
-        output.push(this.state.totalDeath.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-        output.push(this.state.totalTotal.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-        output.push(this.state.totalPositive.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-        output.push(this.state.totalNegative.find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      }
+      output.push(this.state[this.state.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)  ))
+      output.push(this.state[this.state.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.state.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.state.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
     }
     return output
   }
@@ -334,7 +332,7 @@ class App extends React.Component {
                       Raw Numbers Table
                     </Button>
                   }
-                  {this.state.displayType === "allOfUSGraph"
+                  {/* {this.state.displayType === "allOfUSGraph"
                   ?
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="allOfUSGraph" active >
                       All of U.S. Chart
@@ -343,28 +341,39 @@ class App extends React.Component {
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="allOfUSGraph"  onClick={this.formChangeHandler}>
                       All of U.S. Chart
                     </Button>
+                  } */}
+                  {this.state.displayType === "rateOfGrowthChart"
+                  ?
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="rateOfGrowthChart" active >
+                      Rates of Growth Chart
+                    </Button>
+                  :
+                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
+                      Rates of Growth Chart
+                    </Button>
                   }
                   {this.state.displayType === "singleStateChart"
                   ?
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="singleStateChart" active >
-                      Single State Chart
+                      Single State (and U.S.) Charts
                     </Button>
                   :
                     <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State Chart
+                      Single State (and U.S.) Charts 
                     </Button>
                   }            
                 </Form.Group  >
               </Form.Row>
             </Form >
           </Row>
-          {this.state.displayType === "singleStateChart"
+          {(this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart")
           ?
           <Row>
             <Form >
                 <Form.Row>
                   <Form.Group  >
                       <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.state.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} > 
+                      <option value={99}>{"Entire U.S."}</option>
                         {this.dropdownOptionsForStates()}
                       </Form.Control>
                   </Form.Group  >
@@ -424,6 +433,20 @@ class App extends React.Component {
                                           allDatesArr={this.state.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
+                                          includeTestedAndNegatives={this.state.includeTestedAndNegatives}
+                                          includePositives={this.state.includePositives}
+                    />
+                    // </div>
+                  :
+                  (this.state.displayType === "rateOfGrowthChart")
+                  ?
+                    // <div id="LineChart" >
+                    <ChartBuilder 
+                                          gridType="rateOfGrowthChart"
+                                          allDatesArr={this.state.staticDatesArr}
+                                          gridLinesArray={this.singleStateData()}
+                                          selectedStatType={this.state.selectedStatType}
+                                          newOrTotal={this.state.newOrTotal}
                                           includeTestedAndNegatives={this.state.includeTestedAndNegatives}
                                           includePositives={this.state.includePositives}
                     />

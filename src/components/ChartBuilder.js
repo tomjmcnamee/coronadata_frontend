@@ -2,7 +2,7 @@ import React from 'react'
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, CartesianAxis
 } from 'recharts';
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
@@ -41,8 +41,25 @@ class ChartBuilder extends React.Component {
       width: { ...width, [dataKey]: 3 },
     });
   }
-  
+
+  formatYAxisForRateOfGrowth = (tickItem) => { return tickItem + "%" }
+
+  yLabel = () => {
+    if (this.props.newOrTotal==="new") {
+      return 'RoG = (current - previous) / previous'
+    } else {
+      return 'RoG = (current - total) / total'
+    }
+  }
+
+
+
   render () {
+
+    const tooltipStyle = {
+      textAlign: 'left',
+      // backgroundImage: 'url(' + imgUrl + ')',
+    };
 
     const { width } = this.state
     let chartData = []
@@ -50,16 +67,6 @@ class ChartBuilder extends React.Component {
     switch(this.props.gridType) {
       case "AllStatesChart":
 
-        // const chartData = [
-        //   { name: 'Page A', uv: 4000, pv: 2400, amt: 2400,          },          {
-        //     name: 'Page B', uv: 3000, pv: 1398, amt: 2210,          },
-        //   { name: 'Page C', uv: 2000, pv: 9800, amt: 2290, },          {
-        //     name: 'Page D', uv: 2780, pv: 3908, amt: 2000,          },
-        //   {            name: 'Page E', uv: 1890, pv: 4800, amt: 2181,          },
-        //   {
-        //     name: 'Page F', uv: 2390, pv: 3800, amt: 2500,          },
-        //   {            name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
-        //   },        ];
         
         if (formattedGridLinesArr.length > 0 ) {
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
@@ -79,8 +86,7 @@ class ChartBuilder extends React.Component {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip />
-              {/* <Legend /> */}
+              <Tooltip offset={60} itemStyle={tooltipStyle} nd /> */}
               {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" />
               <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
               <Line type="monotone" dataKey="Alabama" stroke="#8884d8" />
@@ -143,30 +149,23 @@ class ChartBuilder extends React.Component {
             </LineChart>
           ) // ends "AllStatesChart" RETURN
 
+
+
+
       case "singleStateChart":
-
-        
-
-
         if (formattedGridLinesArr.length > 0 ) {
           //This checks to see if its for the WHOLE US or not
-          if (formattedGridLinesArr[0].state_id == 99) {
-            chartData = formattedGridLinesArr
-          } else {
             for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
               formattedGridLinesArr.forEach(stateTypeObj =>
                 dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
               )
             )
-          }
-
 
           console.log("This is the date from APP ----" , formattedGridLinesArr)
           console.log("This is the chart data ----" , chartData)
           } // ends GridLines IF statement
 
-// debugger
           return( 
             <ResponsiveContainer width="95%" height={300}>                        
             <LineChart  data={chartData}
@@ -174,61 +173,88 @@ class ChartBuilder extends React.Component {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip />
+              <Tooltip offset={60} itemStyle={tooltipStyle} />
               <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} />
-              {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-              <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
-              {/* <Line type="monotone" dataKey="Alabama" stroke="#8884d8" /> */}
+              {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+              {this.props.includePositives ? <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
 
-
-
-{this.props.includeTestedAndNegatives 
-?
-  <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   />
-:
-null
-}
-{this.props.includeTestedAndNegatives 
-?
-  <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/>
-:
-null
-}
-{this.props.includePositives 
-?
-<Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   />
-:
-null
-}
-
-<Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
-{/* 
-<Line type="monotone" dataKey="Day Positive" strokeWidth={width["Day Positive"]} stroke="pink"   />
-<Line type="monotone" dataKey="Day Negative" strokeWidth={width["Day Negative"]} stroke="#E5A419"   />
-<Line type="monotone" dataKey="Day Tested" strokeWidth={width["Day Tested"]} stroke="#1973E5"/>
-<Line type="monotone" dataKey="Day Deaths" strokeWidth={width["Day Deaths"]} stroke="grey"   />
-<Line type="monotone" dataKey="Total Tested" strokeWidth={width["Total Tested"]} stroke="#2F19E5"   />
-<Line type="monotone" dataKey="Total Positive" strokeWidth={width["Total Positive"]} stroke="#E51919"   />
-<Line type="monotone" dataKey="Total Negative" strokeWidth={width["Total Negative"]} stroke="#229954"   />
-<Line type="monotone" dataKey="Total Deaths" strokeWidth={width["Total Deaths"]} stroke="black"   /> */}
-
-{/* <Line type="monotone" dataKey="new-total" stroke="#8884d8" />
-<Line type="monotone" dataKey="new-positive" stroke="#8884d8" />
-<Line type="monotone" dataKey="new-negative" stroke="#8884d8" />
-<Line type="monotone" dataKey="new-death" stroke="#8884d8" />
-<Line type="monotone" dataKey="total-total" stroke="#8884d8" />
-<Line type="monotone" dataKey="total-positive" stroke="#8884d8" />
-<Line type="monotone" dataKey="total-negative" stroke="#8884d8" />
-<Line type="monotone" dataKey="total-death" stroke="#8884d8" /> */}
-
-
-
-
+              <Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
             </ResponsiveContainer>                        
-
-
           ) // ends "singleStateChart" RETURN
+
+      case "rateOfGrowthChart":
+        let chartMax = 500
+        let chartMin = -500
+        if (formattedGridLinesArr.length > 0 ) {
+          //This checks to see if its for the WHOLE US or not
+
+            for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
+            chartData.forEach((dataObject, index) => 
+            formattedGridLinesArr.forEach(stateTypeObj =>
+                //let tempVal = stateTypeObj[this.props.allDatesArr[index]] // This is the origina, just print the value
+                
+                {if (index === 0) {
+                  dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = null
+                } else {
+                  //if yesterday's AND today's numbers were NOT 0 or null   ---- IDEAL
+                  if (!!stateTypeObj[this.props.allDatesArr[index]] && !!stateTypeObj[this.props.allDatesArr[index -1 ]] ) {
+                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = ((stateTypeObj[this.props.allDatesArr[index]] - stateTypeObj[this.props.allDatesArr[index - 1]] ) / stateTypeObj[this.props.allDatesArr[index - 1]]) *100
+                  } else if (!stateTypeObj[this.props.allDatesArr[index]]) {
+                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = 0
+                  } else if (!stateTypeObj[this.props.allDatesArr[index - 1]]) {
+                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
+                  }
+                  if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] > chartMax) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMax}
+                  if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] < chartMin) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMin}
+                }} //Closes Original IF
+                
+
+              )
+            )
+          
+
+
+          console.log("This is the date from APP ----" , formattedGridLinesArr)
+          console.log("This is the chart data ----" , chartData)
+
+          
+          } // ends GridLines IF statement
+
+          function gridTooltipValFormatter(value, name) {
+            if (value === chartMax) {
+              return `>${value.toFixed(2)}%`
+            } else if (value === chartMin) {
+                return `<${value.toFixed(2)}%`
+            }else {
+                return `${value.toFixed(2)}%`
+            }
+          }  
+
+          return( 
+            <ResponsiveContainer width="90%" height={300}>                        
+            <LineChart  data={chartData}
+              margin={{ top: 5, right: 1, left: 10, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              {/* <CartesianAxis tickLine="false"     /> */}
+              <XAxis dataKey="date" />
+              <YAxis tickFormatter={this.formatYAxisForRateOfGrowth}>
+                <Label angle={-90} position='insideBottomLeft' >{this.yLabel()}</Label>
+              </YAxis>
+              <Tooltip  
+              formatter={gridTooltipValFormatter}
+              labelFormatter={(value) => `RoG for ${value}` }
+              offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
+              <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} />
+              {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+              {this.props.includePositives ? <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              <Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
+            </LineChart>
+            </ResponsiveContainer>                        
+          ) // ends "singleStateChart" RETURN
+     
 
       default:
         break
