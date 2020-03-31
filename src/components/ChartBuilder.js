@@ -4,10 +4,12 @@ import React from 'react'
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, CartesianAxis
 } from 'recharts';
+
+import { scaleLog } from 'd3-scale'
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 
-
+const scale = scaleLog().base(Math.E)
 
 class ChartBuilder extends React.Component {
 
@@ -172,7 +174,7 @@ class ChartBuilder extends React.Component {
               margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
-              <YAxis />
+              <YAxis   />
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} />
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }

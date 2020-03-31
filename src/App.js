@@ -10,7 +10,6 @@ import { Form, Col, Container, Row, Tabs, Tab} from 'react-bootstrap'
 import loadingMap from './assets/USSpreadMap.gif'
 import 'rsuite/dist/styles/rsuite-default.css';
 import { mapStateIdToStateName } from './HelperFunctions/mappingIDtoSomething'
-import { getMonthDayFromYYYYMMDD } from './HelperFunctions/DateFormatting' 
 import { Button } from 'rsuite';
 
 
@@ -34,7 +33,7 @@ class App extends React.Component {
 
     selectedStatType: "Positive",
     newOrTotal: "total",
-    sortOrder: "OldToNew",
+    sortOrder: "NewToOld",
 
     displayType: "table",
     idOfStateInSingleStateGrid: "99",
@@ -62,7 +61,7 @@ class App extends React.Component {
         console.log("coronaData---RESP ", response)
         this.setState({
           allDatesArr: response.allDatesArr,
-          staticDatesArr: [...response.allDatesArr],
+          staticDatesArr: [...response.allDatesArr].reverse(),
           totalNegative: response.totalNegative,
           totalPending: response.totalPending,
           totalDeath: response.totalDeath,
@@ -90,13 +89,7 @@ class App extends React.Component {
           })
           console.log("Processing Time for NEW Fetch = ", ((+ new Date()) - startTime)/1000 )
         })
-      })
-    
-      // .catch((error) => {
-      //   debugger 
-      //   console.log("Fetch Full Data errors - ", error)
-      // });
-    
+      })    
   }
 
   formChangeHandler = (event) => {
@@ -134,31 +127,11 @@ class App extends React.Component {
     } else {
       sortOrder = "NewToOld"
     }
-
     let newOrder = this.state.allDatesArr.reverse()
     this.setState({
       allDatesArr: newOrder,
       sortOrder: sortOrder
     })
-
-
-    // fetch(process.env.REACT_APP_FETCH_LOCATION + "date_order", {
-    //       method: "GET",
-    //       headers: {
-    //         "content-type": "application/json",
-    //         accepts: "application/json",
-    //         FetchPW: process.env.REACT_APP_FETCH_PASSWORD,
-    //         SortOrder: sortOrder
-    //       }
-    //     })  
-    //     .then(resp => resp.json())
-    //     .then((response) => {
-    //       console.log("coronaData---RESP ", response)
-    //       this.setState({
-    //         sortOrder: sortOrder,
-    //         newNegative: response.allDatesArr
-    //       })
-    //     })
   }
 
   dropdownOptionsForStates = () => {
