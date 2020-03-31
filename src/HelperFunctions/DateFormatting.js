@@ -3,7 +3,7 @@ const getMonthDayFromYYYYMMDD = (YYYYMMDDint) => {
   if (YYYYMMDDint) {
     let reformat1 = YYYYMMDDint.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3') 
     // Create a date object from the timestamp
-    let [ year, month, day ] = reformat1.split("-")
+    let [ , month, day ] = reformat1.split("-")
   
     // Create a list of names for the months
     // var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',	'Nov', 'Dec'];

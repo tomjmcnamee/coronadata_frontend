@@ -2,14 +2,12 @@ import React from 'react'
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, CartesianAxis
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label
 } from 'recharts';
 
-import { scaleLog } from 'd3-scale'
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 
-const scale = scaleLog().base(Math.E)
 
 class ChartBuilder extends React.Component {
 
@@ -78,8 +76,7 @@ class ChartBuilder extends React.Component {
               dataObject[stateDataObj.state_name] = stateDataObj[this.props.allDatesArr[index]]
             )
           )
-          console.log("This is the chart data ----" , chartData)
-          } // ends GridLines IF statement
+        } // ends GridLines IF statement
 
 
           return(                         
@@ -163,9 +160,6 @@ class ChartBuilder extends React.Component {
                 dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
               )
             )
-
-          console.log("This is the date from APP ----" , formattedGridLinesArr)
-          console.log("This is the chart data ----" , chartData)
           } // ends GridLines IF statement
 
           return( 
@@ -215,13 +209,6 @@ class ChartBuilder extends React.Component {
 
               )
             )
-          
-
-
-          console.log("This is the date from APP ----" , formattedGridLinesArr)
-          console.log("This is the chart data ----" , chartData)
-
-          
           } // ends GridLines IF statement
 
           function gridTooltipValFormatter(value, name) {

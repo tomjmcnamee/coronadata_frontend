@@ -3,7 +3,7 @@ import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
 import './App.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Col, Container, Row, Tabs, Tab} from 'react-bootstrap'
+import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tabs from 'react-bootstrap/Tabs'
 // import Tab  from 'react-bootstrap/Tab'
 
@@ -58,7 +58,6 @@ class App extends React.Component {
     })
     .then(resp => resp.json())
     .then((response) => {
-        console.log("coronaData---RESP ", response)
         this.setState({
           allDatesArr: response.allDatesArr,
           staticDatesArr: [...response.allDatesArr].reverse(),
@@ -80,7 +79,6 @@ class App extends React.Component {
         })  
         .then(resp => resp.json())
         .then((response) => {
-          console.log("coronaData---RESP ", response)
           this.setState({
             newPositive: response.newPositive,
             newNegative: response.newNegative,
@@ -138,9 +136,8 @@ class App extends React.Component {
     let output = []
     for (let id = 1; id < 56; id++) {
       // Runs 5 times, with values of step 0 through 4.
-      output.push(<option value={id}>{mapStateIdToStateName(parseInt(id))}</option>);
+      output.push(<option key={id} value={id}>{mapStateIdToStateName(parseInt(id))}</option>);
     }
-    console.log("State Dropdownb Option = ", output)
     return output
   }
 
@@ -149,12 +146,11 @@ class App extends React.Component {
     let output = []
     let count_types = []
     let state_type = []
-    let chartColumnName = []
     if (this.state.idOfStateInSingleStateGrid === "99") {
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
         count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death"]
         state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death"]
-        chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
+        // let chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       // for (let day of this.state.staticDatesArr) { 
         // debugger
         let index = 0
@@ -448,14 +444,14 @@ class App extends React.Component {
             }
           </Row>
         </Container>
-        <h6>Updated once daily at 5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/">CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data">this article</a>).</h6>
-        {process.env.REACT_APP_VIEW_TRACKER == "true"
+        <h6>Updated once daily at 5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/" rel="noopener noreferrer" >CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data"  rel="noopener noreferrer" >this article</a>).</h6>
+        {process.env.REACT_APP_VIEW_TRACKER === "true"
         ?
           <>
-            <a  style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
+            <a  style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank" rel="noopener noreferrer">
               <img src="https://hitwebcounter.com/counter/counter.php?page=7213589&style=0005&nbdigits=6&type=page&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />
             </a>                
-            <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank">
+            <a style={{display:"none"}} href="https://www.hitwebcounter.com" target="_blank" rel="noopener noreferrer">
               <img src="https://hitwebcounter.com/counter/counter.php?page=7213591&style=0005&nbdigits=6&type=ip&initCount=0" title="User Stats" Alt="PHP Hits Count"   border="0" />              
             </a>
           </> 
