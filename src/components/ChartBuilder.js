@@ -67,7 +67,7 @@ class ChartBuilder extends React.Component {
     switch(this.props.gridType) {
       case "AllStatesChart":
 
-        
+        // Keep these next two, verifies SOMETHING and adds state name to Obj
         if (formattedGridLinesArr.length > 0 ) {
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
           for ( let date1 of this.props.allDatesArr) { chartData.push({date: date1})}

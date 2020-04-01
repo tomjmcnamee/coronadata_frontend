@@ -31,7 +31,7 @@ class App extends React.Component {
     totalDeath: [],
     totalTotal: [],
 
-    selectedStatType: "Positive",
+    selectedStatType: "Death",
     newOrTotal: "total",
     sortOrder: "NewToOld",
 
@@ -96,7 +96,7 @@ class App extends React.Component {
     // debugger
     if (event.target.dataset.buttontype) {
       // let newVal = event.target.name
-      if (event.target.name === "new" &&this.state.selectedStatType === "Pending" ) {
+      if (event.target.name === "new" && this.state.selectedStatType === "Pending" ) {
         this.setState({
           selectedStatType: "Positive"
         })
@@ -185,9 +185,30 @@ class App extends React.Component {
     return output
   }
 
-
+  
+  
   render() {
-
+    const tableDataToDisplay = () => {
+      // debugger
+      let outputArr
+      let sortedArr
+      let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
+      
+      if (this.state.rawOrTops === "raw") {
+        outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]]
+        // debugger
+      } else if (this.state.rawOrTops === "tops") {
+        // debugger
+        // outputArr = this.state[this.state.newOrTotal + this.state.selectedStatType].sort((a, b) => a.lastDate-b.lastDate )
+        sortedArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
+          if (a[lastDate] > b[lastDate]) return -1;
+	        if (a[lastDate] < b[lastDate]) return 1;
+        }  )
+        outputArr = sortedArr.slice(0,10)
+      }
+      return outputArr
+    }
+    
 
 
     let tableDescription = () => {
@@ -218,11 +239,10 @@ class App extends React.Component {
             return `All data for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
           }
       }
-
-      
-                        
-
     }
+
+    
+
 
     return (
       
@@ -233,6 +253,82 @@ class App extends React.Component {
               <h3>Coronavirus in the US: by the numbers</h3>
             </Col>
           </Row>
+          <Row>
+            <Form >
+              <Form.Row>
+                <Form.Group  >
+                  
+                  {this.state.displayType === "table"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="table" active >
+                      Raw Numbers<br />Tables
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="table"  onClick={this.formChangeHandler}>
+                      Raw Numbers<br />Tables
+                    </Button>
+                  }
+                  {this.state.displayType === "rateOfGrowthChart"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
+                      Rates of<br />Growth Chart
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
+                      Rates of<br />Growth Chart
+                    </Button>
+                  }
+                  {this.state.displayType === "singleStateChart"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
+                      Single State<br />(and U.S.) Charts
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
+                      Single State<br />(and U.S.) Charts 
+                    </Button>
+                  }            
+                </Form.Group  >
+              </Form.Row>
+            </Form >
+          </Row>
+          {(this.state.displayType === "table" || this.state.displayType === "singleStateChart")
+            ?
+            <Row>
+              <Col>
+              </Col>
+                <Form >
+                  <Form.Row>
+                    <Form.Group  >
+                    {this.state.rawOrTops === "raw"
+                    ?
+                      <Button className="maintypebuttonSelected" data-buttontype="rawOrTops"  color="violet" appearance="primary" size="sm" name="raw" active >
+                        Raw Stats
+                      </Button>
+                    :
+                      <Button className="maintypebuttonNotSelected" data-buttontype="rawOrTops"  color="violet" appearance="ghost" size="sm" name="raw"  onClick={this.formChangeHandler}>
+                        Raw Stats
+                      </Button>
+                    }
+                    {this.state.rawOrTops === "tops"
+                    ?
+                      <Button className="maintypebuttonSelected" data-buttontype="rawOrTops"  color="violet" appearance="primary" size="sm" name="tops" active >
+                        Top 10s
+                      </Button>
+                    :
+                      <Button className="maintypebuttonNotSelected" data-buttontype="rawOrTops"  color="violet" appearance="ghost" size="sm" name="tops"  onClick={this.formChangeHandler}>
+                        Top 10s 
+                      </Button>
+                    }
+                    </Form.Group  >
+                  </Form.Row>
+                </Form>
+              <Col>
+              </Col>
+            </Row> 
+          :
+            null
+          }
           <Row>
             <Col  sm={3}>
               <Form >
@@ -288,65 +384,10 @@ class App extends React.Component {
               </Form>
             </Col>
           </Row>
-          <Row>
-            <Form >
-              <Form.Row>
-                <Form.Group  >
-                  
-                  {this.state.displayType === "table"
-                  ?
-                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="table" active >
-                      Raw Numbers<br />Tables
-                    </Button>
-                  :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="table"  onClick={this.formChangeHandler}>
-                      Raw Numbers<br />Tables
-                    </Button>
-                  }
-                  {this.state.displayType === "rateOfGrowthChart"
-                  ?
-                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
-                      Rates of<br />Growth Chart
-                    </Button>
-                  :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
-                      Rates of<br />Growth Chart
-                    </Button>
-                  }
-                  {this.state.displayType === "singleStateChart"
-                  ?
-                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
-                      Single State<br />(and U.S.) Charts
-                    </Button>
-                  :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State<br />(and U.S.) Charts 
-                    </Button>
-                  }            
-                </Form.Group  >
-              </Form.Row>
-            </Form >
-          </Row>
           {(this.state.displayType === "table")
           ?
                   null
-          // <Row>
-          //   <Col>
-          //   </Col>
-          //     <Form >
-          //       <Form.Row>
-          //         <Form.Group  >
-          //             <Form.Control as="select" name="rawOrTops" value={this.state.rawOrTops} onChange={this.formChangeHandler} > 
-          //             <option value={"raw"}>Raw Numbers</option>
-          //             <option value={"raw"}>Top 10 per Category</option>
-          //             <option value={"raw"}>Raw Numbers</option>
-          //             </Form.Control>
-          //         </Form.Group  >
-          //       </Form.Row>
-          //     </Form>
-          //   <Col>
-          //   </Col>
-          // </Row>  
+           
           :
           <Row>
             <Form >
@@ -388,16 +429,18 @@ class App extends React.Component {
           </Row>
           <Row  className="justify-content-md-center" >
             <Col md="auto" >
-                {this.state.totalPositive.length > 0
+                {this.state.totalDeath.length > 0
                 ?  
                   this.state.displayType === "table"
                   ?
                   <div id="statesTable" >
                     <GridBuilder
-                    gridType="AllStates-PerDay"
-                    allDatesArr={this.state.allDatesArr}
-                    gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]}
-                    selectedStatType={this.state.selectedStatType}
+                      gridType="AllStates-PerDay"
+                      allDatesArr={this.state.allDatesArr}
+                      gridLinesArray={tableDataToDisplay()}
+                      // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
+                      selectedStatType={this.state.selectedStatType} //ex: Pos, Neg, Total, Death
+                      rawOrTops={this.state.rawOrTops}
                     />
                   </div>
                   :

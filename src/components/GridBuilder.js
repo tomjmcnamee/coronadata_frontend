@@ -19,15 +19,18 @@ function GridBuilder(props) {
         let xAxisDates
         
         if (props.gridLinesArray.length > 0 ) {
-
-          // This builds the line for US SUMS   
-          let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
-          for (let day of props.allDatesArr) {
-            US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
-              function(prev, curr) {
-                return prev + curr[day]
-              }, 0)
-          } // ends FOR OF Loop
+          
+          // This builds the line for US SUMS   for RAW only
+          if (props.rawOrTops === "raw") {
+            let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
+            for (let day of props.allDatesArr) {
+              US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
+                function(prev, curr) {
+                  return prev + curr[day]
+                }, 0)
+              } // ends FOR OF Loop
+            formattedGridLinesArr.unshift(US_Totals_Gridline)
+          }
 
           xAxisDates = props.allDatesArr.map((date, index) => (
 
@@ -39,7 +42,6 @@ function GridBuilder(props) {
           ))
 
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
-          formattedGridLinesArr.unshift(US_Totals_Gridline)
           
           } // ends GridLines IF statement
           return( 
