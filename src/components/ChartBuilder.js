@@ -17,6 +17,62 @@ class ChartBuilder extends React.Component {
       "Negative": 3,
       "Tested": 3,
       "Deaths" : 3,
+      "Alabama": 3,
+      "Alaska": 3,
+      "Arizona": 3,
+      "Arkansas": 3,
+      "California": 3,
+      "Colorado": 3,
+      "Connecticut": 3,
+      "Delaware": 3,
+      "Florida": 3,
+      "Georgia": 3,
+      "Hawaii": 3,
+      "Idaho": 3,
+      "Illinois": 3,
+      "Indiana": 3,
+      "Iowa": 3,
+      "Kansas": 3,
+      "Kentucky": 3,
+      "Louisiana": 3,
+      "Maine": 3,
+      "Maryland": 3,
+      "Massachusetts": 3,
+      "Michigan": 3,
+      "Minnesota": 3,
+      "Mississippi": 3,
+      "Missouri": 3,
+      "Montana": 3,
+      "Nebraska": 3,
+      "Nevada": 3,
+      "New Hampshire": 3,
+      "New Jersey": 3,
+      "New Mexico": 3,
+      "New York": 3,
+      "North Carolina": 3,
+      "North Dakota": 3,
+      "Ohio": 3,
+      "Oklahoma": 3,
+      "Oregon": 3,
+      "Pennsylvania": 3,
+      "Rhode Island": 3,
+      "South Carolina": 3,
+      "South Dakota": 3,
+      "Tennessee": 3,
+      "Texas": 3,
+      "Utah": 3,
+      "Vermont": 3,
+      "Virginia": 3,
+      "Washington": 3,
+      "Washington DC": 3,
+      "West Virginia": 3,
+      "Wisconsin": 3,
+      "Wyoming": 3,
+      "American Samoa": 3,
+      "Puerto Rico": 3,
+      "US Virgin Islands": 3,
+      "Guam": 3,
+      "Northern Mariana Islands": 3
       // "Total Tested": 2,
       // "Total Positive": 2,
       // "Total Negative": 2,
@@ -27,7 +83,6 @@ class ChartBuilder extends React.Component {
   handleMouseEnter = (o) => {
     const { dataKey } = o;
     const { width } = this.state;
-
     this.setState({
       width: { ...width, [dataKey]: 6 },
     });
@@ -36,9 +91,20 @@ class ChartBuilder extends React.Component {
   handleMouseLeave = (o) => {
     const { dataKey } = o;
     const { width } = this.state;
-
     this.setState({
       width: { ...width, [dataKey]: 3 },
+    });
+  }
+
+  handleLegendClick = (o) => {
+    const { dataKey } = o;
+    const { width } = this.state;
+    let newWidth = 6
+    if (this.state.width[dataKey] === 6) {
+      newWidth = 3
+    }
+    this.setState({
+      width: { ...width, [dataKey]: newWidth },
     });
   }
 
@@ -61,91 +127,97 @@ class ChartBuilder extends React.Component {
       // backgroundImage: 'url(' + imgUrl + ')',
     };
 
+    let formattedGridLinesArr = [...this.props.gridLinesArray]
     const { width } = this.state
     let chartData = []
-    let formattedGridLinesArr = [...this.props.gridLinesArray]
+    let chartLines = []
+    const top10Colors = ["#FF0000", "#FF1493", "#EE82EE", "#8A2BE2", "#FF8C00", "#D2691E", "#00FF00", "#20B2AA", "#00BFFF", "#0000FF"]
     switch(this.props.gridType) {
-      case "AllStatesChart":
+      case "top10s":
 
         // Keep these next two, verifies SOMETHING and adds state name to Obj
         if (formattedGridLinesArr.length > 0 ) {
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
-          for ( let date1 of this.props.allDatesArr) { chartData.push({date: date1})}
+          for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
           chartData.forEach((dataObject, index) => 
             formattedGridLinesArr.forEach(stateDataObj =>
               dataObject[stateDataObj.state_name] = stateDataObj[this.props.allDatesArr[index]]
             )
           )
+          chartLines = formattedGridLinesArr.map((obj, index) => <Line key={index} dot={{ strokeWidth: 1 }} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
+          // for (let obj of )
         } // ends GridLines IF statement
 
 
           return(                         
-            <LineChart width={730} height={300} data={chartData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <ResponsiveContainer width="95%" height={300}>                        
+            <LineChart  data={chartData}
+              margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip offset={60} itemStyle={tooltipStyle} nd /> */}
-              {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-              <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
-              <Line type="monotone" dataKey="Alabama" stroke="#8884d8" />
-<Line type="monotone" dataKey="Alaska" stroke="#8884d8" />
-<Line type="monotone" dataKey="Arizona" stroke="#8884d8" />
-<Line type="monotone" dataKey="Arkansas" stroke="#8884d8" />
-<Line type="monotone" dataKey="California" stroke="#8884d8" />
-<Line type="monotone" dataKey="Colorado" stroke="#8884d8" />
-<Line type="monotone" dataKey="Connecticut" stroke="#8884d8" />
-<Line type="monotone" dataKey="Delaware" stroke="#8884d8" />
-<Line type="monotone" dataKey="Florida" stroke="#8884d8" />
-<Line type="monotone" dataKey="Georgia" stroke="#8884d8" />
-<Line type="monotone" dataKey="Hawaii" stroke="#8884d8" />
-<Line type="monotone" dataKey="Idaho" stroke="#8884d8" />
-<Line type="monotone" dataKey="Illinois" stroke="#8884d8" />
-<Line type="monotone" dataKey="Indiana" stroke="#8884d8" />
-<Line type="monotone" dataKey="Iowa" stroke="#8884d8" />
-<Line type="monotone" dataKey="Kansas" stroke="#8884d8" />
-<Line type="monotone" dataKey="Kentucky" stroke="#8884d8" />
-<Line type="monotone" dataKey="Louisiana" stroke="#8884d8" />
-<Line type="monotone" dataKey="Maine" stroke="#8884d8" />
-<Line type="monotone" dataKey="Maryland" stroke="#8884d8" />
-<Line type="monotone" dataKey="Massachusetts" stroke="#8884d8" />
-<Line type="monotone" dataKey="Michigan" stroke="#8884d8" />
-<Line type="monotone" dataKey="Minnesota" stroke="#8884d8" />
-<Line type="monotone" dataKey="Mississippi" stroke="#8884d8" />
-<Line type="monotone" dataKey="Missouri" stroke="#8884d8" />
-<Line type="monotone" dataKey="Montana" stroke="#8884d8" />
-<Line type="monotone" dataKey="Nebraska" stroke="#8884d8" />
-<Line type="monotone" dataKey="Nevada" stroke="#8884d8" />
-<Line type="monotone" dataKey="New Hampshire" stroke="#8884d8" />
-<Line type="monotone" dataKey="New Jersey" stroke="#8884d8" />
-<Line type="monotone" dataKey="New Mexico" stroke="#8884d8" />
-<Line type="monotone" dataKey="New York" stroke="#8884d8" />
-<Line type="monotone" dataKey="North Carolina" stroke="#8884d8" />
-<Line type="monotone" dataKey="North Dakota" stroke="#8884d8" />
-<Line type="monotone" dataKey="Ohio" stroke="#8884d8" />
-<Line type="monotone" dataKey="Oklahoma" stroke="#8884d8" />
-<Line type="monotone" dataKey="Oregon" stroke="#8884d8" />
-<Line type="monotone" dataKey="Pennsylvania" stroke="#8884d8" />
-<Line type="monotone" dataKey="Rhode Island" stroke="#8884d8" />
-<Line type="monotone" dataKey="South Carolina" stroke="#8884d8" />
-<Line type="monotone" dataKey="South Dakota" stroke="#8884d8" />
-<Line type="monotone" dataKey="Tennessee" stroke="#8884d8" />
-<Line type="monotone" dataKey="Texas" stroke="#8884d8" />
-<Line type="monotone" dataKey="Utah" stroke="#8884d8" />
-<Line type="monotone" dataKey="Vermont" stroke="#8884d8" />
-<Line type="monotone" dataKey="Virginia" stroke="#8884d8" />
-<Line type="monotone" dataKey="Washington" stroke="#8884d8" />
-<Line type="monotone" dataKey="Washington DC" stroke="#8884d8" />
-<Line type="monotone" dataKey="West Virginia" stroke="#8884d8" />
-<Line type="monotone" dataKey="Wisconsin" stroke="#8884d8" />
-<Line type="monotone" dataKey="Wyoming" stroke="#8884d8" />
-<Line type="monotone" dataKey="American Samoa" stroke="#8884d8" />
-<Line type="monotone" dataKey="Puerto Rico" stroke="#8884d8" />
-<Line type="monotone" dataKey="US Virgin Islands" stroke="#8884d8" />
-<Line type="monotone" dataKey="Guam" stroke="#8884d8" />
-<Line type="monotone" dataKey="Northern Mariana Islands" stroke="#8884d8" />
-<Line type="monotone" dataKey="US Totals" stroke="#8884d8" />
+              <YAxis   />
+              <Tooltip offset={60} itemStyle={tooltipStyle} />
+              {/* <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} /> */}
+              <Legend onClick={this.handleLegendClick} />
+              {chartLines}
+              {/* <Line type="monotone" dataKey="Alabama" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Alaska" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Arizona" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Arkansas" stroke="#8884d8" />
+              <Line type="monotone" dataKey="California" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Colorado" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Connecticut" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Delaware" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Florida" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Georgia" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Hawaii" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Idaho" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Illinois" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Indiana" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Iowa" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Kansas" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Kentucky" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Louisiana" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Maine" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Maryland" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Massachusetts" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Michigan" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Minnesota" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Mississippi" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Missouri" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Montana" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Nebraska" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Nevada" stroke="#8884d8" />
+              <Line type="monotone" dataKey="New Hampshire" stroke="#8884d8" />
+              <Line type="monotone" dataKey="New Jersey" stroke="#8884d8" />
+              <Line type="monotone" dataKey="New Mexico" stroke="#8884d8" />
+              <Line type="monotone" dataKey="New York" stroke="#8884d8" />
+              <Line type="monotone" dataKey="North Carolina" stroke="#8884d8" />
+              <Line type="monotone" dataKey="North Dakota" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Ohio" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Oklahoma" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Oregon" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Pennsylvania" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Rhode Island" stroke="#8884d8" />
+              <Line type="monotone" dataKey="South Carolina" stroke="#8884d8" />
+              <Line type="monotone" dataKey="South Dakota" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Tennessee" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Texas" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Utah" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Vermont" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Virginia" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Washington" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Washington DC" stroke="#8884d8" />
+              <Line type="monotone" dataKey="West Virginia" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Wisconsin" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Wyoming" stroke="#8884d8" />
+              <Line type="monotone" dataKey="American Samoa" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Puerto Rico" stroke="#8884d8" />
+              <Line type="monotone" dataKey="US Virgin Islands" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Guam" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Northern Mariana Islands" stroke="#8884d8" /> */}
             </LineChart>
+            </ResponsiveContainer>
           ) // ends "AllStatesChart" RETURN
 
 
@@ -170,12 +242,12 @@ class ChartBuilder extends React.Component {
               <XAxis dataKey="date" />
               <YAxis   />
               <Tooltip offset={60} itemStyle={tooltipStyle} />
-              <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} />
-              {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
-              {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositives ? <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              <Legend onClick={this.handleLegendClick} iconType="wye"  />
+              {this.props.includeTestedAndNegatives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+              {this.props.includePositives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
 
-              <Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
+              <Line dot={{ strokeWidth: 1 }} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
             </ResponsiveContainer>                        
           ) // ends "singleStateChart" RETURN
@@ -235,7 +307,7 @@ class ChartBuilder extends React.Component {
               formatter={gridTooltipValFormatter}
               labelFormatter={(value) => `RoG for ${value}` }
               offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
-              <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} />
+              <Legend onClick={this.handleLegendClick} />
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
               {this.props.includePositives ? <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }

@@ -21,7 +21,6 @@ function GridBuilder(props) {
         if (props.gridLinesArray.length > 0 ) {
           
           // This builds the line for US SUMS   for RAW only
-          if (props.rawOrTops === "raw") {
             let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
             for (let day of props.allDatesArr) {
               US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
@@ -30,29 +29,35 @@ function GridBuilder(props) {
                 }, 0)
               } // ends FOR OF Loop
             formattedGridLinesArr.unshift(US_Totals_Gridline)
-          }
+
 
           xAxisDates = props.allDatesArr.map((date, index) => (
-
-            <Column width={80} key={index}>
-              <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
-              <Cell dataKey={date.toString()} />
-            </Column>
-
+            index === 0
+            ?
+              <Column width={80} key={index} sortable >
+                <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}  </HeaderCell>
+                <Cell align="left"  dataKey={date.toString()}  />
+              </Column>
+            :
+              <Column width={80}  key={index} >
+                <HeaderCell className="headerCell">{getMonthDayFromYYYYMMDD(date)}</HeaderCell>
+                <Cell align="left"  dataKey={date.toString()} />
+              </Column>
+            
           ))
 
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
-          
           } // ends GridLines IF statement
           return( 
               <Table 
                 data={formattedGridLinesArr}
                 rowHeight={32}
                 height={275}
+                onSortColumn={props.sortHandler}
               >
-                <Column width={115} align="left"  fixed >
-                  <HeaderCell></HeaderCell>
-                  <Cell dataKey="state_name" />
+                <Column width={115} align="center"  fixed sortable >
+                  <HeaderCell >Sort</HeaderCell>
+                  <Cell  dataKey="state_name" />
                 </Column>
                
                 

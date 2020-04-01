@@ -9,6 +9,7 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 
 import loadingMap from './assets/USSpreadMap.gif'
 import { mapStateIdToStateName } from './HelperFunctions/mappingIDtoSomething'
+import { getMonthDayFromYYYYMMDD } from './HelperFunctions/DateFormatting'
 import { Button } from 'rsuite';
 import './App.css';
 
@@ -33,14 +34,13 @@ class App extends React.Component {
 
     selectedStatType: "Death",
     newOrTotal: "total",
-    sortOrder: "NewToOld",
 
     displayType: "table",
     idOfStateInSingleStateGrid: "99",
     includeTestedAndNegatives: false,
     includePositives: true,
 
-    rawOrTops: "raw"
+    columnToSort: "state_name"
   }
 
 
@@ -119,20 +119,6 @@ class App extends React.Component {
       [event.target.name]: newVal
     })
   }
-  
-  dateSortOrder = () => {
-    let sortOrder
-    if (this.state.sortOrder === "NewToOld"){
-      sortOrder = "OldToNew"
-    } else {
-      sortOrder = "NewToOld"
-    }
-    let newOrder = this.state.allDatesArr.reverse()
-    this.setState({
-      allDatesArr: newOrder,
-      sortOrder: sortOrder
-    })
-  }
 
   dropdownOptionsForStates = () => {
     let output = []
@@ -184,59 +170,94 @@ class App extends React.Component {
     }
     return output
   }
-
+  
+  
+  
+  
+  sortHandler = (columnToSortValue) => {
+    if (columnToSortValue === "state_name") {
+      this.setState({
+        columnToSort: "state_name"
+      })
+    } else {
+      this.setState({
+        columnToSort: "first_number_col"
+      })
+    }
+  }
   
   
   render() {
     const tableDataToDisplay = () => {
       // debugger
       let outputArr
-      let sortedArr
       let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
       
-      if (this.state.rawOrTops === "raw") {
+      if (this.state.columnToSort === "state_name") {
         outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]]
         // debugger
-      } else if (this.state.rawOrTops === "tops") {
+      } else if (this.state.columnToSort === "first_number_col") {
         // debugger
         // outputArr = this.state[this.state.newOrTotal + this.state.selectedStatType].sort((a, b) => a.lastDate-b.lastDate )
-        sortedArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
+        outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
           if (a[lastDate] > b[lastDate]) return -1;
 	        if (a[lastDate] < b[lastDate]) return 1;
         }  )
-        outputArr = sortedArr.slice(0,10)
       }
       return outputArr
     }
     
+    const top10sData = () => {
+      // debugger
+      let output = []
+      let count_types = []
+      let state_type = []
+      let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
+  
+      let sortedObjects = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
+        if (a[lastDate] > b[lastDate]) return -1;
+        if (a[lastDate] < b[lastDate]) return 1;
+      }  )
+      let top10StateIDs = sortedObjects.slice(0,10).map(obj => obj.state_id)
+      for (let id of top10StateIDs) {
+        output.push(this.state[this.state.newOrTotal + this.state.selectedStatType].find((obj) => obj.state_id === id  ))
+      }
+      return output
+    }
 
 
     let tableDescription = () => {
-      if (this.state.displayType === "table"){
-        let newOrCumulative = () => {
-          switch (this.state.newOrTotal) {
-            case "new": return "Daily"
-            case "total": return "Cumulative"
-            default: return
-          }
+      let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
+      let newOrCumulative = () => {
+        switch (this.state.newOrTotal) {
+          case "new": return "Daily"
+          case "total": return "Cumulative"
+          default: return
         }
-        let tableDesc = () => {
-  
-            switch (this.state.selectedStatType) {
-              case "Positive": return "Positive Tests"
-              case "Negative": return "Negative Tests"
-              case "Pending": return "Pending Tests"
-              case "Death": return "Deaths"
-              case "Total": return "Tests Submitted"
-              default: return
-            }
-          }
-          return `${newOrCumulative()} count of ${tableDesc()}`
+      }
+      let tableDesc = () => {
+        switch (this.state.selectedStatType) {
+          case "Positive": return "Positive Tests"
+          case "Negative": return "Negative Tests"
+          case "Pending": return "Pending Tests"
+          case "Death": return "Deaths"
+          case "Total": return "Tests Submitted"
+          default: return
+        }
+      }
+      if (this.state.displayType === "table"){
+        return `${newOrCumulative()} count of ${tableDesc()}`
+      } else if (this.state.displayType === "top10s") {
+        if (this.state.newOrTotal === "new") {
+          return `States with the 10 most ${tableDesc()} reported on ${getMonthDayFromYYYYMMDD(lastDate)}`
         } else {
-          if (this.state.displayType === "allOfUSGraph") {
-            return `All data for the entire U.S.`
+          return `States with the 10 most total ${tableDesc()} `
+        }
+      } else {
+          if (this.state.newOrTotal === "new") {
+            return `All daily increases for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
           } else {
-            return `All data for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
+            return `All total counts for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
           }
       }
     }
@@ -258,7 +279,7 @@ class App extends React.Component {
               <Form.Row>
                 <Form.Group  >
                   
-                  {this.state.displayType === "table"
+                {this.state.displayType === "table"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="table" active >
                       Raw Numbers<br />Tables
@@ -268,7 +289,17 @@ class App extends React.Component {
                       Raw Numbers<br />Tables
                     </Button>
                   }
-                  {this.state.displayType === "rateOfGrowthChart"
+                  {this.state.displayType === "top10s"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="top10s" active >
+                      Top 10s<br />Chart
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="top10s"  onClick={this.formChangeHandler}>
+                      Top 10s<br />Chart
+                    </Button>
+                  }
+                  {/* {this.state.displayType === "rateOfGrowthChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
                       Rates of<br />Growth Chart
@@ -277,7 +308,7 @@ class App extends React.Component {
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
                       Rates of<br />Growth Chart
                     </Button>
-                  }
+                  } */}
                   {this.state.displayType === "singleStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
@@ -292,49 +323,12 @@ class App extends React.Component {
               </Form.Row>
             </Form >
           </Row>
-          {(this.state.displayType === "table" || this.state.displayType === "singleStateChart")
-            ?
-            <Row>
-              <Col>
-              </Col>
-                <Form >
-                  <Form.Row>
-                    <Form.Group  >
-                    {this.state.rawOrTops === "raw"
-                    ?
-                      <Button className="maintypebuttonSelected" data-buttontype="rawOrTops"  color="violet" appearance="primary" size="sm" name="raw" active >
-                        Raw Stats
-                      </Button>
-                    :
-                      <Button className="maintypebuttonNotSelected" data-buttontype="rawOrTops"  color="violet" appearance="ghost" size="sm" name="raw"  onClick={this.formChangeHandler}>
-                        Raw Stats
-                      </Button>
-                    }
-                    {this.state.rawOrTops === "tops"
-                    ?
-                      <Button className="maintypebuttonSelected" data-buttontype="rawOrTops"  color="violet" appearance="primary" size="sm" name="tops" active >
-                        Top 10s
-                      </Button>
-                    :
-                      <Button className="maintypebuttonNotSelected" data-buttontype="rawOrTops"  color="violet" appearance="ghost" size="sm" name="tops"  onClick={this.formChangeHandler}>
-                        Top 10s 
-                      </Button>
-                    }
-                    </Form.Group  >
-                  </Form.Row>
-                </Form>
-              <Col>
-              </Col>
-            </Row> 
-          :
-            null
-          }
           <Row>
             <Col  sm={3}>
               <Form >
                 <Form.Row>
                   <Form.Group  >
-                    {this.state.displayType === "table"
+                    {(this.state.displayType === "table" || this.state.displayType === "top10s")
                     ?
                       <Form.Control as="select" name="selectedStatType" value={this.state.selectedStatType} onChange={this.formChangeHandler} > 
                         <option value="Positive">Test Results: Positive</option>
@@ -384,11 +378,8 @@ class App extends React.Component {
               </Form>
             </Col>
           </Row>
-          {(this.state.displayType === "table")
+          {(this.state.displayType === "singleStateChart")
           ?
-                  null
-           
-          :
           <Row>
             <Form >
                 <Form.Row>
@@ -401,11 +392,11 @@ class App extends React.Component {
                 </Form.Row>
               </Form>
           </Row>  
-          }
-          {this.state.displayType === "table"
-          ?
-          null
           :
+          null
+          }
+          {this.state.displayType === "singleStateChart"
+          ?
           <Row>
             <Form >
                 <Form.Row>
@@ -420,7 +411,8 @@ class App extends React.Component {
                 </Form.Row>
               </Form>
           </Row>  
-
+          :
+          null
           }
           <Row>
             <Col sm={12} >
@@ -440,13 +432,13 @@ class App extends React.Component {
                       gridLinesArray={tableDataToDisplay()}
                       // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
                       selectedStatType={this.state.selectedStatType} //ex: Pos, Neg, Total, Death
-                      rawOrTops={this.state.rawOrTops}
+                      sortHandler={this.sortHandler}
                     />
                   </div>
                   :
 
 
-                  (this.state.displayType === "allOfUSGraph" || this.state.displayType === "singleStateChart")
+                  (this.state.displayType === "singleStateChart")
                   ?
                     // <div id="LineChart" >
                     <ChartBuilder 
@@ -459,13 +451,13 @@ class App extends React.Component {
                     />
                     // </div>
                   :
-                  (this.state.displayType === "rateOfGrowthChart")
+                  (this.state.displayType === "top10s")
                   ?
                     // <div id="LineChart" >
                     <ChartBuilder 
-                                          gridType="rateOfGrowthChart"
+                                          gridType="top10s"
                                           allDatesArr={this.state.staticDatesArr}
-                                          gridLinesArray={this.singleStateData()}
+                                          gridLinesArray={top10sData()}
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}
                                           includeTestedAndNegatives={this.state.includeTestedAndNegatives}
@@ -474,26 +466,25 @@ class App extends React.Component {
                     // </div>
                   :
                   null
+                  // (this.state.displayType === "rateOfGrowthChart")
+                  // ?
+                  //   // <div id="LineChart" >
+                  //   <ChartBuilder 
+                  //                         gridType="rateOfGrowthChart"
+                  //                         allDatesArr={this.state.staticDatesArr}
+                  //                         gridLinesArray={this.singleStateData()}
+                  //                         selectedStatType={this.state.selectedStatType}
+                  //                         newOrTotal={this.state.newOrTotal}
+                  //                         includeTestedAndNegatives={this.state.includeTestedAndNegatives}
+                  //                         includePositives={this.state.includePositives}
+                  //   />
+                  //   // </div>
+                  // :
+                  // null
                 :
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                 }
               </Col>
-          </Row>
-          <Row>
-            {(this.state.totalPositive.length > 0 && this.state.displayType === "table" )
-            ?
-              this.state.sortOrder === "NewToOld"
-              ?
-                <Button className="typebutton" data-buttontype="sortOrder"  appearance="primary" size="md" name="OldToNew" active onClick={this.dateSortOrder}>
-                  Reorder Dates: Oldest To Newest
-                </Button> 
-              :
-                <Button className="typebutton" data-buttontype="sortOrder"  appearance="primary" size="md" name="NewToOld" active onClick={this.dateSortOrder}>
-                  Reorder Dates: Newest To Oldest
-                </Button>
-            :
-            null
-            }
           </Row>
         </Container>
         <h6>Updated once daily at 5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/" rel="noopener noreferrer" >CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data"  rel="noopener noreferrer" >this article</a>).</h6>
