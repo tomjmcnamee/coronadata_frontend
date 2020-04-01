@@ -1,16 +1,16 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
-import './App.css';
+import 'rsuite/dist/styles/rsuite-default.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tabs from 'react-bootstrap/Tabs'
 // import Tab  from 'react-bootstrap/Tab'
 
 import loadingMap from './assets/USSpreadMap.gif'
-import 'rsuite/dist/styles/rsuite-default.css';
 import { mapStateIdToStateName } from './HelperFunctions/mappingIDtoSomething'
 import { Button } from 'rsuite';
+import './App.css';
 
 
 
@@ -38,7 +38,9 @@ class App extends React.Component {
     displayType: "table",
     idOfStateInSingleStateGrid: "99",
     includeTestedAndNegatives: false,
-    includePositives: true
+    includePositives: true,
+
+    rawOrTops: "raw"
   }
 
 
@@ -293,64 +295,71 @@ class App extends React.Component {
                   
                   {this.state.displayType === "table"
                   ?
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="table" active >
-                      Raw Numbers Table
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="table" active >
+                      Raw Numbers<br />Tables
                     </Button>
                   :
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="table"  onClick={this.formChangeHandler}>
-                      Raw Numbers Table
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="table"  onClick={this.formChangeHandler}>
+                      Raw Numbers<br />Tables
                     </Button>
                   }
-                  {/* {this.state.displayType === "allOfUSGraph"
-                  ?
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="allOfUSGraph" active >
-                      All of U.S. Chart
-                    </Button>
-                  :
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="allOfUSGraph"  onClick={this.formChangeHandler}>
-                      All of U.S. Chart
-                    </Button>
-                  } */}
                   {this.state.displayType === "rateOfGrowthChart"
                   ?
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="rateOfGrowthChart" active >
-                      Rates of Growth Chart
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
+                      Rates of<br />Growth Chart
                     </Button>
                   :
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
-                      Rates of Growth Chart
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
+                      Rates of<br />Growth Chart
                     </Button>
                   }
                   {this.state.displayType === "singleStateChart"
                   ?
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="primary" size="md" name="singleStateChart" active >
-                      Single State (and U.S.) Charts
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
+                      Single State<br />(and U.S.) Charts
                     </Button>
                   :
-                    <Button className="typebutton" data-buttontype="displayType"  color="cyan" appearance="ghost" size="md" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State (and U.S.) Charts 
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
+                      Single State<br />(and U.S.) Charts 
                     </Button>
                   }            
                 </Form.Group  >
               </Form.Row>
             </Form >
           </Row>
-          {(this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart")
+          {(this.state.displayType === "table")
           ?
+                  null
+          // <Row>
+          //   <Col>
+          //   </Col>
+          //     <Form >
+          //       <Form.Row>
+          //         <Form.Group  >
+          //             <Form.Control as="select" name="rawOrTops" value={this.state.rawOrTops} onChange={this.formChangeHandler} > 
+          //             <option value={"raw"}>Raw Numbers</option>
+          //             <option value={"raw"}>Top 10 per Category</option>
+          //             <option value={"raw"}>Raw Numbers</option>
+          //             </Form.Control>
+          //         </Form.Group  >
+          //       </Form.Row>
+          //     </Form>
+          //   <Col>
+          //   </Col>
+          // </Row>  
+          :
           <Row>
             <Form >
                 <Form.Row>
                   <Form.Group  >
                       <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.state.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} > 
-                      <option value={99}>{"Entire U.S."}</option>
+                      <option value={99}>Entire U.S.</option>
                         {this.dropdownOptionsForStates()}
                       </Form.Control>
                   </Form.Group  >
                 </Form.Row>
               </Form>
           </Row>  
-          :
-          null
           }
           {this.state.displayType === "table"
           ?
