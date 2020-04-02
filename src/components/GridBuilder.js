@@ -46,7 +46,7 @@ function GridBuilder(props) {
             
           ))
 
-          formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
+          formattedGridLinesArr.forEach( obj => !obj.state_name ? obj.state_name = `${mapStateIdToStateName(obj.state_id)}` : null)
           } // ends GridLines IF statement
           return( 
               <Table 
