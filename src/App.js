@@ -26,10 +26,12 @@ class App extends React.Component {
     newNegative: [],
     newDeath: [],
     newTotal: [],
+    newHospitalized: [],
     totalPositive: [],
     totalNegative: [],
     totalDeath: [],
     totalTotal: [],
+    totalHospitalized: [],
 
     selectedStatType: "Death",
     newOrTotal: "total",
@@ -65,7 +67,8 @@ class App extends React.Component {
           totalNegative: response.totalNegative,
           totalDeath: response.totalDeath,
           totalTotal: response.totalTotal,
-          totalPositive: response.totalPositive          
+          totalPositive: response.totalPositive ,
+          totalHospitalized: response.totalHospitalized
         })
         console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
         fetch(process.env.REACT_APP_FETCH_LOCATION + "new_stats", {
@@ -83,7 +86,8 @@ class App extends React.Component {
             newPositive: response.newPositive,
             newNegative: response.newNegative,
             newDeath: response.newDeath,
-            newTotal: response.newTotal
+            newTotal: response.newTotal,
+            newHospitalized: response.newHospitalized
           })
           console.log("Processing Time for NEW Fetch = ", ((+ new Date()) - startTime)/1000 )
         })
@@ -159,6 +163,7 @@ class App extends React.Component {
       output.push(this.state[this.state.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.state.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
     }
     return output
   }
@@ -233,6 +238,7 @@ class App extends React.Component {
           case "Negative": return "Negative Tests"
           case "Death": return "Deaths"
           case "Total": return "Tests Submitted"
+          case "Hospitalized": return "Hospitalized"
           default: return
         }
       }
@@ -324,8 +330,9 @@ class App extends React.Component {
                       <Form.Control as="select" name="selectedStatType" value={this.state.selectedStatType} onChange={this.formChangeHandler} > 
                         <option value="Positive">Test Results: Positive</option>
                         <option value="Negative">Test Results: Negative</option>
-                        <option value="Death">Corona Deaths</option>
                         <option value="Total">Total Tested</option>
+                        <option value="Hospitalized">Total Hospitalized</option>
+                        <option value="Death">Corona Deaths</option>
                       </Form.Control>
                     :
                     null
