@@ -28,7 +28,6 @@ class App extends React.Component {
     newTotal: [],
     totalPositive: [],
     totalNegative: [],
-    totalPending: [],
     totalDeath: [],
     totalTotal: [],
 
@@ -64,7 +63,6 @@ class App extends React.Component {
           allDatesArr: response.allDatesArr,
           staticDatesArr: [...response.allDatesArr].reverse(),
           totalNegative: response.totalNegative,
-          totalPending: response.totalPending,
           totalDeath: response.totalDeath,
           totalTotal: response.totalTotal,
           totalPositive: response.totalPositive          
@@ -95,12 +93,6 @@ class App extends React.Component {
   formChangeHandler = (event) => {
     // debugger
     if (event.target.dataset.buttontype) {
-      // let newVal = event.target.name
-      if (event.target.name === "new" && this.state.selectedStatType === "Pending" ) {
-        this.setState({
-          selectedStatType: "Positive"
-        })
-      }
       // This handles the BUTTONS
       this.setState({
         [event.target.dataset.buttontype]: event.target.name
@@ -239,7 +231,6 @@ class App extends React.Component {
         switch (this.state.selectedStatType) {
           case "Positive": return "Positive Tests"
           case "Negative": return "Negative Tests"
-          case "Pending": return "Pending Tests"
           case "Death": return "Deaths"
           case "Total": return "Tests Submitted"
           default: return
@@ -292,11 +283,11 @@ class App extends React.Component {
                   {this.state.displayType === "top10s"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="top10s" active >
-                      Top 10s<br />Chart
+                      Top 10<br />Charts
                     </Button>
                   :
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="top10s"  onClick={this.formChangeHandler}>
-                      Top 10s<br />Chart
+                      Top 10<br />Charts
                     </Button>
                   }
                   {/* {this.state.displayType === "rateOfGrowthChart"
@@ -333,7 +324,6 @@ class App extends React.Component {
                       <Form.Control as="select" name="selectedStatType" value={this.state.selectedStatType} onChange={this.formChangeHandler} > 
                         <option value="Positive">Test Results: Positive</option>
                         <option value="Negative">Test Results: Negative</option>
-                        { this.state.newOrTotal === "new" ? null : <option value="Pending">Test Results: Pending</option>}
                         <option value="Death">Corona Deaths</option>
                         <option value="Total">Total Tested</option>
                       </Form.Control>
