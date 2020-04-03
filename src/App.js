@@ -32,6 +32,7 @@ class App extends React.Component {
     totalDeath: [],
     totalTotal: [],
     totalHospitalized: [],
+    stayAtHomeOrders: [],
 
     selectedStatType: "Death",
     newOrTotal: "total",
@@ -39,7 +40,7 @@ class App extends React.Component {
     displayType: "table",
     idOfStateInSingleStateGrid: "99",
     includeTestedAndNegatives: false,
-    includePositives: true,
+    includePositivesAndHospitalized: true,
 
     columnToSort: "state_name"
   }
@@ -87,7 +88,8 @@ class App extends React.Component {
             newNegative: response.newNegative,
             newDeath: response.newDeath,
             newTotal: response.newTotal,
-            newHospitalized: response.newHospitalized
+            newHospitalized: response.newHospitalized,
+            stayAtHomeOrders: response.stayAtHomeOrders
           })
           console.log("Processing Time for NEW Fetch = ", ((+ new Date()) - startTime)/1000 )
         })
@@ -132,8 +134,8 @@ class App extends React.Component {
     let state_type = []
     if (this.state.idOfStateInSingleStateGrid === "99") {
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death"]
-        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death"]
+        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized"]
+        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized"]
         // let chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       // for (let day of this.state.staticDatesArr) { 
         // debugger
@@ -403,7 +405,7 @@ class App extends React.Component {
                 </Form.Row>
                 <Form.Row>
                   <Form.Group  >
-                    <Form.Check type="checkbox" name="includePositives" checked={this.state.includePositives} label="Include 'Positive Results'" onChange={this.formToggleHandler}/>
+                    <Form.Check type="checkbox" name="includePositivesAndHospitalized" checked={this.state.includePositivesAndHospitalized} label="Include 'Positive Results' and 'Hospitalized'" onChange={this.formToggleHandler}/>
                   </Form.Group  >
                 </Form.Row>
               </Form>
@@ -444,7 +446,8 @@ class App extends React.Component {
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                                           includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                                          includePositives={this.state.includePositives}
+                                          includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
+                                          stayAtHomeOrders={this.state.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
                     />
                     // </div>
                   :
@@ -458,7 +461,7 @@ class App extends React.Component {
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}
                                           includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                                          includePositives={this.state.includePositives}
+                                          includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
                     />
                     // </div>
                   :
@@ -473,7 +476,7 @@ class App extends React.Component {
                   //                         selectedStatType={this.state.selectedStatType}
                   //                         newOrTotal={this.state.newOrTotal}
                   //                         includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                  //                         includePositives={this.state.includePositives}
+                  //                         includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
                   //   />
                   //   // </div>
                   // :

@@ -2,7 +2,7 @@ import React from 'react'
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine
 } from 'recharts';
 
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
@@ -17,6 +17,7 @@ class ChartBuilder extends React.Component {
       "Negative": 3,
       "Tested": 3,
       "Deaths" : 3,
+      "Hospitalized" : 3,
       "Alabama": 3,
       "Alaska": 3,
       "Arizona": 3,
@@ -233,6 +234,13 @@ class ChartBuilder extends React.Component {
               )
             )
           } // ends GridLines IF statement
+          
+          let stayAtHomeOrderXReferences
+          if (this.props.stayAtHomeOrders.length > 0 ) {
+            stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map(obj => <ReferenceLine x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
+                <Label position="insideTop">{obj.orderAction === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
+              </ReferenceLine>)
+          }
 
           return( 
             <ResponsiveContainer width="95%" height={300}>                        
@@ -242,10 +250,14 @@ class ChartBuilder extends React.Component {
               <XAxis dataKey="date" />
               <YAxis   />
               <Tooltip offset={60} itemStyle={tooltipStyle} />
+              {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
+              {stayAtHomeOrderXReferences}
               <Legend onClick={this.handleLegendClick} iconType="wye"  />
               {this.props.includeTestedAndNegatives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
+
 
               <Line dot={{ strokeWidth: 1 }} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
@@ -310,7 +322,8 @@ class ChartBuilder extends React.Component {
               <Legend onClick={this.handleLegendClick} />
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositives ? <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line type="monotone" dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
               <Line type="monotone" dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
             </ResponsiveContainer>                        
