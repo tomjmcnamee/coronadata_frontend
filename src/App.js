@@ -69,30 +69,16 @@ class App extends React.Component {
           totalDeath: response.totalDeath,
           totalTotal: response.totalTotal,
           totalPositive: response.totalPositive ,
-          totalHospitalized: response.totalHospitalized
+          totalHospitalized: response.totalHospitalized,
+
+          newPositive: response.newPositive,
+          newNegative: response.newNegative,
+          newDeath: response.newDeath,
+          newTotal: response.newTotal,
+          newHospitalized: response.newHospitalized,
+          stayAtHomeOrders: response.stayAtHomeOrders
         })
         console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
-        fetch(process.env.REACT_APP_FETCH_LOCATION + "new_stats", {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-            accepts: "application/json",
-            // FetchPW: `${token}`
-            FetchPW: process.env.REACT_APP_FETCH_PASSWORD
-          }
-        })  
-        .then(resp => resp.json())
-        .then((response) => {
-          this.setState({
-            newPositive: response.newPositive,
-            newNegative: response.newNegative,
-            newDeath: response.newDeath,
-            newTotal: response.newTotal,
-            newHospitalized: response.newHospitalized,
-            stayAtHomeOrders: response.stayAtHomeOrders
-          })
-          console.log("Processing Time for NEW Fetch = ", ((+ new Date()) - startTime)/1000 )
-        })
       })    
   }
 
@@ -456,7 +442,13 @@ class App extends React.Component {
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="top10s"
-                                          allDatesArr={this.state.staticDatesArr}
+                                          allDatesArr={
+                                            this.state.selectedStatType === "Hospitalized" 
+                                            ?
+                                              this.state.staticDatesArr.slice(16,-1)
+                                              :
+                                              this.state.staticDatesArr
+                                          }
                                           gridLinesArray={top10sData()}
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}
