@@ -253,10 +253,10 @@ class ChartBuilder extends React.Component {
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {stayAtHomeOrderXReferences}
               <Legend onClick={this.handleLegendClick} iconType="wye"  />
-              {this.props.includeTestedAndNegatives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
-              {this.props.includeTestedAndNegatives ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositivesAndHospitalized ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
-              {this.props.includePositivesAndHospitalized ? <Line dot={{ strokeWidth: 1 }} type="monotone" dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line  dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line  dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
 
 
               <Line dot={{ strokeWidth: 1 }} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
