@@ -145,7 +145,7 @@ class ChartBuilder extends React.Component {
               dataObject[stateDataObj.state_name] = stateDataObj[this.props.allDatesArr[index]]
             )
           )
-          chartLines = formattedGridLinesArr.map((obj, index) => <Line key={index} dot={{ strokeWidth: 1 }} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
+          chartLines = formattedGridLinesArr.map((obj, index) => <Line key={index} dot={false} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
           // for (let obj of )
         } // ends GridLines IF statement
 
@@ -253,13 +253,13 @@ class ChartBuilder extends React.Component {
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {stayAtHomeOrderXReferences}
               <Legend onClick={this.handleLegendClick} iconType="wye"  />
-              {this.props.includeTestedAndNegatives ? <Line  dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
-              {this.props.includeTestedAndNegatives ? <Line  dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositivesAndHospitalized ? <Line  dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
-              {this.props.includePositivesAndHospitalized ? <Line  dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
 
 
-              <Line dot={{ strokeWidth: 1 }} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
+              <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
             </ResponsiveContainer>                        
           ) // ends "singleStateChart" RETURN
