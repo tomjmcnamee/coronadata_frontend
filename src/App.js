@@ -1,8 +1,8 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
+import Comments from './components/Comments'
 import 'rsuite/dist/styles/rsuite-default.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tabs from 'react-bootstrap/Tabs'
 // import Tab  from 'react-bootstrap/Tab'
@@ -480,6 +480,7 @@ class App extends React.Component {
           </Row>
         </Container>
         <p>Updated once daily ~5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/" rel="noopener noreferrer" >CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data"  rel="noopener noreferrer" >this article</a>).</p>
+        <Comments />
         {process.env.REACT_APP_VIEW_TRACKER === "true"
         ?
           <>
