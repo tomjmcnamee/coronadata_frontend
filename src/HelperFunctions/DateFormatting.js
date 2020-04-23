@@ -14,6 +14,20 @@ const getMonthDayFromYYYYMMDD = (YYYYMMDDint) => {
   }
 };
 
+const getDashSeperatedInDATEFormatFromYYYYMMDD = (YYYYMMDDint) => {
+  if (YYYYMMDDint) {
+    return new Date(YYYYMMDDint.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3') )
+    ;
+  }
+};
+
+const getDashSeperatedDateFromYYYYMMDD = (YYYYMMDDint) => {
+  if (YYYYMMDDint) {
+    return YYYYMMDDint.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')
+    ;
+  }
+};
+
 
 // const mapStateIdToStateAbbreviation = (id) => {
 //   switch (id) {
@@ -28,4 +42,4 @@ const getMonthDayFromYYYYMMDD = (YYYYMMDDint) => {
 
 
 export { 
-  getMonthDayFromYYYYMMDD  }
+  getMonthDayFromYYYYMMDD, getDashSeperatedInDATEFormatFromYYYYMMDD, getDashSeperatedDateFromYYYYMMDD  }

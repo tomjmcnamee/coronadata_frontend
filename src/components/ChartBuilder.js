@@ -1,12 +1,12 @@
 import React from 'react'
-import { DateRangePicker } from 'rsuite';
+import { DateRangePicker } from 'rsuite'
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine
 } from 'recharts';
 
-import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
+import { getMonthDayFromYYYYMMDD, getDashSeperatedInDATEFormatFromYYYYMMDD, getDashSeperatedDateFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 
 
@@ -80,7 +80,17 @@ class ChartBuilder extends React.Component {
       // "Total Negative": 2,
       // "Total Deaths" :2
     },
+    datePickerValue: [],
+    displayDates: []
   };
+
+  componentDidMount(){
+    this.setState({
+      datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+      displayDates: this.props.allDatesArr
+    })
+  }
+
 
   handleMouseEnter = (o) => {
     const { dataKey } = o;
@@ -125,8 +135,44 @@ class ChartBuilder extends React.Component {
 
 
   render () {
+    const {
+      allowedMaxDays,
+      allowedDays,
+      allowedRange,
+      beforeToday,
+      afterToday,
+      combine
+    } = DateRangePicker;
 
-   
+
+    let dateRangePicker = () => {
+      return <DateRangePicker 
+                showOneCalendar
+                // defaultValue={[getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]}
+                disabledDate={allowedRange(getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1))}         
+                value={this.state.datePickerValue}
+                onChange={value => {
+                  this.setState({ datePickerValue: value });
+                }}
+                onClean={() => this.setState({
+                  datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+                })}
+        ranges={[{
+          label: 'Last 7',
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 7]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          // value: [dateFns.addDays(new Date(), -1), dateFns.addDays(new Date(), -1)]
+        }, {
+          label: 'Last 14',
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 14]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+        }, {
+          label: 'Last 30',
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+        }, {
+          label: 'All available',
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+        }]}
+      />
+    }
 
     const tooltipStyle = {
       textAlign: 'left',
@@ -193,6 +239,7 @@ class ChartBuilder extends React.Component {
 
           return( 
             <>
+            {dateRangePicker()}
             <ResponsiveContainer width="95%" height={300}>                        
             <LineChart  data={chartData}
               margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
