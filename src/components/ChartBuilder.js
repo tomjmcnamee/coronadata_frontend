@@ -1,4 +1,5 @@
 import React from 'react'
+import { DateRangePicker } from 'rsuite';
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
@@ -121,7 +122,11 @@ class ChartBuilder extends React.Component {
 
 
 
+
+
   render () {
+
+   
 
     const tooltipStyle = {
       textAlign: 'left',
@@ -187,6 +192,7 @@ class ChartBuilder extends React.Component {
           }
 
           return( 
+            <>
             <ResponsiveContainer width="95%" height={300}>                        
             <LineChart  data={chartData}
               margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
@@ -206,6 +212,7 @@ class ChartBuilder extends React.Component {
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
             </ResponsiveContainer>                        
+          </>
           ) // ends "singleStateChart" RETURN
 
       case "rateOfGrowthChart":
