@@ -284,7 +284,7 @@ class App extends React.Component {
                       Top 10<br />Charts
                     </Button>
                   }
-                  {/* {this.state.displayType === "rateOfGrowthChart"
+                  {this.state.displayType === "rateOfGrowthChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
                       Rates of<br />Growth Chart
@@ -293,7 +293,7 @@ class App extends React.Component {
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
                       Rates of<br />Growth Chart
                     </Button>
-                  } */}
+                  }
                   {this.state.displayType === "singleStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
@@ -363,7 +363,7 @@ class App extends React.Component {
               </Form>
             </Col>
           </Row>
-          {(this.state.displayType === "singleStateChart")
+          {this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart"
           ?
           <Row>
             <Form >
@@ -380,7 +380,7 @@ class App extends React.Component {
           :
           null
           }
-          {this.state.displayType === "singleStateChart"
+          {this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart"
           ?
           <Row>
             <Form >
@@ -457,22 +457,22 @@ class App extends React.Component {
                     />
                     // </div>
                   :
-                  null
-                  // (this.state.displayType === "rateOfGrowthChart")
-                  // ?
-                  //   // <div id="LineChart" >
-                  //   <ChartBuilder 
-                  //                         gridType="rateOfGrowthChart"
-                  //                         allDatesArr={this.state.staticDatesArr}
-                  //                         gridLinesArray={this.singleStateData()}
-                  //                         selectedStatType={this.state.selectedStatType}
-                  //                         newOrTotal={this.state.newOrTotal}
-                  //                         includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                  //                         includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
-                  //   />
-                  //   // </div>
-                  // :
                   // null
+                  (this.state.displayType === "rateOfGrowthChart")
+                  ?
+                    // <div id="LineChart" >
+                    <ChartBuilder 
+                                          gridType="rateOfGrowthChart"
+                                          allDatesArr={this.state.staticDatesArr}
+                                          gridLinesArray={this.singleStateData()}
+                                          selectedStatType={this.state.selectedStatType}
+                                          newOrTotal={this.state.newOrTotal}
+                                          includeTestedAndNegatives={this.state.includeTestedAndNegatives}
+                                          includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
+                    />
+                    // </div>
+                  :
+                  null
                 :
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                 }
