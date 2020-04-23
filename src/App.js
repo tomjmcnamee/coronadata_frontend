@@ -274,6 +274,20 @@ class App extends React.Component {
                       Raw Numbers<br />Tables
                     </Button>
                   }
+                  {this.state.displayType === "singleStateChart"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
+                      Single State<br />(and U.S.) Charts
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
+                      Single State<br />(and U.S.) Charts 
+                    </Button>
+                  }  
+                  </Form.Group  >          
+                </Form.Row>
+                <Form.Row>
+                  <Form.Group  >
                   {this.state.displayType === "top10s"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="top10s" active >
@@ -294,16 +308,6 @@ class App extends React.Component {
                       Rates of<br />Growth Chart
                     </Button>
                   }
-                  {this.state.displayType === "singleStateChart"
-                  ?
-                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
-                      Single State<br />(and U.S.) Charts
-                    </Button>
-                  :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State<br />(and U.S.) Charts 
-                    </Button>
-                  }            
                 </Form.Group  >
               </Form.Row>
             </Form >

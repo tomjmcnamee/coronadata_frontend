@@ -52,7 +52,7 @@ function GridBuilder(props) {
               <Table 
                 data={formattedGridLinesArr}
                 rowHeight={32}
-                height={275}
+                height={375}
                 onSortColumn={props.sortHandler}
               >
                 <Column width={115} align="center"  fixed sortable >
