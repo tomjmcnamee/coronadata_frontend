@@ -234,9 +234,9 @@ class App extends React.Component {
         return `${newOrCumulative()} count of ${tableDesc()}`
       } else if (this.state.displayType === "top10s") {
         if (this.state.newOrTotal === "new") {
-          return `States with the 10 most ${tableDesc()} reported on ${getMonthDayFromYYYYMMDD(lastDate)}`
+          return `States with the 10 most ${tableDesc()} reported on last date in range`
         } else {
-          return `States with the 10 most total ${tableDesc()} `
+          return `States with the 10 most total ${tableDesc()} as of last date in range`
         }
       } else {
           if (this.state.newOrTotal === "new") {

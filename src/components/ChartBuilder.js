@@ -6,7 +6,10 @@ import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine
 } from 'recharts';
 
-import { getMonthDayFromYYYYMMDD, getDashSeperatedInDATEFormatFromYYYYMMDD, getDashSeperatedDateFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
+import { getMonthDayFromYYYYMMDD, 
+  getDashSeperatedInDATEFormatFromYYYYMMDD, 
+  getDashSeperatedDateFromYYYYMMDD,
+  getYYYYMMDDfromFormattedDate  } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 
 
@@ -86,8 +89,8 @@ class ChartBuilder extends React.Component {
 
   componentDidMount(){
     this.setState({
-      datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
-      displayDates: this.props.allDatesArr
+      datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+      displayDates: [...this.props.allDatesArr]
     })
   }
 
@@ -130,6 +133,29 @@ class ChartBuilder extends React.Component {
     }
   }
 
+  datePickerChangeHandler = (value) => {
+    console.log("this is the value passed to change hanler: ", value)
+    if (value.length === 0) {
+      // This denotes the "CLEAN 'X' "
+      this.setState({ 
+        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+        displayDates: [...this.props.allDatesArr]
+       })
+    } else {
+      this.setState({ 
+        datePickerValue: value,
+        displayDates: this.newDisplayDateArr(value)
+       })
+    }
+  }
+
+  newDisplayDateArr = (value) => {
+    let startIndex = this.props.allDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[0]))
+    let endIndex = this.props.allDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[1]))  
+    let arrToReturn = this.props.allDatesArr.slice(startIndex, endIndex + 1)
+    return arrToReturn
+  }
+
 
 
 
@@ -146,17 +172,13 @@ class ChartBuilder extends React.Component {
 
 
     let dateRangePicker = () => {
+      console.log("this.state.datePickerValue = ", this.state.datePickerValue)
       return <DateRangePicker 
+                cleanable={false}
                 showOneCalendar
-                // defaultValue={[getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]}
-                disabledDate={allowedRange(getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1))}         
+                disabledDate={allowedRange(getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1))}         
                 value={this.state.datePickerValue}
-                onChange={value => {
-                  this.setState({ datePickerValue: value });
-                }}
-                onClean={() => this.setState({
-                  datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
-                })}
+                onChange={(value) => this.datePickerChangeHandler(value) }
         ranges={[{
           label: 'Last 7',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 7]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
@@ -169,7 +191,7 @@ class ChartBuilder extends React.Component {
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
         }, {
           label: 'All available',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
         }]}
       />
     }
@@ -190,10 +212,10 @@ class ChartBuilder extends React.Component {
         // Keep these next two, verifies SOMETHING and adds state name to Obj
         if (formattedGridLinesArr.length > 0 ) {
           formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
-          for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
+          for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
           chartData.forEach((dataObject, index) => 
             formattedGridLinesArr.forEach(stateDataObj =>
-              dataObject[stateDataObj.state_name] = stateDataObj[this.props.allDatesArr[index]]
+              dataObject[stateDataObj.state_name] = stateDataObj[this.state.displayDates[index]]
             )
           )
           chartLines = formattedGridLinesArr.map((obj, index) => <Line key={index} dot={false} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
@@ -201,19 +223,21 @@ class ChartBuilder extends React.Component {
         } // ends GridLines IF statement
 
 
-          return(                         
-            <ResponsiveContainer width="95%" height={300}>                        
-            <LineChart  data={chartData}
-              margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis   />
-              <Tooltip offset={60} itemStyle={tooltipStyle} />
-              {/* <Legend onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} /> */}
-              <Legend onClick={this.handleLegendClick} />
-              {chartLines}
-            </LineChart>
-            </ResponsiveContainer>
+          return(     
+            <>
+            {dateRangePicker()}                    
+              <ResponsiveContainer width="95%" height={300}>                        
+              <LineChart  data={chartData}
+                margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis   />
+                <Tooltip offset={60} itemStyle={tooltipStyle} />
+                <Legend onClick={this.handleLegendClick} iconType="wye"  />
+                {chartLines}
+              </LineChart>
+              </ResponsiveContainer>
+            </>
           ) // ends "AllStatesChart" RETURN
 
 
@@ -222,10 +246,10 @@ class ChartBuilder extends React.Component {
       case "singleStateChart":
         if (formattedGridLinesArr.length > 0 ) {
           //This checks to see if its for the WHOLE US or not
-            for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
+            for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
               formattedGridLinesArr.forEach(stateTypeObj =>
-                dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
+                dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
               )
             )
           } // ends GridLines IF statement
@@ -250,7 +274,7 @@ class ChartBuilder extends React.Component {
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {stayAtHomeOrderXReferences}
               <Legend onClick={this.handleLegendClick} iconType="wye"  />
-              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke="#F39C12"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
               {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
               {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
@@ -268,21 +292,21 @@ class ChartBuilder extends React.Component {
         if (formattedGridLinesArr.length > 0 ) {
           //This checks to see if its for the WHOLE US or not
 
-            for ( let date1 of this.props.allDatesArr) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
+            for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
             formattedGridLinesArr.forEach(stateTypeObj =>
-                //let tempVal = stateTypeObj[this.props.allDatesArr[index]] // This is the origina, just print the value
+                //let tempVal = stateTypeObj[this.state.displayDates[index]] // This is the origina, just print the value
                 
                 {if (index === 0) {
                   dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = null
                 } else {
                   //if yesterday's AND today's numbers were NOT 0 or null   ---- IDEAL
-                  if (!!stateTypeObj[this.props.allDatesArr[index]] && !!stateTypeObj[this.props.allDatesArr[index -1 ]] ) {
-                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = ((stateTypeObj[this.props.allDatesArr[index]] - stateTypeObj[this.props.allDatesArr[index - 1]] ) / stateTypeObj[this.props.allDatesArr[index - 1]]) *100
-                  } else if (!stateTypeObj[this.props.allDatesArr[index]]) {
+                  if (!!stateTypeObj[this.state.displayDates[index]] && !!stateTypeObj[this.state.displayDates[index -1 ]] ) {
+                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = ((stateTypeObj[this.state.displayDates[index]] - stateTypeObj[this.state.displayDates[index - 1]] ) / stateTypeObj[this.state.displayDates[index - 1]]) *100
+                  } else if (!stateTypeObj[this.state.displayDates[index]]) {
                     dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = 0
-                  } else if (!stateTypeObj[this.props.allDatesArr[index - 1]]) {
-                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.props.allDatesArr[index]]
+                  } else if (!stateTypeObj[this.state.displayDates[index - 1]]) {
+                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
                   }
                   if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] > chartMax) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMax}
                   if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] < chartMin) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMin}
@@ -304,6 +328,8 @@ class ChartBuilder extends React.Component {
           }  
 
           return( 
+            <>
+            {dateRangePicker()}
             <ResponsiveContainer width="90%" height={300}>                        
             <LineChart  data={chartData}
               margin={{ top: 5, right: 1, left: 10, bottom: 5 }}>
@@ -317,14 +343,15 @@ class ChartBuilder extends React.Component {
               formatter={gridTooltipValFormatter}
               labelFormatter={(value) => `RoG for ${value}` }
               offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
-              <Legend onClick={this.handleLegendClick} />
+              <Legend onClick={this.handleLegendClick} iconType="wye"  />
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
               {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
               {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
               <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
-            </ResponsiveContainer>                        
+            </ResponsiveContainer>       
+            </>                 
           ) // ends "singleStateChart" RETURN
      
 

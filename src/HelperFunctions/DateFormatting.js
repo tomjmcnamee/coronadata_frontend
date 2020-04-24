@@ -28,6 +28,23 @@ const getDashSeperatedDateFromYYYYMMDD = (YYYYMMDDint) => {
   }
 };
 
+function getYYYYMMDDfromFormattedDate(d) {
+  let month, day, year, newDate
+  if (d instanceof Date) {
+      month = d.getMonth()+1
+      month = month.toString()
+      day = d.getDate().toString()
+      year = d.getFullYear().toString()
+
+    if (month.length < 2) {month = "0" + month}
+    if (day.length < 2) {day = "0" + day}
+        
+
+    newDate = parseInt([year, month, day].join(""))
+    return newDate;
+  }
+}
+
 
 // const mapStateIdToStateAbbreviation = (id) => {
 //   switch (id) {
@@ -42,4 +59,8 @@ const getDashSeperatedDateFromYYYYMMDD = (YYYYMMDDint) => {
 
 
 export { 
-  getMonthDayFromYYYYMMDD, getDashSeperatedInDATEFormatFromYYYYMMDD, getDashSeperatedDateFromYYYYMMDD  }
+  getMonthDayFromYYYYMMDD, 
+  getDashSeperatedInDATEFormatFromYYYYMMDD, 
+  getDashSeperatedDateFromYYYYMMDD,
+  getYYYYMMDDfromFormattedDate  
+}
