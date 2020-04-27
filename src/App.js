@@ -405,7 +405,7 @@ class App extends React.Component {
           }
           <Row>
             <Col sm={12} >
-              <h5>{tableDescription()}</h5>
+              <h5>{this.state.totalDeath.length > 0 ? tableDescription() : null }</h5>
             </Col>
           </Row>
           <Row  className="justify-content-md-center" >
