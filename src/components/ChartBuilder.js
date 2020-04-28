@@ -244,15 +244,33 @@ class ChartBuilder extends React.Component {
 
 
           case "singleStateChart":
+            // let averageDeaths = {}
             if (formattedGridLinesArr.length > 0 ) {
               /// This builds the 7-day Average numbers
-              let deathsArr = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
-              console.log("New Deaths array = ", deathsArr)
+              let newDeathsArr = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
+              let averageDeaths = {...newDeathsArr}
+              if (newDeathsArr && Object.keys(newDeathsArr).length > 0) {
+                let dates = Object.keys(newDeathsArr)
+                let i = 6
+                console.log("New Deaths array = ", newDeathsArr)
+                console.log("Dates arr = ", dates)
 
+              // debugger
+              while (i < dates.length) {
+                averageDeaths[dates[i]] = Math.trunc((newDeathsArr[dates[i]] + (newDeathsArr[dates[i-1]]) + (newDeathsArr[dates[i-2]]) + (newDeathsArr[dates[i-3]]) + (newDeathsArr[dates[i-4]]) + 
+                (newDeathsArr[dates[i-5]]) + (newDeathsArr[dates[i-6]]))/7)
+                i++
+              }
+              averageDeaths["count_type"] = "7DayAverage"
+              formattedGridLinesArr.push(averageDeaths)
+            }
+            console.log("Averae Deaths arr = ", averageDeaths)
+            console.log("formattedGridLinesArr  arr = ", formattedGridLinesArr)
 
 
 
           //This checks to see if its for the WHOLE US or not
+
             for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
               formattedGridLinesArr.forEach(stateTypeObj =>
@@ -261,7 +279,7 @@ class ChartBuilder extends React.Component {
             )
           } // ends GridLines IF statement
 
-          
+          console.log("props", chartData)
           let stayAtHomeOrderXReferences
           if (this.props.stayAtHomeOrders.length > 0 ) {
             stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map(obj => <ReferenceLine x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
@@ -289,7 +307,8 @@ class ChartBuilder extends React.Component {
 
 
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
-              <Line dot={false} type="monotone"  dataKey="Deaths7Day" strokeWidth={width["Deaths"]} stroke="purple"   />
+              {/* <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   />  */}
+              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   /> : null}
             </LineChart>
             </ResponsiveContainer>                        
           </>
