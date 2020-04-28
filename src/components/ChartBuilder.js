@@ -243,8 +243,15 @@ class ChartBuilder extends React.Component {
 
 
 
-      case "singleStateChart":
-        if (formattedGridLinesArr.length > 0 ) {
+          case "singleStateChart":
+            if (formattedGridLinesArr.length > 0 ) {
+              /// This builds the 7-day Average numbers
+              let deathsArr = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
+              console.log("New Deaths array = ", deathsArr)
+
+
+
+
           //This checks to see if its for the WHOLE US or not
             for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
@@ -253,6 +260,7 @@ class ChartBuilder extends React.Component {
               )
             )
           } // ends GridLines IF statement
+
           
           let stayAtHomeOrderXReferences
           if (this.props.stayAtHomeOrders.length > 0 ) {
@@ -281,6 +289,7 @@ class ChartBuilder extends React.Component {
 
 
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
+              <Line dot={false} type="monotone"  dataKey="Deaths7Day" strokeWidth={width["Deaths"]} stroke="purple"   />
             </LineChart>
             </ResponsiveContainer>                        
           </>
