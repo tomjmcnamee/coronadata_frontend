@@ -283,7 +283,7 @@ class ChartBuilder extends React.Component {
           let stayAtHomeOrderXReferences
           if (this.props.stayAtHomeOrders.length > 0 ) {
             stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map(obj => <ReferenceLine x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
-                <Label position="insideTop">{obj.orderAction === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
+                <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
               </ReferenceLine>)
           }
 
@@ -308,7 +308,7 @@ class ChartBuilder extends React.Component {
 
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
               {/* <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   />  */}
-              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   /> : null}
+              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Average deaths-per-day over previous 7 days" strokeWidth={2} stroke="#12F315"   /> : null}
             </LineChart>
             </ResponsiveContainer>                        
           </>
