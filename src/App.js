@@ -64,7 +64,7 @@ class App extends React.Component {
     .then((response) => {
         this.setState({
           allDatesArr: response.allDatesArr,
-          staticDatesArr: [...response.allDatesArr].reverse(),
+          staticDatesArr: [...response.allDatesArr  ].reverse(),
           totalNegative: response.totalNegative,
           totalDeath: response.totalDeath,
           totalTotal: response.totalTotal,
@@ -301,7 +301,7 @@ class App extends React.Component {
                   {this.state.displayType === "rateOfGrowthChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
-                      Rates of<br />Growth Chart
+                      Rates of<br />Growth Charts
                     </Button>
                   :
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>

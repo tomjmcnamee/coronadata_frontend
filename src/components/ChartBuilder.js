@@ -205,7 +205,7 @@ class ChartBuilder extends React.Component {
     const { width } = this.state
     let chartData = []
     let chartLines = []
-    const top10Colors = ["#FF0000", "#FF1493", "#EE82EE", "#8A2BE2", "#FF8C00", "#D2691E", "#00FF00", "#20B2AA", "#00BFFF", "#0000FF"]
+    const top10Colors = ["#FF0000", "#00BFFF", "#EE82EE", "#00FF00", "#8A2BE2", "#FF8C00", "#D2691E", "#20B2AA", "#FF1493", "#0000FF"]
     switch(this.props.gridType) {
       case "top10s":
 
@@ -308,7 +308,7 @@ class ChartBuilder extends React.Component {
 
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
               {/* <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   />  */}
-              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Average deaths-per-day over previous 7 days" strokeWidth={2} stroke="#12F315"   /> : null}
+              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Deaths: 7 day average" strokeWidth={2} stroke="#12F315"   /> : null}
             </LineChart>
             </ResponsiveContainer>                        
           </>
