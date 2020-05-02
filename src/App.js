@@ -240,9 +240,9 @@ class App extends React.Component {
         }
       } else if (this.state.displayType === "rateOfGrowthChart") {
         if (this.state.newOrTotal === "new") {
-          return `Rates of Growth for Daily numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
+          return `Rates of Growth for Daily 7-day average numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
         } else {
-          return `Rates of growth of Total numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
+          return `Rates of growth of Total 7-day average numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
         }
       } else {
           if (this.state.newOrTotal === "new") {

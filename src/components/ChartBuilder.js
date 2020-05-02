@@ -84,7 +84,8 @@ class ChartBuilder extends React.Component {
       // "Total Deaths" :2
     },
     datePickerValue: [],
-    displayDates: []
+    displayDates: [],
+    average: false
   };
 
   componentDidMount(){
@@ -250,7 +251,7 @@ class ChartBuilder extends React.Component {
               let newDeathsArr = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
               let averageDeaths = {...newDeathsArr}
               if (newDeathsArr && Object.keys(newDeathsArr).length > 0) {
-                let dates = Object.keys(newDeathsArr)
+                let dates = Object.keys(newDeathsArr).filter( k => k.startsWith("2020"))
                 let i = 6
                 console.log("New Deaths array = ", newDeathsArr)
                 console.log("Dates arr = ", dates)
@@ -315,72 +316,87 @@ class ChartBuilder extends React.Component {
           ) // ends "singleStateChart" RETURN
 
       case "rateOfGrowthChart":
-        let chartMax = 500
-        let chartMin = -500
+
+
+        let chartMax = 100
+        let chartMin = -100
         if (formattedGridLinesArr.length > 0 ) {
           //This checks to see if its for the WHOLE US or not
 
-            for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
-            chartData.forEach((dataObject, index) => 
-            formattedGridLinesArr.forEach(stateTypeObj =>
-                //let tempVal = stateTypeObj[this.state.displayDates[index]] // This is the origina, just print the value
-                
-                {if (index === 0) {
-                  dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = null
-                } else {
-                  //if yesterday's AND today's numbers were NOT 0 or null   ---- IDEAL
-                  if (!!stateTypeObj[this.state.displayDates[index]] && !!stateTypeObj[this.state.displayDates[index -1 ]] ) {
-                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = ((stateTypeObj[this.state.displayDates[index]] - stateTypeObj[this.state.displayDates[index - 1]] ) / stateTypeObj[this.state.displayDates[index - 1]]) *100
-                  } else if (!stateTypeObj[this.state.displayDates[index]]) {
-                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = 0
-                  } else if (!stateTypeObj[this.state.displayDates[index - 1]]) {
-                    dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
-                  }
-                  if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] > chartMax) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMax}
-                  if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] < chartMin) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMin}
-                }} //Closes Original IF
-                
+          for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
 
-              )
+    /// Averaging-out logic Starts here
+            let tempRoGAveragesData = []
+            let dates = Object.keys(formattedGridLinesArr[0]).filter( k => k.startsWith("2020"))
+            formattedGridLinesArr.forEach( function(obj) {
+              let i = 6
+              let tempObj = {...obj}
+              while (i < dates.length) {
+                tempObj[dates[i]] = Math.trunc((obj[dates[i]] + (obj[dates[i-1]]) + (obj[dates[i-2]]) + (obj[dates[i-3]]) + (obj[dates[i-4]]) + 
+                (obj[dates[i-5]]) + (obj[dates[i-6]]))/7)
+                i++
+              }
+            tempRoGAveragesData.push(tempObj)
+          })  // Ends forEach to geet average of all values
+          formattedGridLinesArr = [...tempRoGAveragesData]
+    /// Averaging-out logic Stops here
+
+          chartData.forEach((dataObject, index) => 
+          formattedGridLinesArr.forEach(stateTypeObj =>              
+              {if (index === 0) {
+                dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = null
+              } else {
+                //if yesterday's AND today's numbers were NOT 0 or null   ---- IDEAL
+                if (!!stateTypeObj[this.state.displayDates[index]] && !!stateTypeObj[this.state.displayDates[index -1 ]] ) {
+                  dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = ((stateTypeObj[this.state.displayDates[index]] - stateTypeObj[this.state.displayDates[index - 1]] ) / stateTypeObj[this.state.displayDates[index - 1]]) *100
+                } else if (!stateTypeObj[this.state.displayDates[index]]) {
+                  dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = 0
+                } else if (!stateTypeObj[this.state.displayDates[index - 1]]) {
+                  dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
+                }
+                if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] > chartMax) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMax}
+                if (dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] < chartMin) {dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = chartMin}
+              }} //Closes Original IF
             )
-          } // ends GridLines IF statement
+          )
+        } // ends GridLines IF statements
 
-          function gridTooltipValFormatter(value, name) {
-            if (value === chartMax) {
-              return `>${value.toFixed(2)}%`
-            } else if (value === chartMin) {
-                return `<${value.toFixed(2)}%`
-            }else {
-                return `${value.toFixed(2)}%`
-            }
-          }  
+        function gridTooltipValFormatter(value, name) {
+          if (value === chartMax) {
+            return `>${value.toFixed(2)}%`
+          } else if (value === chartMin) {
+              return `<${value.toFixed(2)}%`
+          }else {
+              return `${value.toFixed(2)}%`
+          }
+        }  
 
-          return( 
-            <>
-            {dateRangePicker()}
-            <ResponsiveContainer width="90%" height={300}>                        
-            <LineChart  data={chartData}
-              margin={{ top: 5, right: 1, left: 10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              {/* <CartesianAxis tickLine="false"     /> */}
-              <XAxis dataKey="date" />
-              <YAxis tickFormatter={this.formatYAxisForRateOfGrowth}>
-                <Label angle={-90} position='insideBottomLeft' >{this.yLabel()}</Label>
-              </YAxis>
-              <Tooltip  
-              formatter={gridTooltipValFormatter}
-              labelFormatter={(value) => `RoG for ${value}` }
-              offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
-              <Legend onClick={this.handleLegendClick} iconType="wye"  />
-              {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
-              {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
-              {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
-              <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
-            </LineChart>
-            </ResponsiveContainer>       
-            </>                 
-          ) // ends "singleStateChart" RETURN
+        return( 
+          <>
+          {dateRangePicker()}
+          <ResponsiveContainer width="90%" height={300}>                        
+          <LineChart  data={chartData}
+            margin={{ top: 5, right: 1, left: 10, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            {/* <CartesianAxis tickLine="false"     /> */}
+            <XAxis dataKey="date" />
+            <YAxis tickFormatter={this.formatYAxisForRateOfGrowth}>
+              <Label angle={-90} position='insideBottomLeft' >{this.yLabel()}</Label>
+            </YAxis>
+            <Tooltip  
+            formatter={gridTooltipValFormatter}
+            labelFormatter={(value) => `RoG for ${value}` }
+            offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
+            <Legend onClick={this.handleLegendClick} iconType="wye"  />
+            {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+            {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+            {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+            {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
+            <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
+          </LineChart>
+          </ResponsiveContainer>       
+          </>                 
+        ) // ends "singleStateChart" RETURN
      
 
       default:
