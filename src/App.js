@@ -238,6 +238,12 @@ class App extends React.Component {
         } else {
           return `States with the 10 most total ${tableDesc()} as of last date in range`
         }
+      } else if (this.state.displayType === "rateOfGrowthChart") {
+        if (this.state.newOrTotal === "new") {
+          return `Rates of Growth for Daily numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
+        } else {
+          return `Rates of growth of Total numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
+        }
       } else {
           if (this.state.newOrTotal === "new") {
             return `All daily increases for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
