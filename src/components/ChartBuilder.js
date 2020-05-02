@@ -158,10 +158,19 @@ class ChartBuilder extends React.Component {
   }
 
 
-
-
-
+  
+  
+  
   render () {
+    const sevenDayAverageCalculator = (inputObj, outputObj, datesArr) => {
+      let i = 6
+      while (i < datesArr.length) {
+        outputObj[datesArr[i]] = Math.trunc((inputObj[datesArr[i]] + (inputObj[datesArr[i-1]]) + (inputObj[datesArr[i-2]]) + (inputObj[datesArr[i-3]]) + (inputObj[datesArr[i-4]]) + 
+        (inputObj[datesArr[i-5]]) + (inputObj[datesArr[i-6]]))/7)
+        i++
+      }
+    }
+
     const {
       allowedMaxDays,
       allowedDays,
@@ -248,23 +257,14 @@ class ChartBuilder extends React.Component {
             // let averageDeaths = {}
             if (formattedGridLinesArr.length > 0 ) {
               /// This builds the 7-day Average numbers
-              let newDeathsArr = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
-              let averageDeaths = {...newDeathsArr}
-              if (newDeathsArr && Object.keys(newDeathsArr).length > 0) {
-                let dates = Object.keys(newDeathsArr).filter( k => k.startsWith("2020"))
-                let i = 6
-                console.log("New Deaths array = ", newDeathsArr)
-                console.log("Dates arr = ", dates)
-
-              // debugger
-              while (i < dates.length) {
-                averageDeaths[dates[i]] = Math.trunc((newDeathsArr[dates[i]] + (newDeathsArr[dates[i-1]]) + (newDeathsArr[dates[i-2]]) + (newDeathsArr[dates[i-3]]) + (newDeathsArr[dates[i-4]]) + 
-                (newDeathsArr[dates[i-5]]) + (newDeathsArr[dates[i-6]]))/7)
-                i++
+              let newDeathsObj = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
+              let averageDeaths = {...newDeathsObj}
+              if (newDeathsObj && Object.keys(newDeathsObj).length > 0) {
+                let dates = Object.keys(newDeathsObj).filter( k => k.startsWith("2020"))
+                sevenDayAverageCalculator(newDeathsObj, averageDeaths, dates)
+                averageDeaths["count_type"] = "7DayAverage"
+                formattedGridLinesArr.push(averageDeaths)
               }
-              averageDeaths["count_type"] = "7DayAverage"
-              formattedGridLinesArr.push(averageDeaths)
-            }
             console.log("Averae Deaths arr = ", averageDeaths)
             console.log("formattedGridLinesArr  arr = ", formattedGridLinesArr)
 
@@ -329,13 +329,9 @@ class ChartBuilder extends React.Component {
             let tempRoGAveragesData = []
             let dates = Object.keys(formattedGridLinesArr[0]).filter( k => k.startsWith("2020"))
             formattedGridLinesArr.forEach( function(obj) {
-              let i = 6
+              
               let tempObj = {...obj}
-              while (i < dates.length) {
-                tempObj[dates[i]] = Math.trunc((obj[dates[i]] + (obj[dates[i-1]]) + (obj[dates[i-2]]) + (obj[dates[i-3]]) + (obj[dates[i-4]]) + 
-                (obj[dates[i-5]]) + (obj[dates[i-6]]))/7)
-                i++
-              }
+              sevenDayAverageCalculator(obj, tempObj, dates)
             tempRoGAveragesData.push(tempObj)
           })  // Ends forEach to geet average of all values
           formattedGridLinesArr = [...tempRoGAveragesData]

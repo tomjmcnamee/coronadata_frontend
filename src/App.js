@@ -9,7 +9,6 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 
 import loadingMap from './assets/USSpreadMap.gif'
 import { mapStateIdToStateName } from './HelperFunctions/mappingIDtoSomething'
-import { getMonthDayFromYYYYMMDD } from './HelperFunctions/DateFormatting'
 import { Button } from 'rsuite';
 import './App.css';
 
@@ -195,8 +194,6 @@ class App extends React.Component {
     const top10sData = () => {
       // debugger
       let output = []
-      let count_types = []
-      let state_type = []
       let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
   
       let sortedObjects = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
@@ -212,7 +209,6 @@ class App extends React.Component {
 
 
     let tableDescription = () => {
-      let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
       let newOrCumulative = () => {
         switch (this.state.newOrTotal) {
           case "new": return "Daily"
