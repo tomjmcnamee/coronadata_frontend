@@ -135,7 +135,6 @@ class ChartBuilder extends React.Component {
   }
 
   datePickerChangeHandler = (value) => {
-    console.log("this is the value passed to change hanler: ", value)
     if (value.length === 0) {
       // This denotes the "CLEAN 'X' "
       this.setState({ 
@@ -182,7 +181,6 @@ class ChartBuilder extends React.Component {
 
 
     let dateRangePicker = () => {
-      console.log("this.state.datePickerValue = ", this.state.datePickerValue)
       return <DateRangePicker 
                 cleanable={false}
                 showOneCalendar
@@ -265,8 +263,6 @@ class ChartBuilder extends React.Component {
                 averageDeaths["count_type"] = "7DayAverage"
                 formattedGridLinesArr.push(averageDeaths)
               }
-            console.log("Averae Deaths arr = ", averageDeaths)
-            console.log("formattedGridLinesArr  arr = ", formattedGridLinesArr)
 
 
 
@@ -280,7 +276,6 @@ class ChartBuilder extends React.Component {
             )
           } // ends GridLines IF statement
 
-          console.log("props", chartData)
           let stayAtHomeOrderXReferences
           if (this.props.stayAtHomeOrders.length > 0 ) {
             stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map(obj => <ReferenceLine x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
@@ -303,13 +298,13 @@ class ChartBuilder extends React.Component {
               <Legend onClick={this.handleLegendClick} iconType="wye"  />
               {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke="#F39C12"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke="#12F315"   /> :null }
               {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
 
 
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
               {/* <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   />  */}
-              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Deaths: 7 day average" strokeWidth={2} stroke="#12F315"   /> : null}
+              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Deaths: 7 day average" strokeWidth={2} stroke="red"   /> : null}
             </LineChart>
             </ResponsiveContainer>                        
           </>
