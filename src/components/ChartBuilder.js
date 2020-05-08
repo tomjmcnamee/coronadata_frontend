@@ -254,6 +254,8 @@ class ChartBuilder extends React.Component {
           case "singleStateChart":
             // let averageDeaths = {}
             if (formattedGridLinesArr.length > 0 ) {
+
+              
               /// This builds the 7-day Average numbers
               let newDeathsObj = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
               let averageDeaths = {...newDeathsObj}
@@ -283,6 +285,8 @@ class ChartBuilder extends React.Component {
               </ReferenceLine>)
           }
 
+
+
           return( 
             <>
             {dateRangePicker()}
@@ -295,7 +299,7 @@ class ChartBuilder extends React.Component {
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {stayAtHomeOrderXReferences}
-              <Legend onClick={this.handleLegendClick} iconType="wye"  />
+              <Legend  onClick={this.handleLegendClick} iconType="wye"  />
               {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke="#F39C12"   /> :null }
               {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
               {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke="#12F315"   /> :null }
@@ -304,7 +308,7 @@ class ChartBuilder extends React.Component {
 
               <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
               {/* <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   />  */}
-              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Deaths: 7 day average" strokeWidth={2} stroke="red"   /> : null}
+              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Deaths: 7 day average" strokeWidth={2} stroke="red"   strokeDasharray="3 3" /> : null}
             </LineChart>
             </ResponsiveContainer>                        
           </>
