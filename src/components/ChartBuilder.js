@@ -291,22 +291,7 @@ class ChartBuilder extends React.Component {
               } //  Ends For...In formattedFridlineArr
           
 
-              
-
-
-              // let newDeathObj = .find( obj => obj.count_type === "new-death")
-              // let averageDeaths = {...newDeathObj}
-              // if (newDeathObj && Object.keys(newDeathObj).length > 0) {
-              //   let dates = Object.keys(newDeathObj).filter( k => k.startsWith("2020"))
-              //   sevenDayAverageCalculator(newDeathObj, averageDeaths, dates)
-              //   averageDeaths["count_type"] = "7DayAverage"
-              //   formattedGridLinesArr.push(averageDeaths)
-              // }
-
-
-
           //This checks to see if its for the WHOLE US or not
-
             for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
               formattedGridLinesArr.forEach(stateTypeObj =>
@@ -322,11 +307,13 @@ class ChartBuilder extends React.Component {
               </ReferenceLine>)
           }
           
+          
+
           let legendPayload = [
             { color: this.state.colors.positive,
               dataKey:"Positive",
               inactive:false,
-              type:"plainline",
+              type:this.props.includePositives?"plainline":"none",
               value:"Positive",
               payload:{dot:false,
                   dataKey:"Positive",
@@ -350,7 +337,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.tested,
               dataKey:"Tested",
               inactive:false,
-              type:"plainline",
+              type:this.props.includeTested?"plainline":"none",
               value:"Tested",
               payload:{dot:false,
                 dataKey:"Tested",
@@ -374,7 +361,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.death,
               dataKey:"Deaths",
               inactive:false,
-              type:"plainline",
+              type:this.props.includeDeaths?"plainline":"none",
               value:"Deaths",
               payload:{dot:false,
                 dataKey:"Deaths",
@@ -398,7 +385,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.negative,
               dataKey:"Negative",
               inactive:false,
-              type:"plainline",
+              type:this.props.includeNegatives?"plainline":"none",
               value:"Negative",
               payload:{dot:false,
                 dataKey:"Negative",
@@ -422,7 +409,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.hospitalized,
               dataKey:"Hospitalized",
               inactive:false,
-              type:"plainline",
+              type:this.props.includeHospitalized?"plainline":"none",
               value:"Hospitalized",
               payload:{dot:false,
                 dataKey:"Hospitalized ",
@@ -446,7 +433,8 @@ class ChartBuilder extends React.Component {
             { color:"black",
               dataKey:"Deaths: 7 day average",
               inactive:false,
-              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? "plainline" : "none" ,
+              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") && (this.props.includeTested || this.props.includeNegatives || this.props.includeDeaths || this.props.includePositives || this.props.includeHospitalized) ? "plainline" : "none" ,
+              // type:this.props.gridLinesArray[0]["count_type"].startsWith("new" && (this.props.includeTested || this.props.includeNegatives || this.props.includeDeaths || this.props.includePositives || this.props.includeHospitalized) ? "plainline" : "none" ,
               value:"7 day averages",
               payload:{dot:false,
                 dataKey:"Deaths: 7 day average",
