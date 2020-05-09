@@ -34,7 +34,7 @@ class App extends React.Component {
     stayAtHomeOrders: [],
 
     selectedStatType: "Death",
-    newOrTotal: "total",
+    newOrTotal: "new",
 
     displayType: "table",
     idOfStateInSingleStateGrid: "99",

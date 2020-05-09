@@ -1,9 +1,10 @@
 import React from 'react'
 import { DateRangePicker } from 'rsuite'
+
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine, LegendPayload
 } from 'recharts';
 
 import { getMonthDayFromYYYYMMDD, 
@@ -85,8 +86,17 @@ class ChartBuilder extends React.Component {
     },
     datePickerValue: [],
     displayDates: [],
-    average: false
+    average: false,
+    colors: {
+      death: "purple",
+      hospitalized: "red",
+      positive: "#12F315",
+      tested: "#1973E5",
+      negative: "#F39C12"
+    }
   };
+
+  
 
   componentDidMount(){
     this.setState({
@@ -254,17 +264,39 @@ class ChartBuilder extends React.Component {
           case "singleStateChart":
             // let averageDeaths = {}
             if (formattedGridLinesArr.length > 0 ) {
+              /// This builds the 7-day Average numbers
+              
+              // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
+              // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
+              
+              for (let dataSetObj of formattedGridLinesArr) {
+                // debugger    
+                let tempAveragesArr = []
+                if ( Object.keys(dataSetObj).length > 0 ) {
+                  let tempAveragesObj = {}
+                  let dates = Object.keys(dataSetObj).filter( k => k.startsWith("2020"))
+                  sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
+                  let tempCountType = dataSetObj["count_type"]
+                  tempAveragesObj["count_type"] = tempCountType + "-avg"
+                  tempAveragesArr.push(tempAveragesObj)
+                }
+
+                formattedGridLinesArr = [ ...formattedGridLinesArr, ...tempAveragesArr]
+
+              } //  Ends For...In formattedFridlineArr
+          
 
               
-              /// This builds the 7-day Average numbers
-              let newDeathsObj = formattedGridLinesArr.find( obj => obj.count_type === "new-death")
-              let averageDeaths = {...newDeathsObj}
-              if (newDeathsObj && Object.keys(newDeathsObj).length > 0) {
-                let dates = Object.keys(newDeathsObj).filter( k => k.startsWith("2020"))
-                sevenDayAverageCalculator(newDeathsObj, averageDeaths, dates)
-                averageDeaths["count_type"] = "7DayAverage"
-                formattedGridLinesArr.push(averageDeaths)
-              }
+
+
+              // let newDeathObj = .find( obj => obj.count_type === "new-death")
+              // let averageDeaths = {...newDeathObj}
+              // if (newDeathObj && Object.keys(newDeathObj).length > 0) {
+              //   let dates = Object.keys(newDeathObj).filter( k => k.startsWith("2020"))
+              //   sevenDayAverageCalculator(newDeathObj, averageDeaths, dates)
+              //   averageDeaths["count_type"] = "7DayAverage"
+              //   formattedGridLinesArr.push(averageDeaths)
+              // }
 
 
 
@@ -284,6 +316,172 @@ class ChartBuilder extends React.Component {
                 <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
               </ReferenceLine>)
           }
+          
+          let legendPayload = [
+            { color: this.state.colors.positive,
+              dataKey:"Positive",
+              inactive:false,
+              type:"plainline",
+              value:"Positive",
+              payload:{dot:false,
+                  dataKey:"Positive",
+                  strokeWidth:3,
+                  stroke:this.state.colors.positive,
+                  xAxisId:0,
+                  yAxisId:0,
+                  connectNulls:false,
+                  activeDot:true,
+                  legendType:"line",
+                  fill:"#fff",
+                  points:[],
+                  isAnimationActive:true,
+                  animateNewValues:true,
+                  animationBegin:0,
+                  animationDuration:1500,
+                  animationEasing:"ease",
+                  hide:false
+                }
+              } ,
+            { color:this.state.colors.tested,
+              dataKey:"Tested",
+              inactive:false,
+              type:"plainline",
+              value:"Tested",
+              payload:{dot:false,
+                dataKey:"Tested",
+                strokeWidth:3,
+                stroke:this.state.colors.tested,
+                xAxisId:0,
+                yAxisId:0,
+                connectNulls:false,
+                activeDot:true,
+                legendType:"line",
+                fill:"#fff",
+                points:[],
+                isAnimationActive:true,
+                animateNewValues:true,
+                animationBegin:0,
+                animationDuration:1500,
+                animationEasing:"ease",
+                hide:false
+              }
+            },
+            { color:this.state.colors.death,
+              dataKey:"Deaths",
+              inactive:false,
+              type:"plainline",
+              value:"Deaths",
+              payload:{dot:false,
+                dataKey:"Deaths",
+                strokeWidth:3,
+                stroke:this.state.colors.death,
+                xAxisId:0,
+                yAxisId:0,
+                connectNulls:false,
+                activeDot:true,
+                legendType:"line",
+                fill:"#fff",
+                points:[],
+                isAnimationActive:true,
+                animateNewValues:true,
+                animationBegin:0,
+                animationDuration:1500,
+                animationEasing:"ease",
+                hide:false
+              }
+            },
+            { color:this.state.colors.negative,
+              dataKey:"Negative",
+              inactive:false,
+              type:"plainline",
+              value:"Negative",
+              payload:{dot:false,
+                dataKey:"Negative",
+                strokeWidth:3,
+                stroke:this.state.colors.negative,
+                xAxisId:0,
+                yAxisId:0,
+                connectNulls:false,
+                activeDot:true,
+                legendType:"line",
+                fill:"#fff",
+                points:[],
+                isAnimationActive:true,
+                animateNewValues:true,
+                animationBegin:0,
+                animationDuration:1500,
+                animationEasing:"ease",
+                hide:false
+              }
+            },
+            { color:this.state.colors.hospitalized,
+              dataKey:"Hospitalized",
+              inactive:false,
+              type:"plainline",
+              value:"Hospitalized",
+              payload:{dot:false,
+                dataKey:"Hospitalized ",
+                strokeWidth:3,
+                stroke:this.state.colors.hospitalized,
+                xAxisId:0,
+                yAxisId:0,
+                connectNulls:false,
+                activeDot:true,
+                legendType:"line",
+                fill:"#fff",
+                points:[],
+                isAnimationActive:true,
+                animateNewValues:true,
+                animationBegin:0,
+                animationDuration:1500,
+                animationEasing:"ease",
+                hide:false
+              }
+            },
+            { color:"black",
+              dataKey:"Deaths: 7 day average",
+              inactive:false,
+              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? "plainline" : "none" ,
+              value:"7 day averages",
+              payload:{dot:false,
+                dataKey:"Deaths: 7 day average",
+                strokeWidth:3,
+                strokeDasharray:"3 3",
+                stroke:"black",
+                xAxisId:0,
+                yAxisId:0,
+                connectNulls:false,
+                activeDot:true,
+                legendType:"line",
+                fill:"#fff",
+                points:[],
+                isAnimationActive:true,
+                animateNewValues:true,
+                animationBegin:0,
+                animationDuration:1500,
+                animationEasing:"ease",
+                hide:false
+              }
+            }
+          ]
+
+
+
+          function legendFormatter(value, entry, index) {
+            // debugger
+            let { type, payload, color } = entry;
+
+            if (entry.value.includes("7")) {
+              value = "7 day averages"
+              color = "black"
+              payload = {...payload, type:"none"}
+            } 
+            console.log(entry)
+            // debugger
+            // legendPayloadArray.push(entry)
+            return <span >{value}</span>;
+          }
+          
 
 
 
@@ -291,7 +489,7 @@ class ChartBuilder extends React.Component {
             <>
             {dateRangePicker()}
             <ResponsiveContainer width="95%" height={300}>                        
-            <LineChart  data={chartData}
+            <LineChart  data={chartData} 
               margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
@@ -299,16 +497,22 @@ class ChartBuilder extends React.Component {
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {stayAtHomeOrderXReferences}
-              <Legend  onClick={this.handleLegendClick} iconType="wye"  />
-              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke="#F39C12"   /> :null }
-              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
-              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke="#12F315"   /> :null }
-              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
+              {/* <Legend onClick={this.handleLegendClick} iconType="plainline"  iconSize={30} /> */}
+              <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
+            
+              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke={this.state.colors.negative}   /> :null }
+              {this.props.includeTestedAndNegatives ? <Line  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
+              {this.props.includePositivesAndHospitalized ? <Line  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
 
+              <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke={this.state.colors.death}   />
+              { this.props.includeTestedAndNegatives ? <Line dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
+              { this.props.includeTestedAndNegatives ? <Line dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
+              { this.props.includePositivesAndHospitalized ? <Line dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={2} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
+              { this.props.includePositivesAndHospitalized ? <Line dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={2} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
+              <Line dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={2} stroke={this.state.colors.death}   strokeDasharray="3 3" />
+              
 
-              <Line dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
-              {/* <Line dot={false} type="monotone"  dataKey="Average Deaths per day over previous 7 days" strokeWidth={2} stroke="red"   />  */}
-              { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line dot={false} type="monotone"  dataKey="Deaths: 7 day average" strokeWidth={2} stroke="red"   strokeDasharray="3 3" /> : null}
             </LineChart>
             </ResponsiveContainer>                        
           </>
@@ -384,10 +588,10 @@ class ChartBuilder extends React.Component {
             offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
             <Legend onClick={this.handleLegendClick} iconType="wye"  />
             {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
-            {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke="#1973E5"/> :null }
+            {this.props.includeTestedAndNegatives ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
             {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
-            {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke="black"   /> :null }
-            <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke="purple"   />
+            {this.props.includePositivesAndHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
+            <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke={this.state.colors.death}   />
           </LineChart>
           </ResponsiveContainer>       
           </>                 

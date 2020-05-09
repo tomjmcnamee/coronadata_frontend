@@ -149,7 +149,11 @@ const mapCountTypeToHumanReadableType = (counttype) => {
     case "total-negative": return "Negative"
     case "total-hospitalized": return "Hospitalized"
     case "total-death": return "Deaths"
-    case "7DayAverage": return "Deaths: 7 day average"
+    case "new-total-avg": return "Total-avg"
+    case "new-positive-avg": return "Positive-avg"
+    case "new-negative-avg": return "Negative-avg"
+    case "new-hospitalized-avg": return "Hospitalized-avg"
+    case "new-death-avg": return "Deaths-avg"
     default: return "mapCountTypeToHumanReadableType switch  case in HelperFunctions/mappingIDtoSomething.js"
   } // ends switch/case 
 }
