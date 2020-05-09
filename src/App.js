@@ -1,8 +1,8 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
-import 'rsuite/dist/styles/rsuite-default.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
+import 'rsuite/dist/styles/rsuite-default.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tabs from 'react-bootstrap/Tabs'
 // import Tab  from 'react-bootstrap/Tab'
@@ -38,8 +38,11 @@ class App extends React.Component {
 
     displayType: "table",
     idOfStateInSingleStateGrid: "99",
-    includeTestedAndNegatives: false,
-    includePositivesAndHospitalized: true,
+    includeTested: true,
+    includeNegatives: true,
+    includePositives: true,
+    includeHospitalized: true,
+    includeDeaths: true,
 
     columnToSort: "state_name"
   }
@@ -390,14 +393,13 @@ class App extends React.Component {
           ?
           <Row>
             <Form >
+                    <Form.Check  inline type="checkbox" name="includeTested" checked={this.state.includeTested} label="'Total Tested'" onChange={this.formToggleHandler}/>
+                    <Form.Check inline type="checkbox" name="includePositives" checked={this.state.includePositives} label="'Positive Results'" onChange={this.formToggleHandler}/>
                 <Form.Row>
                   <Form.Group  >
-                    <Form.Check type="checkbox" name="includeTestedAndNegatives" checked={this.state.includeTestedAndNegatives} label="Include 'Total Tested' and 'Negative Results'" onChange={this.formToggleHandler}/>
-                  </Form.Group  >
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group  >
-                    <Form.Check type="checkbox" name="includePositivesAndHospitalized" checked={this.state.includePositivesAndHospitalized} label="Include 'Positive Results' and 'Hospitalized'" onChange={this.formToggleHandler}/>
+                    <Form.Check inline type="checkbox" name="includeNegatives" checked={this.state.includeNegatives} label="'Negative Results'" onChange={this.formToggleHandler}/>
+                    <Form.Check inline type="checkbox" name="includeHospitalized" checked={this.state.includeHospitalized} label="'Hospitalized'" onChange={this.formToggleHandler}/>
+                    <Form.Check inline type="checkbox" name="includeDeaths" checked={this.state.includeDeaths} label="'Deaths'" onChange={this.formToggleHandler}/>
                   </Form.Group  >
                 </Form.Row>
               </Form>
@@ -437,8 +439,11 @@ class App extends React.Component {
                                           allDatesArr={this.state.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
-                                          includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                                          includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
+                                          includeTested={this.state.includeTested}
+                                          includeNegatives={this.state.includeNegatives}
+                                          includeDeaths={this.state.includeDeaths}
+                                          includePositives={this.state.includePositives}
+                                          includeHospitalized={this.state.includeHospitalized}
                                           stayAtHomeOrders={this.state.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
                     />
                     // </div>
@@ -458,8 +463,11 @@ class App extends React.Component {
                                           gridLinesArray={top10sData()}
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}
-                                          includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                                          includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
+                                          includeTested={this.state.includeTested}
+                                          includeNegatives={this.state.includeNegatives}
+                                          includeDeaths={this.state.includeDeaths}
+                                          includePositives={this.state.includePositives}
+                                          includeHospitalized={this.state.includeHospitalized}
                     />
                     // </div>
                   :
@@ -473,8 +481,11 @@ class App extends React.Component {
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}
-                                          includeTestedAndNegatives={this.state.includeTestedAndNegatives}
-                                          includePositivesAndHospitalized={this.state.includePositivesAndHospitalized}
+                                          includeTested={this.state.includeTested}
+                                          includeNegatives={this.state.includeNegatives}
+                                          includeDeaths={this.state.includeDeaths}
+                                          includePositives={this.state.includePositives}
+                                          includeHospitalized={this.state.includeHospitalized}
                     />
                     // </div>
                   :
