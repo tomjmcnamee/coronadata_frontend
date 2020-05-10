@@ -91,6 +91,11 @@ class App extends React.Component {
       this.setState({
         [event.target.dataset.buttontype]: event.target.name
       })
+    } else if (event.target.dataset.includes) {
+      debugger
+      this.setState({
+        [event.target.name]: event.target.dataset.includes
+      })
     } else {
       // This handles the Dropdowns
       this.setState({
@@ -391,18 +396,70 @@ class App extends React.Component {
           }
           {this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart"
           ?
+          // <Row>
+          //   <Form >
+          //           <Form.Check  inline type="checkbox" name="includeTested" checked={this.state.includeTested} label="'Total Tested'" onChange={this.formToggleHandler}/>
+          //           <Form.Check inline type="checkbox" name="includePositives" checked={this.state.includePositives} label="'Positive Results'" onChange={this.formToggleHandler}/>
+          //       <Form.Row>
+          //         <Form.Group  >
+          //           <Form.Check inline type="checkbox" name="includeNegatives" checked={this.state.includeNegatives} label="'Negative Results'" onChange={this.formToggleHandler}/>
+          //           <Form.Check inline type="checkbox" name="includeHospitalized" checked={this.state.includeHospitalized} label="'Hospitalized'" onChange={this.formToggleHandler}/>
+          //           <Form.Check inline type="checkbox" name="includeDeaths" checked={this.state.includeDeaths} label="'Deaths'" onChange={this.formToggleHandler}/>
+          //         </Form.Group  >
+          //       </Form.Row>
+          //     </Form>
+          // </Row>  
           <Row>
-            <Form >
-                    <Form.Check  inline type="checkbox" name="includeTested" checked={this.state.includeTested} label="'Total Tested'" onChange={this.formToggleHandler}/>
-                    <Form.Check inline type="checkbox" name="includePositives" checked={this.state.includePositives} label="'Positive Results'" onChange={this.formToggleHandler}/>
-                <Form.Row>
-                  <Form.Group  >
-                    <Form.Check inline type="checkbox" name="includeNegatives" checked={this.state.includeNegatives} label="'Negative Results'" onChange={this.formToggleHandler}/>
-                    <Form.Check inline type="checkbox" name="includeHospitalized" checked={this.state.includeHospitalized} label="'Hospitalized'" onChange={this.formToggleHandler}/>
-                    <Form.Check inline type="checkbox" name="includeDeaths" checked={this.state.includeDeaths} label="'Deaths'" onChange={this.formToggleHandler}/>
-                  </Form.Group  >
-                </Form.Row>
-              </Form>
+              {this.state.includeTested
+              ?
+                <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeTested" onClick={this.formToggleHandler} active >
+                  Total Tested
+                </Button>
+              :
+                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeTested"  onClick={this.formToggleHandler}>
+                  Total Tested
+                </Button>
+              }
+              {this.state.includeNegatives
+              ?
+              <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeNegatives" onClick={this.formToggleHandler} active >
+                  Negative Results
+                </Button>
+              :
+              <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeNegatives"  onClick={this.formToggleHandler}>
+                  Negative Results
+                </Button>
+              }
+              {this.state.includePositives
+              ?
+                <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositives" onClick={this.formToggleHandler} active >
+                  Positive Results
+                </Button>
+              :
+                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includePositives"  onClick={this.formToggleHandler}>
+                  Positive Results
+                </Button>
+              }
+              {this.state.includeHospitalized
+              ?
+                <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalized" onClick={this.formToggleHandler} active >
+                  Hospitalized
+              </Button>
+              :
+                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeHospitalized"  onClick={this.formToggleHandler}>
+                  Hospitalized
+              </Button>
+              }
+              {this.state.includeDeaths
+              ?
+                <Button className="typebutton"   color="green" appearance="primary" size="sm" name="includeDeaths" onClick={this.formToggleHandler} active >
+                  Deaths
+              </Button>
+              :
+                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeDeaths"  onClick={this.formToggleHandler}>
+                  Deaths
+              </Button>
+              }
           </Row>  
           :
           null

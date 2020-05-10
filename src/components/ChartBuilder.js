@@ -434,7 +434,6 @@ class ChartBuilder extends React.Component {
               dataKey:"Deaths: 7 day average",
               inactive:false,
               type:this.props.gridLinesArray[0]["count_type"].startsWith("new") && (this.props.includeTested || this.props.includeNegatives || this.props.includeDeaths || this.props.includePositives || this.props.includeHospitalized) ? "plainline" : "none" ,
-              // type:this.props.gridLinesArray[0]["count_type"].startsWith("new" && (this.props.includeTested || this.props.includeNegatives || this.props.includeDeaths || this.props.includePositives || this.props.includeHospitalized) ? "plainline" : "none" ,
               value:"7 day averages",
               payload:{dot:false,
                 dataKey:"Deaths: 7 day average",
@@ -457,25 +456,6 @@ class ChartBuilder extends React.Component {
               }
             }
           ]
-
-
-
-          function legendFormatter(value, entry, index) {
-            // debugger
-            let { type, payload, color } = entry;
-
-            if (entry.value.includes("7")) {
-              value = "7 day averages"
-              color = "black"
-              payload = {...payload, type:"none"}
-            } 
-            console.log(entry)
-            // debugger
-            // legendPayloadArray.push(entry)
-            return <span >{value}</span>;
-          }
-          
-
 
 
           return( 
