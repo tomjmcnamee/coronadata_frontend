@@ -10,8 +10,6 @@ import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething'
 
 function GridBuilder(props) {
 
-  
-
     let formattedGridLinesArr = [...props.gridLinesArray]
     // debugger
     switch(props.gridType) {
@@ -55,9 +53,9 @@ function GridBuilder(props) {
                 height={375}
                 onSortColumn={props.sortHandler}
               >
-                <Column width={115} align="center"  fixed sortable >
+                <Column width={125} align="center"  fixed sortable >
                   <HeaderCell >Sort</HeaderCell>
-                  <Cell  dataKey="state_name" />
+                  <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => props.jumpToDisplayAndState("singleStateChart", prop.target.innerHTML)} dataKey="state_name" />
                 </Column>
                
                 

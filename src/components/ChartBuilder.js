@@ -302,7 +302,7 @@ class ChartBuilder extends React.Component {
 
           let stayAtHomeOrderXReferences
           if (this.props.stayAtHomeOrders.length > 0 ) {
-            stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map(obj => <ReferenceLine x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
+            stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
                 <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
               </ReferenceLine>)
           }

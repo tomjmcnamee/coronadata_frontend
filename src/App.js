@@ -8,7 +8,7 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tab  from 'react-bootstrap/Tab'
 
 import loadingMap from './assets/USSpreadMap.gif'
-import { mapStateIdToStateName } from './HelperFunctions/mappingIDtoSomething'
+import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
 import { Button } from 'rsuite';
 import './App.css';
 
@@ -176,6 +176,14 @@ class App extends React.Component {
         columnToSort: "first_number_col"
       })
     }
+  }
+
+  jumpToDisplayAndState = (displayType, stateName) => {
+    this.setState({
+      idOfStateInSingleStateGrid: mapStateNameToStateId(stateName),
+      displayType: displayType
+    })
+
   }
   
   
@@ -483,6 +491,7 @@ class App extends React.Component {
                       // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
                       selectedStatType={this.state.selectedStatType} //ex: Pos, Neg, Total, Death
                       sortHandler={this.sortHandler}
+                      jumpToDisplayAndState={this.jumpToDisplayAndState}
                     />
                   </div>
                   :

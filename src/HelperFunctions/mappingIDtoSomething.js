@@ -137,6 +137,70 @@ const mapStateIdToStateName = (id) => {
   } // ends switch/case 
 } // ends mapStateIdToStateName function
 
+const mapStateNameToStateId = (id) => {
+  switch (id) {
+    case "Alabama": return 1
+    case "Alaska": return 2
+    case "Arizona": return 3
+    case "Arkansas": return 4
+    case "California": return 5
+    case "Colorado": return 6
+    case "Connecticut": return 7
+    case "Delaware": return 8
+    case "Florida": return 9
+    case "Georgia": return 10
+    case "Hawaii": return 11
+    case "Idaho": return 12
+    case "Illinois": return 13
+    case "Indiana": return 14
+    case "Iowa": return 15
+    case "Kansas": return 16
+    case "Kentucky": return 17
+    case "Louisiana": return 18
+    case "Maine": return 19
+    case "Maryland": return 20
+    case "Massachusetts": return 21
+    case "Michigan": return 22
+    case "Minnesota": return 23
+    case "Mississippi": return 24
+    case "Missouri": return 25
+    case "Montana": return 26
+    case "Nebraska": return 27
+    case "Nevada": return 28
+    case "New Hampshire": return 29
+    case "New Jersey": return 30
+    case "New Mexico": return 31
+    case "New York": return 32
+    case "North Carolina": return 33
+    case "North Dakota": return 34
+    case "Ohio": return 35
+    case "Oklahoma": return 36
+    case "Oregon": return 37
+    case "Pennsylvania": return 38
+    case "Rhode Island": return 39
+    case "South Carolina": return 40
+    case "South Dakota": return 41
+    case "Tennessee": return 42
+    case "Texas": return 43
+    case "Utah": return 44
+    case "Vermont": return 45
+    case "Virginia": return 46
+    case "Washington": return 47
+    case "Washington DC": return 48
+    case "West Virginia": return 49
+    case "Wisconsin": return 50
+    case "Wyoming": return 51
+    case "American Samoa": return 52
+    case "Puerto Rico": return 53
+    case "US Virgin Islands": return 54
+    case "Guam": return 55
+    case "N. Mariana Islands": return 56
+    case "US Totals": return 99
+
+    default: return "Correct State Name switch  case in HelperFunctions/mappingIDtoSomething.js"
+  } // ends switch/case 
+} // ends mapStateNameToStateId function
+
 const mapCountTypeToHumanReadableType = (counttype) => {
   switch (counttype) {
     case "new-total": return "Tested"
@@ -161,4 +225,5 @@ const mapCountTypeToHumanReadableType = (counttype) => {
 export { 
   // mapStateIdToStateAbbreviation,
   mapStateIdToStateName,
+  mapStateNameToStateId,
   mapCountTypeToHumanReadableType  }
