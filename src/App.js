@@ -23,6 +23,8 @@ class App extends React.Component {
     staticDatesArr: [],
     newPositive: [],
     newNegative: [],
+    newPositivePercent: [],
+    newNegativePercent: [],
     newDeath: [],
     newTotal: [],
     newHospitalized: [],
@@ -64,25 +66,59 @@ class App extends React.Component {
     })
     .then(resp => resp.json())
     .then((response) => {
-        this.setState({
-          allDatesArr: response.allDatesArr,
-          staticDatesArr: [...response.allDatesArr  ].reverse(),
-          totalNegative: response.totalNegative,
-          totalDeath: response.totalDeath,
-          totalTotal: response.totalTotal,
-          totalPositive: response.totalPositive ,
-          totalHospitalized: response.totalHospitalized,
+      let percentages = this.buildPercentageArrays(response.newTotal, response.newNegative, response.newPositive, response.allDatesArr) 
+      // let percentages = [1,2]
+      // debugger
+      this.setState({
+        allDatesArr: response.allDatesArr,
+        staticDatesArr: [...response.allDatesArr  ].reverse(),
+        totalNegative: response.totalNegative,
+        totalDeath: response.totalDeath,
+        totalTotal: response.totalTotal,
+        totalPositive: response.totalPositive ,
+        totalHospitalized: response.totalHospitalized,
 
-          newPositive: response.newPositive,
-          newNegative: response.newNegative,
-          newDeath: response.newDeath,
-          newTotal: response.newTotal,
-          newHospitalized: response.newHospitalized,
-          stayAtHomeOrders: response.stayAtHomeOrders
-        })
-        console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
-      })    
+        newPositive: response.newPositive,
+        newNegative: response.newNegative,
+        newDeath: response.newDeath,
+        newTotal: response.newTotal,
+        newHospitalized: response.newHospitalized,
+        stayAtHomeOrders: response.stayAtHomeOrders,
+        newPositivePercent: percentages[0],
+        newNegativePercent: percentages[1]
+      })
+      console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
+    })    
+      
   }
+
+  buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr) => {
+    let newPositivePercentArr = []
+    let newNegativePercentArr = []
+    for (let totalObj of newTotal) {
+      let newPosObj = {state_id: totalObj.state_id}
+      let newNegObj = {state_id: totalObj.state_id}
+      let tempPosObj = newPositive.find( obj => obj.state_id === totalObj.state_id)
+      let tempNegObj = newNegative.find( obj => obj.state_id === totalObj.state_id)
+      let tempTotal = newTotal.find( obj => obj.state_id === totalObj.state_id)
+      for (let day of allDatesArr) {
+        if (!tempPosObj[day] || !tempTotal[day]) {
+          newPosObj[day] = "-"
+          } else {
+          newPosObj[day] = (( tempPosObj[day] * 100) / tempTotal[day]).toFixed(2)
+        }
+        // debugger
+        if (!tempPosObj[day] || !tempTotal[day]) {
+          newNegObj[day] = "-"
+        } else {
+          newNegObj[day] = (( tempNegObj[day] * 100) / tempTotal[day]).toFixed(2)
+        }
+      } // ends FOR OF allDatesArr loop
+      newPositivePercentArr.push(newPosObj)
+      newNegativePercentArr.push(newNegObj)
+    } // ends FOR OF newTotalArr loop
+    return [newPositivePercentArr, newNegativePercentArr]
+  } // ends buildPercentageArrays function
 
   formChangeHandler = (event) => {
     // debugger
@@ -192,6 +228,8 @@ class App extends React.Component {
       // debugger
       let outputArr
       let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
+      
+
       
       if (this.state.columnToSort === "state_name") {
         outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]]
@@ -339,7 +377,9 @@ class App extends React.Component {
                     ?
                       <Form.Control as="select" name="selectedStatType" value={this.state.selectedStatType} onChange={this.formChangeHandler} > 
                         <option value="Positive">Test Results: Positive</option>
+                        {this.state.newOrTotal === "new" ? <option value="PositivePercent">Positive Results Percentage</option> : null }
                         <option value="Negative">Test Results: Negative</option>
+                        {this.state.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null }
                         <option value="Total">Total Tested</option>
                         <option value="Hospitalized">Total Hospitalized</option>
                         <option value="Death">Corona Deaths</option>
