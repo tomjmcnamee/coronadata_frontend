@@ -208,6 +208,8 @@ const mapCountTypeToHumanReadableType = (counttype) => {
     case "new-negative": return "Negative"
     case "new-hospitalized": return "Hospitalized"
     case "new-death": return "Deaths"
+    case "new-positivePercent": return "Positive %"
+    case "new-negativePercent": return "Negative %"
     case "total-total": return "Tested"
     case "total-positive": return "Positive"
     case "total-negative": return "Negative"

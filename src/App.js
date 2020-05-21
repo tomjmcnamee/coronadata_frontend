@@ -45,6 +45,7 @@ class App extends React.Component {
     includePositives: true,
     includeHospitalized: true,
     includeDeaths: true,
+    includePositivePercent: true,
 
     columnToSort: "state_name"
   }
@@ -96,23 +97,30 @@ class App extends React.Component {
     let newPositivePercentArr = []
     let newNegativePercentArr = []
     for (let totalObj of newTotal) {
-      let newPosObj = {state_id: totalObj.state_id}
-      let newNegObj = {state_id: totalObj.state_id}
+      let newPosObj = {state_id: totalObj.state_id,  count_type: "new-positivePercent"}
+      let newNegObj = {state_id: totalObj.state_id, count_type: "new-negativePercent"}
       let tempPosObj = newPositive.find( obj => obj.state_id === totalObj.state_id)
       let tempNegObj = newNegative.find( obj => obj.state_id === totalObj.state_id)
       let tempTotal = newTotal.find( obj => obj.state_id === totalObj.state_id)
       for (let day of allDatesArr) {
-        if (!tempPosObj[day] || !tempTotal[day]) {
-          newPosObj[day] = "-"
-          } else {
-          newPosObj[day] = (( tempPosObj[day] * 100) / tempTotal[day]).toFixed(2)
+        for (let negOrPos of ["Neg", "Pos"]) {
+          if (!eval(`temp${negOrPos}Obj`)[day] || !tempTotal[day]) {
+            eval(`new${negOrPos}Obj`)[day] = 0
+            } else {
+            eval(`new${negOrPos}Obj`)[day] = parseFloat((( eval(`temp${negOrPos}Obj`)[day] * 100) / tempTotal[day]).toFixed(1))
+          }
         }
-        // debugger
-        if (!tempPosObj[day] || !tempTotal[day]) {
-          newNegObj[day] = "-"
-        } else {
-          newNegObj[day] = (( tempNegObj[day] * 100) / tempTotal[day]).toFixed(2)
-        }
+        // if (!tempPosObj[day] || !tempTotal[day]) {
+        //   newPosObj[day] = 0
+        //   } else {
+        //   newPosObj[day] = parseInt((( tempPosObj[day] * 100) / tempTotal[day]).toFixed(2))
+        // }
+        // // debugger
+        // if (!tempPosObj[day] || !tempTotal[day]) {
+        //   newNegObj[day] = 0
+        // } else {
+        //   newNegObj[day] = parseInt((( tempNegObj[day] * 100) / tempTotal[day]).toFixed(2))
+        // }
       } // ends FOR OF allDatesArr loop
       newPositivePercentArr.push(newPosObj)
       newNegativePercentArr.push(newNegObj)
@@ -163,8 +171,8 @@ class App extends React.Component {
     let state_type = []
     if (this.state.idOfStateInSingleStateGrid === "99") {
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized"]
-        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized"]
+        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized","new-negativePercent"]
+        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized", "newPositivePercent", "newNegativePercent"]
         // let chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       // for (let day of this.state.staticDatesArr) { 
         // debugger
@@ -195,6 +203,8 @@ class App extends React.Component {
       output.push(this.state[this.state.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.state.newOrTotal + "NegativePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
     }
     return output
   }
@@ -379,7 +389,7 @@ class App extends React.Component {
                         <option value="Positive">Test Results: Positive</option>
                         {this.state.newOrTotal === "new" ? <option value="PositivePercent">Positive Results Percentage</option> : null }
                         <option value="Negative">Test Results: Negative</option>
-                        {this.state.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null }
+                        {/* {this.state.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null } */}
                         <option value="Total">Total Tested</option>
                         <option value="Hospitalized">Total Hospitalized</option>
                         <option value="Death">Corona Deaths</option>
@@ -488,6 +498,16 @@ class App extends React.Component {
                   Positive Results
                 </Button>
               }
+              {this.state.includePositivePercent
+              ?
+                <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositivePercent" onClick={this.formToggleHandler} active >
+                  Positive Percentage
+                </Button>
+              :
+                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includePositivePercent"  onClick={this.formToggleHandler}>
+                  Positive Percentage
+                </Button>
+              }
               {this.state.includeHospitalized
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalized" onClick={this.formToggleHandler} active >
@@ -549,6 +569,7 @@ class App extends React.Component {
                                           includeNegatives={this.state.includeNegatives}
                                           includeDeaths={this.state.includeDeaths}
                                           includePositives={this.state.includePositives}
+                                          includePositivePercent={this.state.includePositivePercent}
                                           includeHospitalized={this.state.includeHospitalized}
                                           stayAtHomeOrders={this.state.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
                     />

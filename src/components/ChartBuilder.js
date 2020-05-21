@@ -23,6 +23,7 @@ class ChartBuilder extends React.Component {
       "Tested": 3,
       "Deaths" : 3,
       "Hospitalized" : 3,
+      "Positive %" : 3,
       "Alabama": 3,
       "Alaska": 3,
       "Arizona": 3,
@@ -92,7 +93,8 @@ class ChartBuilder extends React.Component {
       hospitalized: "red",
       positive: "#12F315",
       tested: "#1973E5",
-      negative: "#F39C12"
+      negative: "#F39C12",
+      positivePercent: "grey"
     }
   };
 
@@ -430,6 +432,31 @@ class ChartBuilder extends React.Component {
                 hide:false
               }
             },
+            { color:this.state.colors.positivePercent,
+              dataKey:"Positive %",
+              inactive:false,
+              // type:this.props.includePositivePercent?"plainline":"none",
+              type:"plainline",
+              value:"Positive %",
+              payload:{dot:false,
+                dataKey:"Positive %",
+                strokeWidth:3,
+                stroke:this.state.colors.positivePercent,
+                xAxisId:0,
+                yAxisId:0,
+                connectNulls:false,
+                activeDot:true,
+                legendType:"line",
+                fill:"#fff",
+                points:[],
+                isAnimationActive:true,
+                animateNewValues:true,
+                animationBegin:0,
+                animationDuration:1500,
+                animationEasing:"ease",
+                hide:false
+              }
+            },
             { color:"black",
               dataKey:"Deaths: 7 day average",
               inactive:false,
@@ -481,6 +508,8 @@ class ChartBuilder extends React.Component {
               {this.props.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
               {this.props.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
               {this.props.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
+              {/* { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative %" strokeWidth={2} stroke="black"    /> : null} */}
+              { this.props.includePositivePercent ? this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
               
               { this.props.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
               { this.props.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
