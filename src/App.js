@@ -137,7 +137,32 @@ class App extends React.Component {
       })
     }
 
-  }
+    // This builds the US Percentages numbers
+    if (!this.state.newPositivePercent.find( obj => obj.state_id === 99)) {
+      let usPosPercentages = {state_id: 99, state_name: "US Totals"}
+      let tempTestsTaken
+      let tempPosResults
+      console.log("Building US Percentages")
+            for (let day of this.state.allDatesArr) {
+                tempPosResults = this.state.newPositive.reduce( 
+                  function(prev, curr) {
+                    return prev + curr[day]
+                  }, 0)
+                tempTestsTaken = this.state.newTotal.reduce( 
+                  function(prev, curr) {
+                    return prev + curr[day]
+                  }, 0)
+                usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
+              } // ends FOR OF Loop
+              let posPercentWithUS = [...this.state.newPositivePercent]
+              posPercentWithUS.unshift(usPosPercentages)
+              this.setState({
+                newPositivePercent: posPercentWithUS
+              })
+              debugger
+            } // ends IF State_ID 99 is alreay in pos percent array
+          }
+  
 
   formChangeHandler = (event) => {
     // debugger
@@ -149,12 +174,12 @@ class App extends React.Component {
         [event.target.dataset.buttontype]: event.target.name
       })
     } else if (event.target.dataset.includes) {
-      debugger
       this.setState({
         [event.target.name]: event.target.dataset.includes
       })
     } else {
       // This handles the Dropdowns
+      this.percentageLogicHandler(event)
       this.setState({
         [event.target.name]: event.target.value
       })

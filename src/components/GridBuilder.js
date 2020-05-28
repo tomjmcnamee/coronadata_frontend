@@ -20,18 +20,16 @@ function GridBuilder(props) {
           
           // This builds the line for US SUMS   for RAW only
             let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
-            for (let day of props.allDatesArr) {
-              // this if statement handles the positive PERCENTAGE.  else handles all other
-              // if (props.selectedStatType === "PositivePercent") {
-              //   // DO NOTHING SINCE US Percentages are calculated on App.js
-              // } else {
-                US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
-                  function(prev, curr) {
-                    return prev + curr[day]
-                  }, 0)
-              // }
-            } // ends FOR OF Loop
-            formattedGridLinesArr.unshift(US_Totals_Gridline)
+            // if statement adds US Totals to dataset IF its not a percentage vierwe
+            if (props.selectedStatType != "PositivePercent") {
+              for (let day of props.allDatesArr) {
+              US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
+                function(prev, curr) {
+                  return prev + curr[day]
+                }, 0)
+              }// ends FOR OF Loop
+              formattedGridLinesArr.unshift(US_Totals_Gridline)
+            }   // Ends IF re: not 'percentage' view
 
 
           xAxisDates = props.allDatesArr.map((date, index) => (
@@ -74,7 +72,7 @@ function GridBuilder(props) {
 
                 </tfoot> */}
               </Table>
-          ) // ends "AccountDetails-SavedVehicles" RETURN
+          ) // 
       default:
         break
     } // ends switch
