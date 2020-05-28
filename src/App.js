@@ -132,9 +132,16 @@ class App extends React.Component {
     // debugger
     if (event.target.dataset.buttontype) {
       // This handles the BUTTONS
-      this.setState({
-        [event.target.dataset.buttontype]: event.target.name
-      })
+      if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event.target.dataset.buttontype === "newOrTotal" ) {
+        this.setState({
+          selectedStatType: "Positive",
+          [event.target.dataset.buttontype]: event.target.name
+        })
+      } else {
+        this.setState({
+          [event.target.dataset.buttontype]: event.target.name
+        })
+      }
     } else if (event.target.dataset.includes) {
       debugger
       this.setState({
