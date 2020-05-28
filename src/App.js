@@ -139,7 +139,7 @@ class App extends React.Component {
 
     // This builds the US Percentages numbers
     if (!this.state.newPositivePercent.find( obj => obj.state_id === 99)) {
-      let usPosPercentages = {state_id: 99, state_name: "US Totals"}
+      let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
       let tempTestsTaken
       let tempPosResults
       console.log("Building US Percentages")
@@ -204,13 +204,14 @@ class App extends React.Component {
 
   singleStateData = () => {
     // debugger
+    this.percentageLogicHandler()
     let output = []
     let count_types = []
     let state_type = []
     if (this.state.idOfStateInSingleStateGrid === "99") {
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized","new-negativePercent"]
-        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized", "newPositivePercent", "newNegativePercent"]
+        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized"]
+        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized"]
         // let chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       // for (let day of this.state.staticDatesArr) { 
         // debugger
@@ -227,6 +228,7 @@ class App extends React.Component {
           index++
           output.push(tempObj)
         }
+        output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
         //     tempObj[chartColumnName[index]] = this.state[state_type[index]].reduce( 
           //               function(prev, curr) {
       //                 // debugger
@@ -242,7 +244,6 @@ class App extends React.Component {
       output.push(this.state[this.state.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state[this.state.newOrTotal + "NegativePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
     }
     return output
   }

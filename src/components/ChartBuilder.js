@@ -279,7 +279,7 @@ class ChartBuilder extends React.Component {
               for (let dataSetObj of formattedGridLinesArr) {
                 // debugger    
                 let tempAveragesArr = []
-                if ( Object.keys(dataSetObj).length > 0 ) {
+                if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
                   let tempAveragesObj = {}
                   let dates = Object.keys(dataSetObj).filter( k => k.startsWith("2020"))
                   sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
