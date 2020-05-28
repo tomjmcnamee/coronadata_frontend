@@ -21,11 +21,16 @@ function GridBuilder(props) {
           // This builds the line for US SUMS   for RAW only
             let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
             for (let day of props.allDatesArr) {
-              US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
-                function(prev, curr) {
-                  return prev + curr[day]
-                }, 0)
-              } // ends FOR OF Loop
+              // this if statement handles the positive PERCENTAGE.  else handles all other
+              // if (props.selectedStatType === "PositivePercent") {
+              //   // DO NOTHING SINCE US Percentages are calculated on App.js
+              // } else {
+                US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
+                  function(prev, curr) {
+                    return prev + curr[day]
+                  }, 0)
+              // }
+            } // ends FOR OF Loop
             formattedGridLinesArr.unshift(US_Totals_Gridline)
 
 

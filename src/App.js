@@ -24,7 +24,7 @@ class App extends React.Component {
     newPositive: [],
     newNegative: [],
     newPositivePercent: [],
-    newNegativePercent: [],
+    // newNegativePercent: [],
     newDeath: [],
     newTotal: [],
     newHospitalized: [],
@@ -86,7 +86,7 @@ class App extends React.Component {
         newHospitalized: response.newHospitalized,
         stayAtHomeOrders: response.stayAtHomeOrders,
         newPositivePercent: percentages[0],
-        newNegativePercent: percentages[1]
+        // newNegativePercent: percentages[1]
       })
       console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
     })    
@@ -128,20 +128,26 @@ class App extends React.Component {
     return [newPositivePercentArr, newNegativePercentArr]
   } // ends buildPercentageArrays function
 
+
+  percentageLogicHandler = (event) => {
+    // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
+    if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event.target.dataset.buttontype === "newOrTotal" ) {
+      this.setState({
+        selectedStatType: "Positive",
+      })
+    }
+
+  }
+
   formChangeHandler = (event) => {
     // debugger
+    // This handles the BUTTONS
     if (event.target.dataset.buttontype) {
-      // This handles the BUTTONS
-      if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event.target.dataset.buttontype === "newOrTotal" ) {
-        this.setState({
-          selectedStatType: "Positive",
-          [event.target.dataset.buttontype]: event.target.name
-        })
-      } else {
-        this.setState({
-          [event.target.dataset.buttontype]: event.target.name
-        })
-      }
+      this.percentageLogicHandler(event)
+      // This IF block changes StatTyp FROM Pos% if 'Totals' button is clicked 
+      this.setState({
+        [event.target.dataset.buttontype]: event.target.name
+      })
     } else if (event.target.dataset.includes) {
       debugger
       this.setState({
@@ -242,7 +248,6 @@ class App extends React.Component {
   
   render() {
     const tableDataToDisplay = () => {
-      // debugger
       let outputArr
       let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
       
@@ -505,7 +510,11 @@ class App extends React.Component {
                   Positive Results
                 </Button>
               }
-              {this.state.includePositivePercent
+              { this.state.newOrTotal === "total" 
+              ?
+                null  // this hides the option to show Pos% on line graph if viewing TOTAL (instead of NEW)
+              :
+              this.state.includePositivePercent
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositivePercent" onClick={this.formToggleHandler} active >
                   Positive Percentage
