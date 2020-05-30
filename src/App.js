@@ -103,7 +103,7 @@ class App extends React.Component {
       let tempNegObj = newNegative.find( obj => obj.state_id === totalObj.state_id)
       let tempTotal = newTotal.find( obj => obj.state_id === totalObj.state_id)
       for (let day of allDatesArr) {
-        for (let negOrPos of ["Neg", "Pos"]) {
+        for (let negOrPos of ["Pos"]) {
           if (!eval(`temp${negOrPos}Obj`)[day] || !tempTotal[day]) {
             eval(`new${negOrPos}Obj`)[day] = 0
             } else {
@@ -125,45 +125,64 @@ class App extends React.Component {
       newPositivePercentArr.push(newPosObj)
       newNegativePercentArr.push(newNegObj)
     } // ends FOR OF newTotalArr loop
-    return [newPositivePercentArr, newNegativePercentArr]
+    let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
+      let tempTestsTaken
+      let tempPosResults
+      console.log("Building US Percentages")
+      for (let day of allDatesArr) {
+        tempPosResults = newPositive.reduce( 
+          function(prev, curr) {
+            return prev + curr[day]
+          }, 0)
+          tempTestsTaken = newTotal.reduce( 
+            function(prev, curr) {
+              return prev + curr[day]
+            }, 0)
+            usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
+          } // ends FOR OF Loop
+          let posPercentWithUS = [...newPositivePercentArr]
+          posPercentWithUS.unshift(usPosPercentages)
+
+    return [posPercentWithUS, newNegativePercentArr]
   } // ends buildPercentageArrays function
 
 
   percentageLogicHandler = (event) => {
+    // debugger
     // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
-    if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event.target.dataset.buttontype === "newOrTotal" ) {
+    if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
       this.setState({
         selectedStatType: "Positive",
       })
     }
 
     // This builds the US Percentages numbers
-    if (!this.state.newPositivePercent.find( obj => obj.state_id === 99)) {
-      let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
-      let tempTestsTaken
-      let tempPosResults
-      console.log("Building US Percentages")
-            for (let day of this.state.allDatesArr) {
-                tempPosResults = this.state.newPositive.reduce( 
-                  function(prev, curr) {
-                    return prev + curr[day]
-                  }, 0)
-                tempTestsTaken = this.state.newTotal.reduce( 
-                  function(prev, curr) {
-                    return prev + curr[day]
-                  }, 0)
-                usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
-              } // ends FOR OF Loop
-              let posPercentWithUS = [...this.state.newPositivePercent]
-              posPercentWithUS.unshift(usPosPercentages)
-              this.setState({
-                newPositivePercent: posPercentWithUS
-              })
-              debugger
-            } // ends IF State_ID 99 is alreay in pos percent array
-          }
-  
-
+    // if (!this.state.newPositivePercent.find( obj => obj.state_id == 99)) {
+    //   let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
+    //   let tempTestsTaken
+    //   let tempPosResults
+    //   console.log("Building US Percentages")
+    //   for (let day of this.state.allDatesArr) {
+    //     tempPosResults = this.state.newPositive.reduce( 
+    //       function(prev, curr) {
+    //         return prev + curr[day]
+    //       }, 0)
+    //       tempTestsTaken = this.state.newTotal.reduce( 
+    //         function(prev, curr) {
+    //           return prev + curr[day]
+    //         }, 0)
+    //         usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
+    //       } // ends FOR OF Loop
+    //       let posPercentWithUS = [...this.state.newPositivePercent]
+    //       posPercentWithUS.unshift(usPosPercentages)
+    //       this.setState({
+    //         newPositivePercent: posPercentWithUS
+    //       })
+    //       debugger
+    //     } // ends IF State_ID 99 is alreay in pos percent array
+      }
+      
+      
   formChangeHandler = (event) => {
     // debugger
     // This handles the BUTTONS
@@ -203,12 +222,11 @@ class App extends React.Component {
   }
 
   singleStateData = () => {
-    // debugger
-    this.percentageLogicHandler()
     let output = []
     let count_types = []
     let state_type = []
-    if (this.state.idOfStateInSingleStateGrid === "99") {
+    if (this.state.idOfStateInSingleStateGrid == "99") {
+      // debugger
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
         count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized"]
         state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized"]
