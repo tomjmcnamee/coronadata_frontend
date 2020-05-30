@@ -89,13 +89,11 @@ class App extends React.Component {
         // newNegativePercent: percentages[1]
       })
       console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
-    })    
-      
+    })        
   }
 
   buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr) => {
     let newPositivePercentArr = []
-    let newNegativePercentArr = []
     for (let totalObj of newTotal) {
       let newPosObj = {state_id: totalObj.state_id,  count_type: "new-positivePercent"}
       let newNegObj = {state_id: totalObj.state_id, count_type: "new-negativePercent"}
@@ -110,21 +108,11 @@ class App extends React.Component {
             eval(`new${negOrPos}Obj`)[day] = parseFloat((( eval(`temp${negOrPos}Obj`)[day] * 100) / tempTotal[day]).toFixed(1))
           }
         }
-        // if (!tempPosObj[day] || !tempTotal[day]) {
-        //   newPosObj[day] = 0
-        //   } else {
-        //   newPosObj[day] = parseInt((( tempPosObj[day] * 100) / tempTotal[day]).toFixed(2))
-        // }
-        // // debugger
-        // if (!tempPosObj[day] || !tempTotal[day]) {
-        //   newNegObj[day] = 0
-        // } else {
-        //   newNegObj[day] = parseInt((( tempNegObj[day] * 100) / tempTotal[day]).toFixed(2))
-        // }
       } // ends FOR OF allDatesArr loop
       newPositivePercentArr.push(newPosObj)
-      newNegativePercentArr.push(newNegObj)
     } // ends FOR OF newTotalArr loop
+
+    // This adds the US percentages to the array    
     let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
       let tempTestsTaken
       let tempPosResults
@@ -133,55 +121,28 @@ class App extends React.Component {
         tempPosResults = newPositive.reduce( 
           function(prev, curr) {
             return prev + curr[day]
-          }, 0)
-          tempTestsTaken = newTotal.reduce( 
-            function(prev, curr) {
-              return prev + curr[day]
-            }, 0)
-            usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
-          } // ends FOR OF Loop
-          let posPercentWithUS = [...newPositivePercentArr]
-          posPercentWithUS.unshift(usPosPercentages)
-
-    return [posPercentWithUS, newNegativePercentArr]
+          }, 
+        0)
+        tempTestsTaken = newTotal.reduce( 
+          function(prev, curr) {
+            return prev + curr[day]
+          }, 
+        0)
+        usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
+      } // ends FOR OF Loop
+      let posPercentWithUS = [...newPositivePercentArr]
+      posPercentWithUS.unshift(usPosPercentages)
+    return [posPercentWithUS]
   } // ends buildPercentageArrays function
 
-
   percentageLogicHandler = (event) => {
-    // debugger
     // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
     if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
       this.setState({
         selectedStatType: "Positive",
       })
     }
-
-    // This builds the US Percentages numbers
-    // if (!this.state.newPositivePercent.find( obj => obj.state_id == 99)) {
-    //   let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
-    //   let tempTestsTaken
-    //   let tempPosResults
-    //   console.log("Building US Percentages")
-    //   for (let day of this.state.allDatesArr) {
-    //     tempPosResults = this.state.newPositive.reduce( 
-    //       function(prev, curr) {
-    //         return prev + curr[day]
-    //       }, 0)
-    //       tempTestsTaken = this.state.newTotal.reduce( 
-    //         function(prev, curr) {
-    //           return prev + curr[day]
-    //         }, 0)
-    //         usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
-    //       } // ends FOR OF Loop
-    //       let posPercentWithUS = [...this.state.newPositivePercent]
-    //       posPercentWithUS.unshift(usPosPercentages)
-    //       this.setState({
-    //         newPositivePercent: posPercentWithUS
-    //       })
-    //       debugger
-    //     } // ends IF State_ID 99 is alreay in pos percent array
-      }
-      
+  }
       
   formChangeHandler = (event) => {
     // debugger
