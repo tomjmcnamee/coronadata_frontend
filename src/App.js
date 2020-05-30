@@ -15,9 +15,6 @@ import './App.css';
 
 
 class App extends React.Component {
-
-  // AUTOLOGIN Check and Fetch
-
   state = {
     allDatesArr: [],
     staticDatesArr: [],
@@ -54,15 +51,30 @@ class App extends React.Component {
   componentDidMount(){
 
     // document.title = "CoronaVirus Data"        
+    this.fetchData("30")
+
+
+    
+  }
+
+  fetchData = ( numberOfDays ) => {
+    // variable 'numberOfDays' can hold values "all", or 
+    // a string with the number of most recent days you want returned
+
+    //This ensure the 'Loading' screen is presented when fetching
+    this.setState({
+      totalDeath: []
+    })
+
     let startTime = (+ new Date())
-
-
     fetch(process.env.REACT_APP_FETCH_LOCATION + "total_stats", {
       method: "GET",
       headers: {
         "content-type": "application/json",
         accepts: "application/json",
-        FetchPW: process.env.REACT_APP_FETCH_PASSWORD
+        FetchPW: process.env.REACT_APP_FETCH_PASSWORD,
+        numOfDays: numberOfDays
+
       }
     })
     .then(resp => resp.json())

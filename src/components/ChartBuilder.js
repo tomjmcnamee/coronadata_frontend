@@ -217,6 +217,7 @@ class ChartBuilder extends React.Component {
         }, {
           label: 'All available',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          // onClick: () => this.props.fetchData("all")
         }]}
       />
     }
