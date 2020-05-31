@@ -194,10 +194,12 @@ class App extends React.Component {
 
   dropdownOptionsForStates = () => {
     let output = []
-    for (let id = 1; id < 56; id++) {
+    for (let id = 1; id < 52; id++) {
       // Runs 5 times, with values of step 0 through 4.
       output.push(<option key={id} value={id}>{mapStateIdToStateName(parseInt(id))}</option>);
     }
+    output.push(<option key={53} value={53}>Puerto Rico</option>);
+
     return output
   }
 
