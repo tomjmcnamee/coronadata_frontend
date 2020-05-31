@@ -32,6 +32,7 @@ class App extends React.Component {
     totalTotal: [],
     totalHospitalized: [],
     stayAtHomeOrders: [],
+    dataQualityGrades: [],
 
     selectedStatType: "Death",
     newOrTotal: "new",
@@ -270,9 +271,6 @@ class App extends React.Component {
     const tableDataToDisplay = () => {
       let outputArr
       let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
-      
-
-      
       if (this.state.columnToSort === "state_name") {
         outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]]
         // debugger
@@ -403,7 +401,17 @@ class App extends React.Component {
                     </Button>
                   :
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="rateOfGrowthChart"  onClick={this.formChangeHandler}>
-                      Rates of<br />Growth Chart
+                      Rates of<br />Growth Charts
+                    </Button>
+                  }
+                  {this.state.displayType === "dataQualityGrades"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="dataQualityGrades" active >
+                      Data Quality<br />Grades
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="dataQualityGrades"  onClick={this.formChangeHandler}>
+                      Data Quality<br />Grades
                     </Button>
                   }
                 </Form.Group  >
@@ -588,6 +596,19 @@ class App extends React.Component {
                       selectedStatType={this.state.selectedStatType} //ex: Pos, Neg, Total, Death
                       sortHandler={this.sortHandler}
                       jumpToDisplayAndState={this.jumpToDisplayAndState}
+                    />
+                  </div>
+                  :
+
+                  this.state.displayType === "dataQualityGrades"
+                  ?
+                  <div id="statesTable" >
+                    <GridBuilder
+                      gridType="dataQualityGrades"
+                      allDatesArr={this.state.allDatesArr}
+                      gridLinesArray={this.state.dataQualityGrades}
+                      // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
+                      sortHandler={this.sortHandler}
                     />
                   </div>
                   :
