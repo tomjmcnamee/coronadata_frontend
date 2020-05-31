@@ -608,7 +608,6 @@ class App extends React.Component {
                   <div id="statesTable" >
                     <GridBuilder
                       gridType="dataQualityGrades"
-                      allDatesArr={this.state.allDatesArr}
                       gridLinesArray={this.state.dataQualityGrades}
                       // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
                       sortHandler={this.sortHandler}
