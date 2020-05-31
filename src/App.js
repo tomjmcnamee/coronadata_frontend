@@ -100,7 +100,10 @@ class App extends React.Component {
         newDeath: response.newDeath,
         newTotal: response.newTotal,
         newHospitalized: response.newHospitalized,
+        
         stayAtHomeOrders: response.stayAtHomeOrders,
+        dataQualityGrades: response.dataQualityGrades,
+
         newPositivePercent: percentages[0],
         fromToDatesValue: fromToDatesValue
       })
