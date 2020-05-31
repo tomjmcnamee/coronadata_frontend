@@ -199,7 +199,10 @@ class App extends React.Component {
       output.push(<option key={id} value={id}>{mapStateIdToStateName(parseInt(id))}</option>);
     }
     output.push(<option key={53} value={53}>Puerto Rico</option>);
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     return output
   }
 

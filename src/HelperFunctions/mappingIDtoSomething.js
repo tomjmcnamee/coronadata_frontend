@@ -190,11 +190,11 @@ const mapStateNameToStateId = (id) => {
     case "West Virginia": return 49
     case "Wisconsin": return 50
     case "Wyoming": return 51
-    case "American Samoa": return 52
+    // case "American Samoa": return 52
     case "Puerto Rico": return 53
-    case "US Virgin Islands": return 54
-    case "Guam": return 55
-    case "N. Mariana Islands": return 56
+    // case "US Virgin Islands": return 54
+    // case "Guam": return 55
+    // case "N. Mariana Islands": return 56
     case "US Totals": return 99
 
     default: return "Correct State Name switch  case in HelperFunctions/mappingIDtoSomething.js"
