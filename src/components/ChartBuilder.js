@@ -101,15 +101,24 @@ class ChartBuilder extends React.Component {
   
 
   componentDidMount(){
-    this.setState({
-      // These two defaults to the last 30 days
-      datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
-      displayDates: this.newDisplayDateArr([getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )])
-       
-      // // Use the below to default to ALL available dates
-      // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
-      // displayDates: [...this.props.allDatesArr]
-    })
+    //// This IF statement checks to see if a 'get all data' fetch was run
+    if (!this.props.fromToDatesValue) {
+      this.setState({
+        //// These two defaults to the last 30 days
+        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+        // displayDates: this.newDisplayDateArr([getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )])
+        
+        //// Use the below to default to ALL available dates
+        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+        displayDates: [...this.props.allDatesArr]
+      })
+    } else {
+      // The page is being reloaded after a 'get all data' fetch
+      this.setState({
+        datePickerValue: this.props.fromToDatesValue,
+        displayDates: this.newDisplayDateArr(this.props.fromToDatesValue)
+      })
+    }
   }
 
 
@@ -151,20 +160,7 @@ class ChartBuilder extends React.Component {
     }
   }
 
-  datePickerChangeHandler = (value) => {
-    if (value.length === 0) {
-      // This denotes the "CLEAN 'X' "
-      this.setState({ 
-        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
-        displayDates: [...this.props.allDatesArr]
-       })
-    } else {
-      this.setState({ 
-        datePickerValue: value,
-        displayDates: this.newDisplayDateArr(value)
-       })
-    }
-  }
+  
 
   newDisplayDateArr = (value) => {
     let startIndex = this.props.allDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[0]))
@@ -174,10 +170,59 @@ class ChartBuilder extends React.Component {
   }
 
 
-  
+  datePickerChangeHandler = (value) => {
+    console.log("value from datepicker = ", value[0])
+    console.log(" getDashSeperatedInDATEFormatFromYYYYMMDD(20200229) ===  ", getDashSeperatedInDATEFormatFromYYYYMMDD(20200229))
+    console.log(" doesthis render TRUE? ", 
+      (
+        ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
+        &&
+        (getYYYYMMDDfromFormattedDate(value[0]) <= this.props.allDatesArr[0])
+        && 
+        (!!this.props.allDatesArr && this.props.allDatesArr.length < 35 )
+      )
+    )
+    console.log("All Dates Array .length = ", this.props.allDatesArr.length)
+    console.log("LEFT OF OLD GreaterThan:  getYYYYMMDDfromFormattedDate(value[0]) === ", getYYYYMMDDfromFormattedDate(value[0]))
+    console.log("RIFHT OF OLD GreaterThan:  getYYYYMMDDfromFormattedDate(20200229) === ", 20200228)
+    console.log("LEFT OF NEW LessThan:  getYYYYMMDDfromFormattedDate(value[0]) === ", getYYYYMMDDfromFormattedDate(value[0]))
+    console.log("RIFHT OF NEW LessThan:  getYYYYMMDDfromFormattedDate(this.props.allDatesArr[0]) === ", this.props.allDatesArr[0])
+    // debugger
+    if (
+        ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
+        &&
+        (getYYYYMMDDfromFormattedDate(value[0]) <= this.props.allDatesArr[0])
+        && 
+        (!!this.props.allDatesArr && this.props.allDatesArr.length < 35 )
+      ) {
+      this.props.fetchData("all", value)
+      this.setState({ 
+        datePickerValue: value,
+        displayDates: this.newDisplayDateArr(value)
+       })
+    } else {
+      this.setState({ 
+        datePickerValue: value,
+        displayDates: this.newDisplayDateArr(value)
+       })
+    }
+    // if (value.length === 0) {
+    //   // This denotes the "CLEAN 'X' "
+    //   this.setState({ 
+    //     datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+    //     displayDates: [...this.props.allDatesArr]
+    //    })
+    // } else {
+    // }
+    // debugger
+  }  
   
   
   render () {
+
+
+
+
     const sevenDayAverageCalculator = (inputObj, outputObj, datesArr) => {
       let i = 6
       while (i < datesArr.length) {
@@ -201,8 +246,8 @@ class ChartBuilder extends React.Component {
       return <DateRangePicker 
                 cleanable={false}
                 showOneCalendar
-                disabledDate={allowedRange(getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1))}         
-                value={this.state.datePickerValue}
+                disabledDate={allowedRange(getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1))}         
+                value={(!!this.props.allDatesArr && this.props.allDatesArr.length < 35 ) ? this.state.datePickerValue : this.state.datePickerValue }
                 onChange={(value) => this.datePickerChangeHandler(value) }
         ranges={[{
           label: 'Last 7',
@@ -216,8 +261,8 @@ class ChartBuilder extends React.Component {
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
         }, {
           label: 'All available',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
-          // onClick: () => this.props.fetchData("all")
+          // value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
         }]}
       />
     }

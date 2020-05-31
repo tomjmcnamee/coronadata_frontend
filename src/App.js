@@ -8,6 +8,7 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tab  from 'react-bootstrap/Tab'
 
 import loadingMap from './assets/USSpreadMap.gif'
+import fetchingALLdata from './assets/fetchingALLdata.gif'
 import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
 import { Button } from 'rsuite';
 import './App.css';
@@ -44,7 +45,9 @@ class App extends React.Component {
     includeDeaths: true,
     includePositivePercent: true,
 
-    columnToSort: "state_name"
+    columnToSort: "state_name",
+
+    fromToDatesValue: []
   }
 
 
@@ -57,7 +60,7 @@ class App extends React.Component {
     
   }
 
-  fetchData = ( numberOfDays ) => {
+  fetchData = ( numberOfDays, fromToDatesValue ) => {
     // variable 'numberOfDays' can hold values "all", or 
     // a string with the number of most recent days you want returned
 
@@ -98,7 +101,7 @@ class App extends React.Component {
         newHospitalized: response.newHospitalized,
         stayAtHomeOrders: response.stayAtHomeOrders,
         newPositivePercent: percentages[0],
-        // newNegativePercent: percentages[1]
+        fromToDatesValue: fromToDatesValue
       })
       console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
     })        
@@ -605,6 +608,8 @@ class App extends React.Component {
                                           includePositivePercent={this.state.includePositivePercent}
                                           includeHospitalized={this.state.includeHospitalized}
                                           stayAtHomeOrders={this.state.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
+                                          fetchData={this.fetchData}
+                                          fromToDatesValue={this.state.fromToDatesValue}  //This is needed to display the correct dates and data after a 'get all data' fetch
                     />
                     // </div>
                   :
@@ -651,7 +656,11 @@ class App extends React.Component {
                   :
                   null
                 :
+                  this.state.newDeath.length === 0 
+                  ?
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
+                  :
+                  <img src={fetchingALLdata} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                 }
               </Col>
           </Row>
