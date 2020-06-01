@@ -10,7 +10,8 @@ import {
 import { getMonthDayFromYYYYMMDD, 
   getDashSeperatedInDATEFormatFromYYYYMMDD, 
   getDashSeperatedDateFromYYYYMMDD,
-  getYYYYMMDDfromFormattedDate  } from '../HelperFunctions/DateFormatting' 
+  getYYYYMMDDfromFormattedDate,
+  buildSecondIndexOfDatePickerValue  } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 
 
@@ -109,9 +110,11 @@ class ChartBuilder extends React.Component {
         // displayDates: this.newDisplayDateArr([getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )])
         
         //// Use the below to default to ALL available dates
-        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
+        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] ).setDate(getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] ).getDate() + 1)],
+        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]),  new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))],
         displayDates: [...this.props.allDatesArr]
       })
+      // debugger
     } else {
       // The page is being reloaded after a 'get all data' fetch
       this.setState({
@@ -171,27 +174,10 @@ class ChartBuilder extends React.Component {
 
 
   datePickerChangeHandler = (value) => {
-    console.log("value from datepicker = ", value[0])
-    console.log(" getDashSeperatedInDATEFormatFromYYYYMMDD(20200229) ===  ", getDashSeperatedInDATEFormatFromYYYYMMDD(20200229))
-    console.log(" doesthis render TRUE? ", 
-      (
-        ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
-        &&
-        (getYYYYMMDDfromFormattedDate(value[0]) <= this.props.allDatesArr[0])
-        && 
-        (!!this.props.allDatesArr && this.props.allDatesArr.length < 35 )
-      )
-    )
-    console.log("All Dates Array .length = ", this.props.allDatesArr.length)
-    console.log("LEFT OF OLD GreaterThan:  getYYYYMMDDfromFormattedDate(value[0]) === ", getYYYYMMDDfromFormattedDate(value[0]))
-    console.log("RIFHT OF OLD GreaterThan:  getYYYYMMDDfromFormattedDate(20200229) === ", 20200228)
-    console.log("LEFT OF NEW LessThan:  getYYYYMMDDfromFormattedDate(value[0]) === ", getYYYYMMDDfromFormattedDate(value[0]))
-    console.log("RIFHT OF NEW LessThan:  getYYYYMMDDfromFormattedDate(this.props.allDatesArr[0]) === ", this.props.allDatesArr[0])
-    // debugger
     if (
         ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
         &&
-        (getYYYYMMDDfromFormattedDate(value[0]) <= this.props.allDatesArr[0])
+        (getYYYYMMDDfromFormattedDate(value[0]) < this.props.allDatesArr[0])
         && 
         (!!this.props.allDatesArr && this.props.allDatesArr.length < 35 )
       ) {
@@ -251,18 +237,17 @@ class ChartBuilder extends React.Component {
                 onChange={(value) => this.datePickerChangeHandler(value) }
         ranges={[{
           label: 'Last 7',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 7]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 7]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
           // value: [dateFns.addDays(new Date(), -1), dateFns.addDays(new Date(), -1)]
         }, {
           label: 'Last 14',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 14]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 14]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
         }, {
           label: 'Last 30',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
         }, {
           label: 'All available',
-          // value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
         }]}
       />
     }

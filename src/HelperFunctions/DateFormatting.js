@@ -28,6 +28,15 @@ const getDashSeperatedDateFromYYYYMMDD = (YYYYMMDDint) => {
   }
 };
 
+// this should always be invoke with "new Date(buildSecondIndexOfDatePickerValue(var))"
+const buildSecondIndexOfDatePickerValue = (arrOrDate) => {
+  if (Array.isArray(arrOrDate)) {
+    return getDashSeperatedInDATEFormatFromYYYYMMDD(arrOrDate[arrOrDate.length - 1] ).setDate(getDashSeperatedInDATEFormatFromYYYYMMDD(arrOrDate[arrOrDate.length - 1] ).getDate() + 1)
+  } else { 
+    return arrOrDate.setDate(arrOrDate.getDate() + 1)
+  }
+};
+
 function getYYYYMMDDfromFormattedDate(d) {
   let month, day, year, newDate
   if (d instanceof Date) {
@@ -39,11 +48,12 @@ function getYYYYMMDDfromFormattedDate(d) {
     if (month.length < 2) {month = "0" + month}
     if (day.length < 2) {day = "0" + day}
         
-
     newDate = parseInt([year, month, day].join(""))
     return newDate;
   }
 }
+
+
 
 
 // const mapStateIdToStateAbbreviation = (id) => {
@@ -62,5 +72,6 @@ export {
   getMonthDayFromYYYYMMDD, 
   getDashSeperatedInDATEFormatFromYYYYMMDD, 
   getDashSeperatedDateFromYYYYMMDD,
-  getYYYYMMDDfromFormattedDate  
+  getYYYYMMDDfromFormattedDate ,
+  buildSecondIndexOfDatePickerValue 
 }
