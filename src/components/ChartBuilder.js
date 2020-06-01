@@ -219,12 +219,12 @@ class ChartBuilder extends React.Component {
     }
 
     const {
-      allowedMaxDays,
-      allowedDays,
-      allowedRange,
-      beforeToday,
-      afterToday,
-      combine
+      // allowedMaxDays,
+      // allowedDays,
+      // beforeToday,
+      // afterToday,
+      // combine,
+      allowedRange
     } = DateRangePicker;
 
 
@@ -246,10 +246,10 @@ class ChartBuilder extends React.Component {
           label: 'Last 30',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
         }, {
-          label: 'All available',
+          label: 'since 2-28-20',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
         }]}
-      />
+      /> // Closes DateRangePicker component call
     }
 
     const tooltipStyle = {

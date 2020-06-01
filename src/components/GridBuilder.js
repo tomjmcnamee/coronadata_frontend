@@ -21,7 +21,7 @@ function GridBuilder(props) {
           // This builds the line for US SUMS   for RAW only
             let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
             // if statement adds US Totals to dataset IF its not a percentage vierwe
-            if (props.selectedStatType != "PositivePercent") {
+            if (props.selectedStatType !== "PositivePercent") {
               for (let day of props.allDatesArr) {
               US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
                 function(prev, curr) {
