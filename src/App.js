@@ -223,7 +223,9 @@ class App extends React.Component {
           index++
           output.push(tempObj)
         }
-        output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
+        if (this.state.newOrTotal === "new") {
+          output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
+        }
         //     tempObj[chartColumnName[index]] = this.state[state_type[index]].reduce( 
           //               function(prev, curr) {
       //                 // debugger
@@ -238,7 +240,9 @@ class App extends React.Component {
       output.push(this.state[this.state.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
       output.push(this.state[this.state.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      if (this.state.newOrTotal === "new") {
+        output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      }
     }
     return output
   }
