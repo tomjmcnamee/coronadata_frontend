@@ -311,6 +311,7 @@ class App extends React.Component {
   }
 
   jumpToDisplayAndState = (displayType, stateName) => {
+    this.singleInitialLineChooser()
     this.setState({
       idOfStateInSingleStateGrid: mapStateNameToStateId(stateName),
       displayType: displayType
