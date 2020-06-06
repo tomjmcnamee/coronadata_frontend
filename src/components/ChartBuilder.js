@@ -102,6 +102,10 @@ class ChartBuilder extends React.Component {
   
 
   componentDidMount(){
+
+
+
+
     //// This IF statement checks to see if a 'get all data' fetch was run
     if (!this.props.fromToDatesValue) {
       this.setState({

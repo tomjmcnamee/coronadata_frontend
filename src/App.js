@@ -38,12 +38,12 @@ class App extends React.Component {
 
     displayType: "table",
     idOfStateInSingleStateGrid: "99",
-    includeTested: true,
-    includeNegatives: true,
-    includePositives: true,
-    includeHospitalized: true,
-    includeDeaths: true,
-    includePositivePercent: true,
+    includeTested: false,
+    includeNegatives: false,
+    includePositives: false,
+    includeHospitalized: false,
+    includeDeaths: false,
+    includePositivePercent: false,
 
     columnToSort: "state_name",
 
@@ -163,11 +163,15 @@ class App extends React.Component {
     // debugger
     // This handles the BUTTONS
     if (event.target.dataset.buttontype) {
+      // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
+      if (event.target.name === "singleStateChart") this.singleInitialLineChooser()
+      
       this.percentageLogicHandler(event)
       // This IF block changes StatTyp FROM Pos% if 'Totals' button is clicked 
       this.setState({
         [event.target.dataset.buttontype]: event.target.name
       })
+      //This handles the "Include in Graph" buttonns
     } else if (event.target.dataset.includes) {
       this.setState({
         [event.target.name]: event.target.dataset.includes
@@ -198,10 +202,53 @@ class App extends React.Component {
     return output
   }
 
+
+  singleInitialLineChooser = () => {
+    //This resets the grid lines to only the value found in t.s.selectedStatType
+    // let toChangeToTrue
+    // switch(this.state.selectedStatType) {
+    //   case "Total":
+    //     toChangeToTrue = "includeTested"
+    //     break
+    //   case "Hospitalized":
+    //       toChangeToTrue = "includeHospitalized"
+    //     break
+    //   case "PositivePercent":
+    //     toChangeToTrue = "includePositivePercent"
+    //     break
+    //   case "Death":
+    //     toChangeToTrue =  "includeDeaths"
+    //     break
+    //   default:
+    //     break
+    // }  // Ends Switch statement
+    // console.log(toChangeToTrue)
+    // this.setState({
+    //   [toChangeToTrue]: true
+    // })
+    console.log("singleInitialLineChooser is running!")
+    if (this.state.selectedStatType === "Total") {
+      this.setState({
+        includeTested: true
+      })
+    } else if (this.state.selectedStatType === "Hospitalized" || this.state.selectedStatType === "PositivePercent") {
+      this.setState({
+        [`include${this.state.selectedStatType}`]: true
+      })
+    } else {
+      this.setState({
+        [`include${this.state.selectedStatType}s`]: true
+      })
+    }
+  }
+  
   singleStateData = () => {
     let output = []
     let count_types = []
     let state_type = []
+
+
+    //This IF builds all 'Etire US' data sets to send along
     if (this.state.idOfStateInSingleStateGrid == "99") {
       // debugger
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
@@ -223,6 +270,7 @@ class App extends React.Component {
           index++
           output.push(tempObj)
         }
+        //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
         if (this.state.newOrTotal === "new") {
           output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
         }
