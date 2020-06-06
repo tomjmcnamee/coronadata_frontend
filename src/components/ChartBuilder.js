@@ -470,7 +470,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.positivePercent,
               dataKey:"Positive %",
               inactive:false,
-              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? "plainline" : "none" ,
+              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? this.props.includePositivePercent ? "plainline" : "none" : "none",
               value:"Positive %",
               payload:{dot:false,
                 dataKey:"Positive %",
