@@ -16,7 +16,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rsuite": "^4.7.4",
-    "rsuite-table": "^3.13.1"
+    "rsuite-table": "^3.13.1",
+    "websocket-extensions": "^0.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
