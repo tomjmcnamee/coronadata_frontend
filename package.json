@@ -7,7 +7,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "react": "^16.13.1",
-    "react-bootstrap": "^1.0.0-beta.17",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
@@ -15,8 +15,8 @@
     "recharts": "^1.8.5",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "rsuite": "^4.3.2",
-    "rsuite-table": "^3.9.4"
+    "rsuite": "^4.7.4",
+    "rsuite-table": "^3.13.1"
   },
   "scripts": {
     "start": "react-scripts start",
