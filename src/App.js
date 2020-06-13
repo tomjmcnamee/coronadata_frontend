@@ -8,30 +8,32 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tab  from 'react-bootstrap/Tab'
 
 import loadingMap from './assets/USSpreadMap.gif'
+import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
 import fetchingALLdata from './assets/fetchingALLdata.gif'
 import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
 import { Button } from 'rsuite';
 import './App.css';
+import { fetchAllStatesData } from './actions'
 
 
 
 class App extends React.Component {
   state = {
-    allDatesArr: [],
-    staticDatesArr: [],
-    newPositive: [],
-    newNegative: [],
-    newPositivePercent: [],
-    // newNegativePercent: [],
-    newDeath: [],
-    newTotal: [],
-    newHospitalized: [],
-    totalPositive: [],
-    totalNegative: [],
-    totalDeath: [],
-    totalTotal: [],
-    totalHospitalized: [],
-    stayAtHomeOrders: [],
+    allDatesArr: [],     //in reducer
+    staticDatesArr: [],   //in reducer
+    newPositive: [],   //in reducer
+    newNegative: [],   //in reducer
+    newPositivePercent: [],   //in reducer
+    newDeath: [],   //in reducer
+    newTotal: [],   //in reducer
+    newHospitalized: [],   //in reducer
+    totalPositive: [],   //in reducer
+    totalNegative: [],   //in reducer
+    totalDeath: [],   //in reducer
+    totalTotal: [],   //in reducer
+    totalHospitalized: [],   //in reducer
+    stayAtHomeOrders: [],   //in reducer
 
     selectedStatType: "Death",
     newOrTotal: "new",
@@ -47,7 +49,7 @@ class App extends React.Component {
 
     columnToSort: "state_name",
 
-    fromToDatesValue: []
+    fromToDatesValue: [] //in reducer
   }
 
 
@@ -55,12 +57,11 @@ class App extends React.Component {
 
     // document.title = "CoronaVirus Data"        
     this.fetchData("30")
-
-
     
   }
-
+  
   fetchData = ( numberOfDays, fromToDatesValue ) => {
+    this.props.fetchAllStatesData( numberOfDays, fromToDatesValue )
     // variable 'numberOfDays' can hold values "all", or 
     // a string with the number of most recent days you want returned
 
@@ -737,4 +738,33 @@ class App extends React.Component {
 }  // ends App Class
 
 
-export default App
+
+function mdp(dispatch) {
+  return { 
+    fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue))
+  }
+}
+
+// this comes from reduct.js - K is local reference, V is foreign state attribute
+function msp(state) {
+  return { 
+    fromToDatesValue: state.fromToDatesValue,
+    allDatesArr: state.allDatesArr,
+    staticDatesArr: state.staticDatesArr,
+    newPositive: state.newPositive,
+    newNegative: state.newNegative,
+    newPositivePercent: state.newPositivePercent,
+    newDeath: state.newDeath,
+    newTotal: state.newTotal,
+    newHospitalized: state.newHospitalized,
+    totalPositive: state.totalPositive,
+    totalNegative: state.totalNegative,
+    totalDeath: state.totalDeath,
+    totalTotal: state.totalTotal,
+    totalHospitalized: state.totalHospitalized,
+    stayAtHomeOrders: state.stayAtHomeOrders,
+  }
+}
+
+export default connect(msp, mdp)(App)
+
