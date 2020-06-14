@@ -12,9 +12,19 @@ import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import fetchingALLdata from './assets/fetchingALLdata.gif'
 import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
+import { tableDescription } from './HelperFunctions/dynamicLabels'
 import { Button } from 'rsuite';
 import './App.css';
-import { fetchAllStatesData } from './actions'
+import { 
+    fetchAllStatesData,
+    jumpToDisplayAndState,
+    setSelectedStatType,
+    setNewOrTotal,
+    setDisplayType,
+    setIdOfStateInSingleStateGrid,
+    toggleGridlines,
+    singleInitialLineChooser
+        } from './actions'
 
 
 
@@ -34,17 +44,12 @@ class App extends React.Component {
     totalTotal: [],   //in reducer
     totalHospitalized: [],   //in reducer
 
-    selectedStatType: "Death",
-    newOrTotal: "new",
+    // selectedStatType: "Death",  //in reducer
+    // newOrTotal: "new",//in reducer
 
-    displayType: "table",
-    idOfStateInSingleStateGrid: "99",
-    includeTested: false,
-    includeNegatives: false,
-    includePositives: false,
-    includeHospitalized: false,
-    includeDeaths: false,
-    includePositivePercent: false,
+    // displayType: "table",  //in reducer
+    // idOfStateInSingleStateGrid: "99",    //in reducer
+
 
     columnToSort: "state_name",
 
@@ -150,45 +155,54 @@ class App extends React.Component {
 
   percentageLogicHandler = (event) => {
     // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
-    if (this.state.newOrTotal === "new" && this.state.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
-      this.setState({
-        selectedStatType: "Positive",
-      })
+    if (this.props.newOrTotal === "new" && this.props.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
+        this.props.setSelectedStatType("Positive")
     }
   }
-      
+   
   formChangeHandler = (event) => {
     // debugger
     // This handles the BUTTONS
     if (event.target.dataset.buttontype) {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
-      if (event.target.name === "singleStateChart") this.singleInitialLineChooser()
+      if (event.target.name === "singleStateChart") {
+        this.props.singleInitialLineChooser(this.props.selectedStatType)
+      }
       
       this.percentageLogicHandler(event)
       // This IF block changes StatTyp FROM Pos% if 'Totals' button is clicked 
-      this.setState({
-        [event.target.dataset.buttontype]: event.target.name
-      })
+      if (event.target.dataset.buttontype === "newOrTotal") this.props.setNewOrTotal(event.target.name)
+      if (event.target.dataset.buttontype === "displayType") this.props.setDisplayType(event.target.name)
+      
+      // TO DELETE - In ACTIONS
+      // this.setState({
+      //   [event.target.dataset.buttontype]: event.target.name
+      // })
+      
+      
+      
       //This handles the "Include in Graph" buttonns
     } else if (event.target.dataset.includes) {
-      this.setState({
-        [event.target.name]: event.target.dataset.includes
-      })
+      // this.setState({
+      //   [event.target.name]: event.target.dataset.includes
+      // })
     } else {
       // This handles the Dropdowns
       this.percentageLogicHandler(event)
-      this.setState({
-        [event.target.name]: event.target.value
-      })
+      if (event.target.name === "selectedStatType") this.props.setSelectedStatType(event.target.value)
+      if (event.target.name === "idOfStateInSingleStateGrid") this.props.setIdOfStateInSingleStateGrid(event.target.value)
+      // this.setState({
+      //   [event.target.name]: event.target.value
+      // })
     }
   }
 
   formToggleHandler = (event) => {
-    console.log("Toggle HAndler event val = ", event)
-    let newVal = !this.state[event.target.name]
-    this.setState({
-      [event.target.name]: newVal
-    })
+    let newVal = !this.props.includeGridLines[event.target.name]
+    this.props.toggleGridlines(event.target.name, newVal)
+    // this.setState({
+    //   [event.target.name]: newVal
+    // })
   }
 
   dropdownOptionsForStates = () => {
@@ -202,44 +216,6 @@ class App extends React.Component {
   }
 
 
-  singleInitialLineChooser = () => {
-    //This resets the grid lines to only the value found in t.s.selectedStatType
-    // let toChangeToTrue
-    // switch(this.state.selectedStatType) {
-    //   case "Total":
-    //     toChangeToTrue = "includeTested"
-    //     break
-    //   case "Hospitalized":
-    //       toChangeToTrue = "includeHospitalized"
-    //     break
-    //   case "PositivePercent":
-    //     toChangeToTrue = "includePositivePercent"
-    //     break
-    //   case "Death":
-    //     toChangeToTrue =  "includeDeaths"
-    //     break
-    //   default:
-    //     break
-    // }  // Ends Switch statement
-    // console.log(toChangeToTrue)
-    // this.setState({
-    //   [toChangeToTrue]: true
-    // })
-    console.log("singleInitialLineChooser is running!")
-    if (this.state.selectedStatType === "Total") {
-      this.setState({
-        includeTested: true
-      })
-    } else if (this.state.selectedStatType === "Hospitalized" || this.state.selectedStatType === "PositivePercent") {
-      this.setState({
-        [`include${this.state.selectedStatType}`]: true
-      })
-    } else {
-      this.setState({
-        [`include${this.state.selectedStatType}s`]: true
-      })
-    }
-  }
   
   singleStateData = () => {
     let output = []
@@ -248,11 +224,11 @@ class App extends React.Component {
 
 
     //This IF builds all 'Etire US' data sets to send along
-    if (this.state.idOfStateInSingleStateGrid == "99") {
+    if (this.props.idOfStateInSingleStateGrid == "99") {
       // debugger
       /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-        count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized"]
-        state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized"]
+        count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
+        state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
         // let chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
       // for (let day of this.props.staticDatesArr) { 
         // debugger
@@ -270,8 +246,8 @@ class App extends React.Component {
           output.push(tempObj)
         }
         //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
-        if (this.state.newOrTotal === "new") {
-          output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
+        if (this.props.newOrTotal === "new") {
+          output.push(this.state[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
         }
         //     tempObj[chartColumnName[index]] = this.state[state_type[index]].reduce( 
           //               function(prev, curr) {
@@ -282,13 +258,13 @@ class App extends React.Component {
       //   }
       //   output.push(tempObj)
     } else {
-      output.push(this.state[this.state.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)  ))
-      output.push(this.state[this.state.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state[this.state.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state[this.state.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      output.push(this.state[this.state.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
-      if (this.state.newOrTotal === "new") {
-        output.push(this.state[this.state.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.props.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)  ))
+      output.push(this.state[this.props.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.props.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.props.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      output.push(this.state[this.props.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      if (this.props.newOrTotal === "new") {
+        output.push(this.state[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
       }
     }
     return output
@@ -309,14 +285,7 @@ class App extends React.Component {
     }
   }
 
-  jumpToDisplayAndState = (displayType, stateName) => {
-    this.singleInitialLineChooser()
-    this.setState({
-      idOfStateInSingleStateGrid: mapStateNameToStateId(stateName),
-      displayType: displayType
-    })
 
-  }
   
   
   render() {
@@ -327,12 +296,12 @@ class App extends React.Component {
 
       
       if (this.state.columnToSort === "state_name") {
-        outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]]
+        outputArr = [...this.state[this.props.newOrTotal + this.props.selectedStatType]]
         // debugger
       } else if (this.state.columnToSort === "first_number_col") {
         // debugger
-        // outputArr = this.state[this.state.newOrTotal + this.state.selectedStatType].sort((a, b) => a.lastDate-b.lastDate )
-        outputArr = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
+        // outputArr = this.state[this.props.newOrTotal + this.props.selectedStatType].sort((a, b) => a.lastDate-b.lastDate )
+        outputArr = [...this.state[this.state.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
           if (a[lastDate] > b[lastDate]) return -1;
 	        if (a[lastDate] < b[lastDate]) return 1;
         }  )
@@ -345,61 +314,16 @@ class App extends React.Component {
       let output = []
       let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
   
-      let sortedObjects = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
+      let sortedObjects = [...this.state[this.props.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
         if (a[lastDate] > b[lastDate]) return -1;
         if (a[lastDate] < b[lastDate]) return 1;
       }  )
       let top10StateIDs = sortedObjects.slice(0,10).map(obj => obj.state_id)
       for (let id of top10StateIDs) {
-        output.push(this.state[this.state.newOrTotal + this.state.selectedStatType].find((obj) => obj.state_id === id  ))
+        output.push(this.state[this.props.newOrTotal + this.props.selectedStatType].find((obj) => obj.state_id === id  ))
       }
       return output
     }
-
-
-    let tableDescription = () => {
-      let newOrCumulative = () => {
-        switch (this.state.newOrTotal) {
-          case "new": return "Daily"
-          case "total": return "Cumulative"
-          default: return
-        }
-      }
-      let tableDesc = () => {
-        switch (this.state.selectedStatType) {
-          case "Positive": return "Positive Tests"
-          case "Negative": return "Negative Tests"
-          case "Death": return "Deaths"
-          case "Total": return "Tests Submitted"
-          case "Hospitalized": return "Hospitalized"
-          default: return
-        }
-      }
-      if (this.state.displayType === "table"){
-        return `${newOrCumulative()} count of ${tableDesc()}`
-      } else if (this.state.displayType === "top10s") {
-        if (this.state.newOrTotal === "new") {
-          return `States with the 10 most ${tableDesc()} reported on last date in range`
-        } else {
-          return `States with the 10 most total ${tableDesc()} as of last date in range`
-        }
-      } else if (this.state.displayType === "rateOfGrowthChart") {
-        if (this.state.newOrTotal === "new") {
-          return `Rates of Growth for Daily 7-day average numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
-        } else {
-          return `Rates of growth of Total 7-day average numbers from ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
-        }
-      } else {
-          if (this.state.newOrTotal === "new") {
-            return `All daily increases for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
-          } else {
-            return `All total counts for ${mapStateIdToStateName(parseInt(this.state.idOfStateInSingleStateGrid))}`
-          }
-      }
-    }
-
-    
-
 
     return (
       
@@ -415,7 +339,7 @@ class App extends React.Component {
               <Form.Row>
                 <Form.Group  >
                   
-                {this.state.displayType === "table"
+                {this.props.displayType === "table"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="table" active >
                       Raw Numbers<br />Tables
@@ -425,7 +349,7 @@ class App extends React.Component {
                       Raw Numbers<br />Tables
                     </Button>
                   }
-                  {this.state.displayType === "singleStateChart"
+                  {this.props.displayType === "singleStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
                       Single State<br />(and U.S.) Charts
@@ -439,7 +363,7 @@ class App extends React.Component {
                 </Form.Row>
                 <Form.Row>
                   <Form.Group  >
-                  {this.state.displayType === "top10s"
+                  {this.props.displayType === "top10s"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="top10s" active >
                       Top 10<br />Charts
@@ -449,7 +373,7 @@ class App extends React.Component {
                       Top 10<br />Charts
                     </Button>
                   }
-                  {this.state.displayType === "rateOfGrowthChart"
+                  {this.props.displayType === "rateOfGrowthChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="rateOfGrowthChart" active >
                       Rates of<br />Growth Charts
@@ -468,13 +392,13 @@ class App extends React.Component {
               <Form >
                 <Form.Row>
                   <Form.Group  >
-                    {(this.state.displayType === "table" || this.state.displayType === "top10s")
+                    {(this.props.displayType === "table" || this.props.displayType === "top10s")
                     ?
-                      <Form.Control as="select" name="selectedStatType" value={this.state.selectedStatType} onChange={this.formChangeHandler} > 
+                      <Form.Control as="select" name="selectedStatType" value={this.props.selectedStatType} onChange={this.formChangeHandler} > 
                         <option value="Positive">Test Results: Positive</option>
-                        {this.state.newOrTotal === "new" ? <option value="PositivePercent">Positive Results Percentage</option> : null }
+                        {this.props.newOrTotal === "new" ? <option value="PositivePercent">Positive Results Percentage</option> : null }
                         <option value="Negative">Test Results: Negative</option>
-                        {/* {this.state.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null } */}
+                        {/* {this.props.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null } */}
                         <option value="Total">Total Tested</option>
                         <option value="Hospitalized">Total Hospitalized</option>
                         <option value="Death">Corona Deaths</option>
@@ -493,7 +417,7 @@ class App extends React.Component {
               <Form >
                 <Form.Row>
                   <Form.Group  >
-                    {this.state.newOrTotal === "new"
+                    {this.props.newOrTotal === "new"
                     ?
                       <Button className="typebutton" data-buttontype="newOrTotal" appearance="primary" size="md" name="new" active>
                         New Per Day
@@ -503,7 +427,7 @@ class App extends React.Component {
                         New Per Day
                       </Button>
                     }
-                    {this.state.newOrTotal === "total"
+                    {this.props.newOrTotal === "total"
                     ?
                       <Button className="typebutton"  data-buttontype="newOrTotal" appearance="primary" size="md" name="total" active >
                         Total
@@ -520,13 +444,13 @@ class App extends React.Component {
               </Form>
             </Col>
           </Row>
-          {this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart"
+          {this.props.displayType === "singleStateChart" || this.props.displayType === "rateOfGrowthChart"
           ?
           <Row>
             <Form >
                 <Form.Row>
                   <Form.Group  >
-                      <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.state.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} > 
+                      <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.props.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} > 
                       <option value={99}>Entire U.S.</option>
                         {this.dropdownOptionsForStates()}
                       </Form.Control>
@@ -537,23 +461,10 @@ class App extends React.Component {
           :
           null
           }
-          {this.state.displayType === "singleStateChart" || this.state.displayType === "rateOfGrowthChart"
-          ?
-          // <Row>
-          //   <Form >
-          //           <Form.Check  inline type="checkbox" name="includeTested" checked={this.state.includeTested} label="'Total Tested'" onChange={this.formToggleHandler}/>
-          //           <Form.Check inline type="checkbox" name="includePositives" checked={this.state.includePositives} label="'Positive Results'" onChange={this.formToggleHandler}/>
-          //       <Form.Row>
-          //         <Form.Group  >
-          //           <Form.Check inline type="checkbox" name="includeNegatives" checked={this.state.includeNegatives} label="'Negative Results'" onChange={this.formToggleHandler}/>
-          //           <Form.Check inline type="checkbox" name="includeHospitalized" checked={this.state.includeHospitalized} label="'Hospitalized'" onChange={this.formToggleHandler}/>
-          //           <Form.Check inline type="checkbox" name="includeDeaths" checked={this.state.includeDeaths} label="'Deaths'" onChange={this.formToggleHandler}/>
-          //         </Form.Group  >
-          //       </Form.Row>
-          //     </Form>
-          // </Row>  
+          {this.props.displayType === "singleStateChart" || this.props.displayType === "rateOfGrowthChart"
+          ? 
           <Row>
-              {this.state.includeTested
+              {this.props.includeGridLines.includeTested
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeTested" onClick={this.formToggleHandler} active >
                   Total Tested
@@ -563,7 +474,7 @@ class App extends React.Component {
                   Total Tested
                 </Button>
               }
-              {this.state.includeNegatives
+              {this.props.includeGridLines.includeNegatives
               ?
               <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeNegatives" onClick={this.formToggleHandler} active >
                   Negative Results
@@ -573,7 +484,7 @@ class App extends React.Component {
                   Negative Results
                 </Button>
               }
-              {this.state.includePositives
+              {this.props.includeGridLines.includePositives
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositives" onClick={this.formToggleHandler} active >
                   Positive Results
@@ -583,11 +494,11 @@ class App extends React.Component {
                   Positive Results
                 </Button>
               }
-              { this.state.newOrTotal === "total" 
+              { this.props.newOrTotal === "total" 
               ?
                 null  // this hides the option to show Pos% on line graph if viewing TOTAL (instead of NEW)
               :
-              this.state.includePositivePercent
+              this.props.includeGridLines.includePositivePercent
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositivePercent" onClick={this.formToggleHandler} active >
                   Positive Percentage
@@ -597,7 +508,7 @@ class App extends React.Component {
                   Positive Percentage
                 </Button>
               }
-              {this.state.includeHospitalized
+              {this.props.includeGridLines.includeHospitalized
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalized" onClick={this.formToggleHandler} active >
                   Hospitalized
@@ -607,7 +518,7 @@ class App extends React.Component {
                   Hospitalized
               </Button>
               }
-              {this.state.includeDeaths
+              {this.props.includeGridLines.includeDeaths
               ?
                 <Button className="typebutton"   color="green" appearance="primary" size="sm" name="includeDeaths" onClick={this.formToggleHandler} active >
                   Deaths
@@ -623,87 +534,86 @@ class App extends React.Component {
           }
           <Row>
             <Col sm={12} >
-              <h5>{this.state.totalDeath.length > 0 ? tableDescription() : null }</h5>
+              <h5>{this.state.totalDeath.length > 0 ? tableDescription(this.props.newOrTotal, this.props.selectedStatType, this.props.displayType, this.props.idOfStateInSingleStateGrid) : null }</h5>
             </Col>
           </Row>
           <Row  className="justify-content-md-center" >
             <Col md="auto" >
                 {this.state.totalDeath.length > 0
                 ?  
-                  this.state.displayType === "table"
+                  this.props.displayType === "table"
                   ?
                   <div id="statesTable" >
                     <GridBuilder
                       gridType="AllStates-PerDay"
                       allDatesArr={this.props.allDatesArr}
                       gridLinesArray={tableDataToDisplay()}
-                      // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
-                      selectedStatType={this.state.selectedStatType} //ex: Pos, Neg, Total, Death
+                      selectedStatType={this.props.selectedStatType} //ex: Pos, Neg, Total, Death
                       sortHandler={this.sortHandler}
-                      jumpToDisplayAndState={this.jumpToDisplayAndState}
+                      // jumpToDisplayAndState={this.jumpToDisplayAndState}
                     />
                   </div>
                   :
 
 
-                  (this.state.displayType === "singleStateChart")
+                  (this.props.displayType === "singleStateChart")
                   ?
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="singleStateChart"
                                           // allDatesArr={this.props.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
-                                          selectedStatType={this.state.selectedStatType}
-                                          includeTested={this.state.includeTested}
-                                          includeNegatives={this.state.includeNegatives}
-                                          includeDeaths={this.state.includeDeaths}
-                                          includePositives={this.state.includePositives}
-                                          includePositivePercent={this.state.includePositivePercent}
-                                          includeHospitalized={this.state.includeHospitalized}
-                                          filteredStayAtHomeOrders={this.props.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
+                                          selectedStatType={this.props.selectedStatType}
+                                          includeTested={this.props.includeGridLines.includeTested}
+                                          includeNegatives={this.props.includeGridLines.includeNegatives}
+                                          includeDeaths={this.props.includeGridLines.includeDeaths}
+                                          includePositives={this.props.includeGridLines.includePositives}
+                                          includePositivePercent={this.props.includeGridLines.includePositivePercent}
+                                          includeHospitalized={this.props.includeGridLines.includeHospitalized}
+                                          filteredStayAtHomeOrders={this.props.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid) )}
                                           fetchData={this.fetchData}
                                           fromToDatesValue={this.state.fromToDatesValue}  //This is needed to display the correct dates and data after a 'get all data' fetch
                     />
                     // </div>
                   :
-                  (this.state.displayType === "top10s")
+                  (this.props.displayType === "top10s")
                   ?
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="top10s"
                                           // allDatesArr={
-                                          //   this.state.selectedStatType === "Hospitalized" 
+                                          //   this.props.selectedStatType === "Hospitalized" 
                                           //   ?
                                           //     this.props.staticDatesArr.slice(16,-1)
                                           //     :
                                           //     this.props.staticDatesArr
                                           // }
                                           gridLinesArray={top10sData()}
-                                          selectedStatType={this.state.selectedStatType}
-                                          newOrTotal={this.state.newOrTotal}
-                                          includeTested={this.state.includeTested}
-                                          includeNegatives={this.state.includeNegatives}
-                                          includeDeaths={this.state.includeDeaths}
-                                          includePositives={this.state.includePositives}
-                                          includeHospitalized={this.state.includeHospitalized}
+                                          selectedStatType={this.props.selectedStatType}
+                                          // newOrTotal={this.props.newOrTotal}
+                                          includeTested={this.props.includeGridLines.includeTested}
+                                          includeNegatives={this.props.includeGridLines.includeNegatives}
+                                          includeDeaths={this.props.includeGridLines.includeDeaths}
+                                          includePositives={this.props.includeGridLines.includePositives}
+                                          includeHospitalized={this.props.includeGridLines.includeHospitalized}
                     />
                     // </div>
                   :
                   // null
-                  (this.state.displayType === "rateOfGrowthChart")
+                  (this.props.displayType === "rateOfGrowthChart")
                   ?
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="rateOfGrowthChart"
                                           // allDatesArr={this.props.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
-                                          selectedStatType={this.state.selectedStatType}
-                                          newOrTotal={this.state.newOrTotal}
-                                          includeTested={this.state.includeTested}
-                                          includeNegatives={this.state.includeNegatives}
-                                          includeDeaths={this.state.includeDeaths}
-                                          includePositives={this.state.includePositives}
-                                          includeHospitalized={this.state.includeHospitalized}
+                                          selectedStatType={this.props.selectedStatType}
+                                          // newOrTotal={this.props.newOrTotal}
+                                          includeTested={this.props.includeGridLines.includeTested}
+                                          includeNegatives={this.props.includeGridLines.includeNegatives}
+                                          includeDeaths={this.props.includeGridLines.includeDeaths}
+                                          includePositives={this.props.includeGridLines.includePositives}
+                                          includeHospitalized={this.props.includeGridLines.includeHospitalized}
                     />
                     // </div>
                   :
@@ -739,7 +649,14 @@ class App extends React.Component {
 
 function mdp(dispatch) {
   return { 
-    fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue))
+    fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue)),
+    jumpToDisplayAndState: (displayType, stateName) => dispatch(jumpToDisplayAndState(displayType, stateName)),
+    setSelectedStatType: (typeName) => dispatch(setSelectedStatType(typeName)),
+    setNewOrTotal: (newOrTotal) => dispatch(setNewOrTotal(newOrTotal)),
+    setDisplayType: (displayType) => dispatch(setDisplayType(displayType)),
+    setIdOfStateInSingleStateGrid: (stateId) => dispatch(setIdOfStateInSingleStateGrid(stateId)),
+    toggleGridlines: (gridline, newValue) => dispatch(toggleGridlines(gridline, newValue)),
+    singleInitialLineChooser: (selectedStatType) => dispatch(singleInitialLineChooser(selectedStatType)),
   }
 }
 
@@ -761,6 +678,11 @@ function msp(state) {
     totalTotal: state.totalTotal,
     totalHospitalized: state.totalHospitalized,
     stayAtHomeOrders: state.stayAtHomeOrders,
+    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
+    displayType: state.displayType,
+    selectedStatType: state.selectedStatType,
+    newOrTotal: state.newOrTotal,
+    includeGridLines: state.includeGridLines
   }
 }
 

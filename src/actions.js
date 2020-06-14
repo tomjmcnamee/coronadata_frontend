@@ -1,4 +1,6 @@
 import { buildPercentageArrays } from './HelperFunctions/mathFunctions'
+import { mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
+
 
 
 
@@ -50,8 +52,64 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
 } // END fetchStateArr function
 
 
+function jumpToDisplayAndState (displayType, stateName) {
+  return function (dispatch) {
+    dispatch({ type: "SET ID OF STATE IN SINGLE STATE GRID", payload: mapStateNameToStateId(stateName)})
+    dispatch({ type: "SET DISPLAY TYPE", payload: displayType})
+  }
+}
+
+function setSelectedStatType (typeName) {
+  return function (dispatch) {
+    dispatch({ type: "SET SELECTED STAT TYPE", payload: typeName})
+  }
+}
+  
+function setNewOrTotal (newOrTotal) {
+  return function (dispatch) {
+    dispatch({ type: "SET NEW OR TOTAL", payload: newOrTotal})
+  }
+}
+  
+function setDisplayType (displayType) {
+  return function (dispatch) {
+    dispatch({ type: "SET DISPLAY TYPE", payload: displayType})
+  }
+}
+  
+function setIdOfStateInSingleStateGrid (stateId) {
+  return function (dispatch) {
+    dispatch({ type: "SET ID OF STATE IN SINGLE STATE GRID", payload: stateId})
+  }
+}
+
+function toggleGridlines (gridlineName, newValue) {
+  return function (dispatch) {
+    dispatch({ type: "UPDATE GRID LINES", payload: [gridlineName, newValue]})
+  }
+}
+
+function singleInitialLineChooser (selectedStatType) {
+  //// all "include" state element neeed to be in global state in order for this to work
+  return function (dispatch) {
+    if (selectedStatType === "Total") {
+      dispatch({ type: "SET GRID LINE AS TRUE", payload: "includeTested"})
+    } else if (selectedStatType === "Hospitalized" || selectedStatType === "PositivePercent") {
+      dispatch({ type: "SET GRID LINE AS TRUE", payload: `include${selectedStatType}`})
+    } else {
+      dispatch({ type: "SET GRID LINE AS TRUE", payload: `include${selectedStatType}s`})
+    }
+  }
+}
   
   
 export { 
-  fetchAllStatesData
+  fetchAllStatesData,
+  jumpToDisplayAndState,
+  setSelectedStatType,
+  setNewOrTotal,
+  setDisplayType,
+  setIdOfStateInSingleStateGrid,
+  toggleGridlines,
+  singleInitialLineChooser
 }

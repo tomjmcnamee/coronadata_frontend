@@ -2,9 +2,13 @@ import React from 'react'
 // import Table  from 'react-bootstrap/Table'
 import { Table, Column, HeaderCell, Cell } from 'rsuite-table';
 import 'rsuite-table/dist/css/rsuite-table.css'
+import { connect } from 'react-redux'
 
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething' 
+import {
+  jumpToDisplayAndState
+} from '../actions'
 
 
 
@@ -77,5 +81,39 @@ function GridBuilder(props) {
         break
     } // ends switch
 }  // ends GridBuilder class
-export default GridBuilder
+
+
+function mdp(dispatch) {
+  return { 
+    jumpToDisplayAndState: (displayType, stateName) => dispatch(jumpToDisplayAndState(displayType, stateName)),
+  }
+}
+
+// this comes from reduct.js - K is local reference, V is foreign state attribute
+function msp(state) {
+  return { 
+    fromToDatesValue: state.fromToDatesValue,
+    allDatesArr: state.allDatesArr,
+    staticDatesArr: state.staticDatesArr,
+    newPositive: state.newPositive,
+    newNegative: state.newNegative,
+    newPositivePercent: state.newPositivePercent,
+    newDeath: state.newDeath,
+    newTotal: state.newTotal,
+    newHospitalized: state.newHospitalized,
+    totalPositive: state.totalPositive,
+    totalNegative: state.totalNegative,
+    totalDeath: state.totalDeath,
+    totalTotal: state.totalTotal,
+    totalHospitalized: state.totalHospitalized,
+    stayAtHomeOrders: state.stayAtHomeOrders,
+    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
+    displayType: state.displayType,
+    selectedStatType: state.selectedStatType,
+    newOrTotal: state.newOrTotal
+  }
+}
+
+export default connect(msp, mdp)(GridBuilder)
+
 

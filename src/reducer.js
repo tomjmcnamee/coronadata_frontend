@@ -15,8 +15,20 @@ let defaultState = {
   totalDeath: [],
   totalTotal: [],
   totalHospitalized: [],
-  stayAtHomeOrders: []
-    
+  stayAtHomeOrders: [],
+
+  idOfStateInSingleStateGrid: "99",
+  displayType: "table",
+  selectedStatType: "Death",
+  newOrTotal: "new",
+  includeGridLines: {
+    includeTested: false,
+    includeNegatives: false,
+    includePositives: false,
+    includeHospitalized: false,
+    includeDeaths: false,
+    includePositivePercent: false,
+  }
 }
 
 
@@ -157,6 +169,55 @@ function stayAtHomeOrdersReducer(state = defaultState.stayAtHomeOrders, action) 
   }
 }
 
+function idOfStateInSingleStateGridReducer(state = defaultState.idOfStateInSingleStateGrid, action) {
+  switch (action.type) {
+      case "SET ID OF STATE IN SINGLE STATE GRID":
+          return action.payload
+      default:
+          return state
+  }
+}
+
+function displayTypeReducer(state = defaultState.displayType, action) {
+  switch (action.type) {
+      case "SET DISPLAY TYPE":
+          return action.payload
+      default:
+          return state
+  }
+}
+
+function selectedStatTypeReducer(state = defaultState.selectedStatType, action) {
+  switch (action.type) {
+      case "SET SELECTED STAT TYPE":
+          return action.payload
+      default:
+          return state
+  }
+}
+
+function newOrTotalReducer(state = defaultState.newOrTotal, action) {
+  switch (action.type) {
+      case "SET NEW OR TOTAL":
+          return action.payload
+      default:
+          return state
+  }
+}
+
+function includeGridLinesReducer(state = defaultState.includeGridLines, action) {
+  switch (action.type) {
+      case "UPDATE GRID LINES":
+        let k = action.payload[0] 
+        let v = action.payload[1]
+        return {...state, [k]: v}
+      case "SET GRID LINE AS TRUE":
+        return {...state, [action.payload]: true}
+      default:
+          return state
+  }
+}
+
 
 
 
@@ -179,6 +240,12 @@ let reducer = combineReducers({
   totalTotal: totalTotalReducer,
   totalHospitalized: totalHospitalizedReducer,
   stayAtHomeOrders: stayAtHomeOrdersReducer,
+  idOfStateInSingleStateGrid: idOfStateInSingleStateGridReducer,
+  displayType: displayTypeReducer, 
+  selectedStatType: selectedStatTypeReducer,
+  newOrTotal: newOrTotalReducer,
+  includeGridLines: includeGridLinesReducer
+
 })
 
 export default reducer

@@ -353,7 +353,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.tested,
               dataKey:"Tested",
               inactive:false,
-              type:this.props.includeTested?"plainline":"none",
+              type:this.props.includeGridLines.includeTested?"plainline":"none",
               value:"Tested",
               payload:{dot:false,
                 dataKey:"Tested",
@@ -377,7 +377,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.negative,
               dataKey:"Negative",
               inactive:false,
-              type:this.props.includeNegatives?"plainline":"none",
+              type:this.props.includeGridLines.includeNegatives?"plainline":"none",
               value:"Negative",
               payload:{dot:false,
                 dataKey:"Negative",
@@ -401,7 +401,7 @@ class ChartBuilder extends React.Component {
             { color: this.state.colors.positive,
               dataKey:"Positive",
               inactive:false,
-              type:this.props.includePositives?"plainline":"none",
+              type:this.props.includeGridLines.includePositives?"plainline":"none",
               value:"Positive",
               payload:{dot:false,
                   dataKey:"Positive",
@@ -425,7 +425,7 @@ class ChartBuilder extends React.Component {
               { color:this.state.colors.hospitalized,
                 dataKey:"Hospitalized",
                 inactive:false,
-              type:this.props.includeHospitalized?"plainline":"none",
+              type:this.props.includeGridLines.includeHospitalized?"plainline":"none",
               value:"Hospitalized",
               payload:{dot:false,
                 dataKey:"Hospitalized ",
@@ -449,7 +449,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.death,
               dataKey:"Deaths",
               inactive:false,
-              type:this.props.includeDeaths?"plainline":"none",
+              type:this.props.includeGridLines.includeDeaths?"plainline":"none",
               value:"Deaths",
               payload:{dot:false,
                 dataKey:"Deaths",
@@ -473,7 +473,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.positivePercent,
               dataKey:"Positive %",
               inactive:false,
-              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? this.props.includePositivePercent ? "plainline" : "none" : "none",
+              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? this.props.includeGridLines.includePositivePercent ? "plainline" : "none" : "none",
               value:"Positive %",
               payload:{dot:false,
                 dataKey:"Positive %",
@@ -497,7 +497,7 @@ class ChartBuilder extends React.Component {
             { color:"black",
               dataKey:"Deaths: 7 day average",
               inactive:false,
-              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") && (this.props.includeTested || this.props.includeNegatives || this.props.includeDeaths || this.props.includePositives || this.props.includeHospitalized) ? "plainline" : "none" ,
+              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
               value:"7 day averages",
               payload:{dot:false,
                 dataKey:"Deaths: 7 day average",
@@ -540,19 +540,19 @@ class ChartBuilder extends React.Component {
 
               {/* isAnimationActive={false} */}
 
-              {this.props.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke={this.state.colors.negative}   /> :null }
-              {this.props.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
-              {this.props.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
-              {this.props.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
-              {this.props.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
+              {this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke={this.state.colors.negative}   /> :null }
+              {this.props.includeGridLines.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
+              {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
+              {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
+              {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
               {/* { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative %" strokeWidth={2} stroke="black"    /> : null} */}
-              { this.props.includePositivePercent ? this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
+              { this.props.includeGridLines.includePositivePercent ? this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
               
-              { this.props.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
-              { this.props.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
-              { this.props.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={2} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
-              { this.props.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={2} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
-              { this.props.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={2} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={2} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={2} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={2} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
               
               
 
@@ -630,11 +630,11 @@ class ChartBuilder extends React.Component {
             labelFormatter={(value) => `RoG for ${value}` }
             offset={60} itemStyle={tooltipStyle} nMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} iconSize={30}/>
             <Legend onClick={this.handleLegendClick} iconType="wye"  />
-            {this.props.includeNegatives ? <Line type="monotone" dot={false} dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
-            {this.props.includeTested ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
-            {this.props.includePositives ? <Line type="monotone" dot={false} dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
-            {this.props.includeHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
-            {this.props.includeDeaths ?  <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke={this.state.colors.death}   /> :null }
+            {this.props.includeGridLines.includeNegatives ? <Line type="monotone" dot={false} dataKey="Negative" strokeWidth={width["Negative"]} stroke="blue"   /> :null }
+            {this.props.includeGridLines.includeTested ? <Line type="monotone" dot={false} dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
+            {this.props.includeGridLines.includePositives ? <Line type="monotone" dot={false} dataKey="Positive" strokeWidth={width["Positive"]} stroke="red"   /> :null }
+            {this.props.includeGridLines.includeHospitalized ? <Line type="monotone" dot={false} dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
+            {this.props.includeGridLines.includeDeaths ?  <Line type="monotone" dot={false} dataKey="Deaths" strokeWidth={width["Deaths"]} stroke={this.state.colors.death}   /> :null }
             
           </LineChart>
           </ResponsiveContainer>       
@@ -659,7 +659,6 @@ function msp(state) {
   return { 
     staticDatesArr: state.staticDatesArr,
     fromToDatesValue: state.fromToDatesValue,
-    staticDatesArr: state.staticDatesArr,
     newPositive: state.newPositive,
     newNegative: state.newNegative,
     newPositivePercent: state.newPositivePercent,
@@ -671,6 +670,8 @@ function msp(state) {
     totalDeath: state.totalDeath,
     totalTotal: state.totalTotal,
     totalHospitalized: state.totalHospitalized,
+    newOrTotal: state.newOrTotal,
+    includeGridLines: state.includeGridLines
   }
 }
 
