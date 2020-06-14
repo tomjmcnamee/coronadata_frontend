@@ -29,7 +29,6 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
       .then(resp => resp.json())
       .then((response) => {
         let percentages = buildPercentageArrays(response.newTotal, response.newNegative, response.newPositive, response.allDatesArr) 
-        debugger
         if (!!fromToDatesValue)  dispatch({ type: "SET FROMTO DATES VALUES", payload: fromToDatesValue}) 
         dispatch({ type: "SET ALL DATES ARRAY", payload: response.allDatesArr})
         dispatch({ type: "SET STATIC DATES ARRAY", payload: [...response.allDatesArr  ].reverse()})

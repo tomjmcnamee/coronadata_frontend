@@ -1,5 +1,7 @@
 import React from 'react'
 import { DateRangePicker } from 'rsuite'
+import { connect } from 'react-redux'
+
 
 // import Table  from 'react-bootstrap/Table'
 // import LineChart from "@rsuite/charts/lib/charts/LineChart";
@@ -13,6 +15,7 @@ import { getMonthDayFromYYYYMMDD,
   getYYYYMMDDfromFormattedDate,
   buildSecondIndexOfDatePickerValue  } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
+import { fetchAllStatesData } from '../actions'
 
 
 class ChartBuilder extends React.Component {
@@ -110,13 +113,13 @@ class ChartBuilder extends React.Component {
     if (!this.props.fromToDatesValue) {
       this.setState({
         //// These two defaults to the last 30 days
-        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
-        // displayDates: this.newDisplayDateArr([getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )])
+        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1 )],
+        // displayDates: this.newDisplayDateArr([getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1 )])
         
         //// Use the below to default to ALL available dates
-        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] ).setDate(getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] ).getDate() + 1)],
-        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[1]),  new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))],
-        displayDates: [...this.props.allDatesArr]
+        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] ).setDate(getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] ).getDate() + 1)],
+        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[1]),  new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))],
+        displayDates: [...this.props.staticDatesArr]
       })
       // debugger
     } else {
@@ -170,9 +173,9 @@ class ChartBuilder extends React.Component {
   
 
   newDisplayDateArr = (value) => {
-    let startIndex = this.props.allDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[0]))
-    let endIndex = this.props.allDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[1]))  
-    let arrToReturn = this.props.allDatesArr.slice(startIndex, endIndex + 1)
+    let startIndex = this.props.staticDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[0]))
+    let endIndex = this.props.staticDatesArr.indexOf(getYYYYMMDDfromFormattedDate(value[1]))  
+    let arrToReturn = this.props.staticDatesArr.slice(startIndex, endIndex + 1)
     return arrToReturn
   }
 
@@ -181,9 +184,9 @@ class ChartBuilder extends React.Component {
     if (
         ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
         &&
-        (getYYYYMMDDfromFormattedDate(value[0]) < this.props.allDatesArr[0])
+        (getYYYYMMDDfromFormattedDate(value[0]) < this.props.staticDatesArr[0])
         && 
-        (!!this.props.allDatesArr && this.props.allDatesArr.length < 35 )
+        (!!this.props.staticDatesArr && this.props.staticDatesArr.length < 35 )
       ) {
       this.props.fetchData("all", value)
       this.setState({ 
@@ -199,8 +202,8 @@ class ChartBuilder extends React.Component {
     // if (value.length === 0) {
     //   // This denotes the "CLEAN 'X' "
     //   this.setState({ 
-    //     datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1 )],
-    //     displayDates: [...this.props.allDatesArr]
+    //     datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1 )],
+    //     displayDates: [...this.props.staticDatesArr]
     //    })
     // } else {
     // }
@@ -236,22 +239,22 @@ class ChartBuilder extends React.Component {
       return <DateRangePicker 
                 cleanable={false}
                 showOneCalendar
-                disabledDate={allowedRange(getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), getDashSeperatedDateFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 1] + 1))}         
-                value={(!!this.props.allDatesArr && this.props.allDatesArr.length < 35 ) ? this.state.datePickerValue : this.state.datePickerValue }
+                disabledDate={allowedRange(getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), getDashSeperatedDateFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1))}         
+                value={(!!this.props.staticDatesArr && this.props.staticDatesArr.length < 35 ) ? this.state.datePickerValue : this.state.datePickerValue }
                 onChange={(value) => this.datePickerChangeHandler(value) }
         ranges={[{
           label: 'Last 7',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 7]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 7]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
           // value: [dateFns.addDays(new Date(), -1), dateFns.addDays(new Date(), -1)]
         }, {
           label: 'Last 14',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 14]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 14]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
         }, {
           label: 'Last 30',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.allDatesArr[this.props.allDatesArr.length - 30]), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 30]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
         }, {
           label: 'since 2-28-20',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), new Date(buildSecondIndexOfDatePickerValue(this.props.allDatesArr))]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
         }]}
       /> // Closes DateRangePicker component call
     }
@@ -338,8 +341,8 @@ class ChartBuilder extends React.Component {
           } // ends GridLines IF statement
 
           let stayAtHomeOrderXReferences
-          if (this.props.stayAtHomeOrders.length > 0 ) {
-            stayAtHomeOrderXReferences = this.props.stayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
+          if (this.props.filteredStayAtHomeOrders.length > 0 ) {
+            stayAtHomeOrderXReferences = this.props.filteredStayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
                 <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
               </ReferenceLine>)
           }
@@ -644,5 +647,31 @@ class ChartBuilder extends React.Component {
     } // ends switch
   }
 }  // ends ChartBuilder class
-export default ChartBuilder
 
+function mdp(dispatch) {
+  return { 
+    fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue))
+  }
+}
+
+// this comes from reduct.js - K is local reference, V is foreign state attribute
+function msp(state) {
+  return { 
+    staticDatesArr: state.staticDatesArr,
+    fromToDatesValue: state.fromToDatesValue,
+    staticDatesArr: state.staticDatesArr,
+    newPositive: state.newPositive,
+    newNegative: state.newNegative,
+    newPositivePercent: state.newPositivePercent,
+    newDeath: state.newDeath,
+    newTotal: state.newTotal,
+    newHospitalized: state.newHospitalized,
+    totalPositive: state.totalPositive,
+    totalNegative: state.totalNegative,
+    totalDeath: state.totalDeath,
+    totalTotal: state.totalTotal,
+    totalHospitalized: state.totalHospitalized,
+  }
+}
+
+export default connect(msp, mdp)(ChartBuilder)

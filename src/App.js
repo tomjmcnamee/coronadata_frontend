@@ -20,8 +20,8 @@ import { fetchAllStatesData } from './actions'
 
 class App extends React.Component {
   state = {
-    allDatesArr: [],     //in reducer
-    staticDatesArr: [],   //in reducer
+    // allDatesArr: [],     //in reducer
+    // staticDatesArr: [],   //in reducer
     newPositive: [],   //in reducer
     newNegative: [],   //in reducer
     newPositivePercent: [],   //in reducer
@@ -33,7 +33,6 @@ class App extends React.Component {
     totalDeath: [],   //in reducer
     totalTotal: [],   //in reducer
     totalHospitalized: [],   //in reducer
-    stayAtHomeOrders: [],   //in reducer
 
     selectedStatType: "Death",
     newOrTotal: "new",
@@ -87,8 +86,8 @@ class App extends React.Component {
       // let percentages = [1,2]
       // debugger
       this.setState({
-        allDatesArr: response.allDatesArr,
-        staticDatesArr: [...response.allDatesArr  ].reverse(),
+        // allDatesArr: response.allDatesArr,
+        // staticDatesArr: [...response.allDatesArr  ].reverse(),
         totalNegative: response.totalNegative,
         totalDeath: response.totalDeath,
         totalTotal: response.totalTotal,
@@ -100,7 +99,6 @@ class App extends React.Component {
         newDeath: response.newDeath,
         newTotal: response.newTotal,
         newHospitalized: response.newHospitalized,
-        stayAtHomeOrders: response.stayAtHomeOrders,
         newPositivePercent: percentages[0],
         fromToDatesValue: fromToDatesValue
       })
@@ -108,6 +106,7 @@ class App extends React.Component {
     })        
   }
 
+  ////CAN DELETE
   buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr) => {
     let newPositivePercentArr = []
     for (let totalObj of newTotal) {
@@ -117,12 +116,10 @@ class App extends React.Component {
       let tempNegObj = newNegative.find( obj => obj.state_id === totalObj.state_id)
       let tempTotal = newTotal.find( obj => obj.state_id === totalObj.state_id)
       for (let day of allDatesArr) {
-        for (let negOrPos of ["Pos"]) {
-          if (!eval(`temp${negOrPos}Obj`)[day] || !tempTotal[day]) {
-            eval(`new${negOrPos}Obj`)[day] = 0
-            } else {
-            eval(`new${negOrPos}Obj`)[day] = parseFloat((( eval(`temp${negOrPos}Obj`)[day] * 100) / tempTotal[day]).toFixed(1))
-          }
+        if (!tempPosObj[day] || !tempTotal[day]) {
+          newPosObj[day] = 0
+          } else {
+          newPosObj[day] = parseFloat((( tempPosObj[day] * 100) / tempTotal[day]).toFixed(1))
         }
       } // ends FOR OF allDatesArr loop
       newPositivePercentArr.push(newPosObj)
@@ -187,6 +184,7 @@ class App extends React.Component {
   }
 
   formToggleHandler = (event) => {
+    console.log("Toggle HAndler event val = ", event)
     let newVal = !this.state[event.target.name]
     this.setState({
       [event.target.name]: newVal
@@ -256,13 +254,13 @@ class App extends React.Component {
         count_types = [this.state.newOrTotal + "-total",this.state.newOrTotal + "-positive",this.state.newOrTotal + "-negative",this.state.newOrTotal + "-death",this.state.newOrTotal + "-hospitalized"]
         state_type =  [this.state.newOrTotal + "Total",this.state.newOrTotal + "Positive",this.state.newOrTotal + "Negative",this.state.newOrTotal + "Death",this.state.newOrTotal + "Hospitalized"]
         // let chartColumnName = [ "Tested", "Positive", "Negative", "Deaths"]
-      // for (let day of this.state.staticDatesArr) { 
+      // for (let day of this.props.staticDatesArr) { 
         // debugger
         let index = 0
         let tempObj
         for (let countT of count_types) {
           tempObj = {state_id: 99, "count_type": countT}
-          for (let day of this.state.staticDatesArr) {
+          for (let day of this.props.staticDatesArr) {
             tempObj[day] = this.state[state_type[index]].reduce(
               function(prev, curr) {
                 return prev + curr[day]
@@ -324,7 +322,7 @@ class App extends React.Component {
   render() {
     const tableDataToDisplay = () => {
       let outputArr
-      let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
+      let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
       
 
       
@@ -345,7 +343,7 @@ class App extends React.Component {
     const top10sData = () => {
       // debugger
       let output = []
-      let lastDate = this.state.staticDatesArr[this.state.staticDatesArr.length - 1]
+      let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
   
       let sortedObjects = [...this.state[this.state.newOrTotal + this.state.selectedStatType]].sort(function (a, b) { 
         if (a[lastDate] > b[lastDate]) return -1;
@@ -637,7 +635,7 @@ class App extends React.Component {
                   <div id="statesTable" >
                     <GridBuilder
                       gridType="AllStates-PerDay"
-                      allDatesArr={this.state.allDatesArr}
+                      allDatesArr={this.props.allDatesArr}
                       gridLinesArray={tableDataToDisplay()}
                       // gridLinesArray={this.state[this.state.newOrTotal + this.state.selectedStatType]} //ex: newDeath or totalPositive
                       selectedStatType={this.state.selectedStatType} //ex: Pos, Neg, Total, Death
@@ -653,7 +651,7 @@ class App extends React.Component {
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="singleStateChart"
-                                          allDatesArr={this.state.staticDatesArr}
+                                          // allDatesArr={this.props.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                                           includeTested={this.state.includeTested}
@@ -662,7 +660,7 @@ class App extends React.Component {
                                           includePositives={this.state.includePositives}
                                           includePositivePercent={this.state.includePositivePercent}
                                           includeHospitalized={this.state.includeHospitalized}
-                                          stayAtHomeOrders={this.state.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
+                                          filteredStayAtHomeOrders={this.props.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.state.idOfStateInSingleStateGrid) )}
                                           fetchData={this.fetchData}
                                           fromToDatesValue={this.state.fromToDatesValue}  //This is needed to display the correct dates and data after a 'get all data' fetch
                     />
@@ -673,13 +671,13 @@ class App extends React.Component {
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="top10s"
-                                          allDatesArr={
-                                            this.state.selectedStatType === "Hospitalized" 
-                                            ?
-                                              this.state.staticDatesArr.slice(16,-1)
-                                              :
-                                              this.state.staticDatesArr
-                                          }
+                                          // allDatesArr={
+                                          //   this.state.selectedStatType === "Hospitalized" 
+                                          //   ?
+                                          //     this.props.staticDatesArr.slice(16,-1)
+                                          //     :
+                                          //     this.props.staticDatesArr
+                                          // }
                                           gridLinesArray={top10sData()}
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}
@@ -697,7 +695,7 @@ class App extends React.Component {
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="rateOfGrowthChart"
-                                          allDatesArr={this.state.staticDatesArr}
+                                          // allDatesArr={this.props.staticDatesArr}
                                           gridLinesArray={this.singleStateData()}
                                           selectedStatType={this.state.selectedStatType}
                                           newOrTotal={this.state.newOrTotal}

@@ -7,12 +7,10 @@ const buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr) 
     let tempNegObj = newNegative.find( obj => obj.state_id === totalObj.state_id)
     let tempTotal = newTotal.find( obj => obj.state_id === totalObj.state_id)
     for (let day of allDatesArr) {
-      for (let negOrPos of ["Pos"]) {
-        if (!eval(`temp${negOrPos}Obj`)[day] || !tempTotal[day]) {
-          eval(`new${negOrPos}Obj`)[day] = 0
-          } else {
-          eval(`new${negOrPos}Obj`)[day] = parseFloat((( eval(`temp${negOrPos}Obj`)[day] * 100) / tempTotal[day]).toFixed(1))
-        }
+      if (!tempPosObj[day] || !tempTotal[day]) {
+        newPosObj[day] = 0
+        } else {
+        newPosObj[day] = parseFloat((( tempPosObj[day] * 100) / tempTotal[day]).toFixed(1))
       }
     } // ends FOR OF allDatesArr loop
     newPositivePercentArr.push(newPosObj)

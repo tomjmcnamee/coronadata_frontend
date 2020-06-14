@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 let defaultState = {
-  fromToDatesValue: [],
+  fromToDatesValue: null,
   allDatesArr: [],
   staticDatesArr: [],
   newPositive: [],
