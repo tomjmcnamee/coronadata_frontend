@@ -15,9 +15,7 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
   let startTime = (+ new Date())
   return function (dispatch) {
     console.log("fetching from actoins")
-      // this.setState({
-      //   totalDeath: []
-      // })
+    dispatch({ type: "SET TOTAL DEATH", payload: []})
       
       fetch(process.env.REACT_APP_FETCH_LOCATION + "total_stats", {
         method: "GET",
