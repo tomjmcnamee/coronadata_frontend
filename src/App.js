@@ -7,12 +7,14 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 // import Tabs from 'react-bootstrap/Tabs'
 // import Tab  from 'react-bootstrap/Tab'
 
+
 import loadingMap from './assets/USSpreadMap.gif'
 import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import fetchingALLdata from './assets/fetchingALLdata.gif'
 import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
 import { tableDescription } from './HelperFunctions/dynamicLabels'
+import  MultiSelectDropdown  from './components/MultiSelectDropdown'
 import { Button } from 'rsuite';
 import './App.css';
 import { 
@@ -371,6 +373,12 @@ class App extends React.Component {
                     <ChartBuilder 
                                           gridType="singleStateChart"
                                           filteredStayAtHomeOrders={this.props.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid) )}
+                    />
+                  :
+                  (this.props.displayType === "multiStateChart")
+                  ?
+                    <MultiSelectDropdown 
+                                          // gridType="top10s"
                     />
                   :
                   (this.props.displayType === "top10s")
