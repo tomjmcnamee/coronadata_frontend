@@ -229,6 +229,16 @@ class App extends React.Component {
                       Single State<br />(and U.S.) Charts 
                     </Button>
                   }  
+                  {this.props.displayType === "multiStateChart"
+                  ?
+                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="multiStateChart" active >
+                      Multi-State and<br />Regional Chart
+                    </Button>
+                  :
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="multiStateChart"  onClick={this.formChangeHandler}>
+                      Multi-State and<br />Regional Chart
+                    </Button>
+                  }  
                   {this.props.displayType === "top10s"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="top10s" active >
