@@ -7,12 +7,19 @@ import { connect } from 'react-redux'
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething' 
 import {
-  jumpToDisplayAndState
+  jumpToDisplayAndState,
+  singleInitialLineChooser
+
 } from '../actions'
 
 
 
 function GridBuilder(props) {
+
+  function stateClickHandler(innerHTML){
+    props.singleInitialLineChooser(props.selectedStatType)
+    props.jumpToDisplayAndState("singleStateChart", innerHTML)
+  }
 
     let formattedGridLinesArr = [...props.gridLinesArray]
     // debugger
@@ -62,7 +69,8 @@ function GridBuilder(props) {
               >
                 <Column width={125} align="center"  fixed sortable >
                   <HeaderCell >Sort</HeaderCell>
-                  <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => props.jumpToDisplayAndState("singleStateChart", prop.target.innerHTML)} dataKey="state_name" />
+                  {/* <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => props.jumpToDisplayAndState("singleStateChart", prop.target.innerHTML)} dataKey="state_name" /> */}
+                  <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => stateClickHandler(prop.target.innerHTML)} dataKey="state_name" />
                 </Column>
                
                 
@@ -86,6 +94,8 @@ function GridBuilder(props) {
 function mdp(dispatch) {
   return { 
     jumpToDisplayAndState: (displayType, stateName) => dispatch(jumpToDisplayAndState(displayType, stateName)),
+    singleInitialLineChooser: (selectedStatType) => dispatch(singleInitialLineChooser(selectedStatType)),
+
   }
 }
 

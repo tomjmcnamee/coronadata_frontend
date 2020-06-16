@@ -89,8 +89,10 @@ function toggleGridlines (gridlineName, newValue) {
 
 function singleInitialLineChooser (selectedStatType) {
   //// all "include" state element neeed to be in global state in order for this to work
+  // debugger
   return function (dispatch) {
     if (selectedStatType === "Total") {
+      // console.log("Selecgted stat type = ", selectedStatType)
       dispatch({ type: "SET GRID LINE AS TRUE", payload: "includeTested"})
     } else if (selectedStatType === "Hospitalized" || selectedStatType === "PositivePercent") {
       dispatch({ type: "SET GRID LINE AS TRUE", payload: `include${selectedStatType}`})
