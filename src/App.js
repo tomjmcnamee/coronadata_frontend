@@ -110,47 +110,6 @@ class App extends React.Component {
 
 
   
-  singleStateData = () => {
-    let output = []
-    let count_types = []
-    let state_type = []
-
-    //This IF builds all 'Etire US' data sets to send along
-    if (this.props.idOfStateInSingleStateGrid == "99") {
-      /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-        count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
-        state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
-
-        let index = 0
-        let tempObj
-        for (let countT of count_types) {
-          tempObj = {state_id: 99, "count_type": countT}
-          for (let day of this.props.staticDatesArr) {
-            tempObj[day] = this.props[state_type[index]].reduce(
-              function(prev, curr) {
-                return prev + curr[day]
-              }, 0)
-            }
-          index++
-          output.push(tempObj)
-        }
-        //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
-        if (this.props.newOrTotal === "new") {
-          output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
-        }
-
-    } else {
-      output.push(this.props[this.props.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)  ))
-      output.push(this.props[this.props.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      output.push(this.props[this.props.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      output.push(this.props[this.props.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      output.push(this.props[this.props.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      if (this.props.newOrTotal === "new") {
-        output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      }
-    }
-    return output
-  }
   
   sortHandler = (columnToSortValue) => {
     if (columnToSortValue === "state_name") {
@@ -180,21 +139,7 @@ class App extends React.Component {
       return outputArr
     }
     
-    const top10sData = () => {
-      let output = []
-      let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
-  
-      let sortedObjects = [...this.props[this.props.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
-        if (a[lastDate] > b[lastDate]) return -1;
-        if (a[lastDate] < b[lastDate]) return 1;
-      }  )
-      let top10StateIDs = sortedObjects.slice(0,10).map(obj => obj.state_id)
-      for (let id of top10StateIDs) {
-        output.push(this.props[this.props.newOrTotal + this.props.selectedStatType].find((obj) => obj.state_id === id  ))
-      }
-      return output
-    }
-
+    
     return (
       
       <div className="App">
@@ -425,7 +370,6 @@ class App extends React.Component {
                     // <div id="LineChart" >
                     <ChartBuilder 
                                           gridType="singleStateChart"
-                                          gridLinesArray={this.singleStateData()}
                                           filteredStayAtHomeOrders={this.props.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid) )}
                     />
                   :
@@ -433,7 +377,6 @@ class App extends React.Component {
                   ?
                     <ChartBuilder 
                                           gridType="top10s"
-                                          gridLinesArray={top10sData()}
                     />
                   :
                   

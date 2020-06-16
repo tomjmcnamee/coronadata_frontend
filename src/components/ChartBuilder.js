@@ -209,7 +209,64 @@ class ChartBuilder extends React.Component {
     // }
     // debugger
   }  
+
+
+  singleStateData = () => {
+    let output = []
+    let count_types = []
+    let state_type = []
+
+    //This IF builds all 'Etire US' data sets to send along
+    if (this.props.idOfStateInSingleStateGrid == "99") {
+      /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
+        count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
+        state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
+
+        let index = 0
+        let tempObj
+        for (let countT of count_types) {
+          tempObj = {state_id: 99, "count_type": countT}
+          for (let day of this.props.staticDatesArr) {
+            tempObj[day] = this.props[state_type[index]].reduce(
+              function(prev, curr) {
+                return prev + curr[day]
+              }, 0)
+            }
+          index++
+          output.push(tempObj)
+        }
+        //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
+        if (this.props.newOrTotal === "new") {
+          output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
+        }
+
+    } else {
+      output.push(this.props[this.props.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)  ))
+      output.push(this.props[this.props.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      output.push(this.props[this.props.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      output.push(this.props[this.props.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      output.push(this.props[this.props.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      if (this.props.newOrTotal === "new") {
+        output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+      }
+    }
+    return output
+  }
   
+  top10sData = () => {
+    let output = []
+    let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
+
+    let sortedObjects = [...this.props[this.props.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
+      if (a[lastDate] > b[lastDate]) return -1;
+      if (a[lastDate] < b[lastDate]) return 1;
+    }  )
+    let top10StateIDs = sortedObjects.slice(0,10).map(obj => obj.state_id)
+    for (let id of top10StateIDs) {
+      output.push(this.props[this.props.newOrTotal + this.props.selectedStatType].find((obj) => obj.state_id === id  ))
+    }
+    return output
+  }
   
   render () {
 
@@ -264,24 +321,29 @@ class ChartBuilder extends React.Component {
       // backgroundImage: 'url(' + imgUrl + ')',
     };
 
-    let formattedGridLinesArr = [...this.props.gridLinesArray]
+    // let formattedGridLinesArr = [...this.props.gridLinesArray]
+    let top10sDataSet = this.top10sData()
+    let singleStateChartDataSet = this.singleStateData()
     const { width } = this.state
     let chartData = []
     let chartLines = []
     const top10Colors = ["#FF0000", "#00BFFF", "#EE82EE", "#00FF00", "#8A2BE2", "#FF8C00", "#D2691E", "#20B2AA", "#FF1493", "#0000FF"]
+    
+    
+    
     switch(this.props.gridType) {
       case "top10s":
 
         // Keep these next two, verifies SOMETHING and adds state name to Obj
-        if (formattedGridLinesArr.length > 0 ) {
-          formattedGridLinesArr.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
+        if (top10sDataSet.length > 0 ) {
+          top10sDataSet.forEach( obj => obj.state_name = `${mapStateIdToStateName(obj.state_id)}`)
           for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
           chartData.forEach((dataObject, index) => 
-            formattedGridLinesArr.forEach(stateDataObj =>
+            top10sDataSet.forEach(stateDataObj =>
               dataObject[stateDataObj.state_name] = stateDataObj[this.state.displayDates[index]]
             )
           )
-          chartLines = formattedGridLinesArr.map((obj, index) => <Line key={index} dot={false} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
+          chartLines = top10sDataSet.map((obj, index) => <Line key={index} dot={false} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
           // for (let obj of )
         } // ends GridLines IF statement
 
@@ -308,14 +370,14 @@ class ChartBuilder extends React.Component {
 
           case "singleStateChart":
             // let averageDeaths = {}
-            if (formattedGridLinesArr.length > 0 ) {
+            if (singleStateChartDataSet.length > 0 ) {
               /// This builds the 7-day Average numbers
               
               // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
               // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
               
-              for (let dataSetObj of formattedGridLinesArr) {
-                // debugger    
+              // debugger    
+              for (let dataSetObj of singleStateChartDataSet) {
                 let tempAveragesArr = []
                 if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
                   let tempAveragesObj = {}
@@ -326,7 +388,7 @@ class ChartBuilder extends React.Component {
                   tempAveragesArr.push(tempAveragesObj)
                 }
 
-                formattedGridLinesArr = [ ...formattedGridLinesArr, ...tempAveragesArr]
+                singleStateChartDataSet = [ ...singleStateChartDataSet, ...tempAveragesArr]
 
               } //  Ends For...In formattedFridlineArr
           
@@ -334,7 +396,7 @@ class ChartBuilder extends React.Component {
           //This checks to see if its for the WHOLE US or not
             for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
             chartData.forEach((dataObject, index) => 
-              formattedGridLinesArr.forEach(stateTypeObj =>
+              singleStateChartDataSet.forEach(stateTypeObj =>
                 dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
               )
             )
@@ -473,7 +535,7 @@ class ChartBuilder extends React.Component {
             { color:this.state.colors.positivePercent,
               dataKey:"Positive %",
               inactive:false,
-              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") ? this.props.includeGridLines.includePositivePercent ? "plainline" : "none" : "none",
+              type:singleStateChartDataSet[0]["count_type"].startsWith("new") ? this.props.includeGridLines.includePositivePercent ? "plainline" : "none" : "none",
               value:"Positive %",
               payload:{dot:false,
                 dataKey:"Positive %",
@@ -497,7 +559,7 @@ class ChartBuilder extends React.Component {
             { color:"black",
               dataKey:"Deaths: 7 day average",
               inactive:false,
-              type:this.props.gridLinesArray[0]["count_type"].startsWith("new") && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
+              type:singleStateChartDataSet[0]["count_type"].startsWith("new") && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
               value:"7 day averages",
               payload:{dot:false,
                 dataKey:"Deaths: 7 day average",
@@ -545,8 +607,7 @@ class ChartBuilder extends React.Component {
               {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
               {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
               {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
-              {/* { this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative %" strokeWidth={2} stroke="black"    /> : null} */}
-              { this.props.includeGridLines.includePositivePercent ? this.props.gridLinesArray[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
+              { this.props.includeGridLines.includePositivePercent ? singleStateChartDataSet[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
               
               { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
@@ -567,14 +628,14 @@ class ChartBuilder extends React.Component {
       // case "rateOfGrowthChart":
       //   let chartMax = 100
       //   let chartMin = -100
-    //     if (formattedGridLinesArr.length > 0 ) {
+    //     if (singleStateChartDataSet.length > 0 ) {
     //       //This checks to see if its for the WHOLE US or not
 
     //       for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
 
     // /// Averaging-out logic Starts here
     //         let tempRoGAveragesData = []
-    //         let dates = Object.keys(formattedGridLinesArr[0]).filter( k => k.startsWith("2020"))
+    //         let dates = Object.keys(top10sDataSet[0]).filter( k => k.startsWith("2020"))
     //         formattedGridLinesArr.forEach( function(obj) {
               
     //           let tempObj = {...obj}
@@ -672,7 +733,10 @@ function msp(state) {
     totalTotal: state.totalTotal,
     totalHospitalized: state.totalHospitalized,
     newOrTotal: state.newOrTotal,
-    includeGridLines: state.includeGridLines
+    includeGridLines: state.includeGridLines,
+    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
+    selectedStatType: state.selectedStatType,
+
   }
 }
 
