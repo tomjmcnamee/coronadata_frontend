@@ -165,7 +165,7 @@ class App extends React.Component {
                       Raw Numbers<br />Tables
                     </Button>
                   }
-                  {this.props.displayType === "singleStateChart"
+                  {/* {this.props.displayType === "singleStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
                       Single State<br />(and U.S.) Charts
@@ -174,15 +174,15 @@ class App extends React.Component {
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
                       Single State<br />(and U.S.) Charts 
                     </Button>
-                  }  
+                  }   */}
                   {this.props.displayType === "multiStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="multiStateChart" active >
-                      Multi-State<br />Aggregate Chart
+                      Single State and <br />Aggregate Chart
                     </Button>
                   :
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="multiStateChart"  onClick={this.formChangeHandler}>
-                      Multi-State and<br />Regional Chart
+                      Single State and <br />Aggregate Chart
                     </Button>
                   }  
                   {this.props.displayType === "top10s"
@@ -360,7 +360,6 @@ class App extends React.Component {
                       gridLinesArray={tableDataToDisplay()}
                       selectedStatType={this.props.selectedStatType} //ex: Pos, Neg, Total, Death
                       sortHandler={this.sortHandler}
-                      // jumpToDisplayAndState={this.jumpToDisplayAndState}
                     />
                   </div>
                   :

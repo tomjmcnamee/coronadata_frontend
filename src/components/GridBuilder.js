@@ -18,7 +18,7 @@ function GridBuilder(props) {
 
   function stateClickHandler(innerHTML){
     props.singleInitialLineChooser(props.selectedStatType)
-    props.jumpToDisplayAndState("singleStateChart", innerHTML)
+    props.jumpToDisplayAndState("multiStateChart", innerHTML)
   }
 
     let formattedGridLinesArr = [...props.gridLinesArray]
