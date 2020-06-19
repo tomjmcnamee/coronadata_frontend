@@ -41,7 +41,7 @@ const buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr, 
 const aggregateForPosPercentages = (allDatesArr, newPositive, newTotal, arrOfSelectedStateObjs) => {
   let aggPosPercentagesObj
   if (arrOfSelectedStateObjs) {
-    debugger
+
     let arrOfSelectedStateIDs = arrOfSelectedStateObjs.map(obj => obj.value)
     newPositive = newPositive.filter(({ state_id }) =>  arrOfSelectedStateIDs.includes(state_id))
     newTotal = newTotal.filter(({ state_id }) =>  arrOfSelectedStateIDs.includes(state_id))

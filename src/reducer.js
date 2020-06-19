@@ -220,7 +220,7 @@ function includeGridLinesReducer(state = defaultState.includeGridLines, action) 
 }
 
 function multiSelectedStatesIdsArrReducer(state = defaultState.multiSelectedStatesIdsArr, action) {
-  // debugger
+
   switch (action.type) {
       case "SET MULTIPLE SELECTED STATE OBJS":
         return action.payload

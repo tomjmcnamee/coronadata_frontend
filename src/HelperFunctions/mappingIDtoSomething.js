@@ -1,6 +1,6 @@
 // const mapMakeIdToMakeName = (allMakes,id) => {
   
-//   debugger
+
 //   switch (id) {
 //     allMakes.map(obj => "case " + [obj.id] + ": return "+ [obj.make_name])
 //     default: return "Correct Status switch/case in HelperFunctions/mappingIDtoSomething.js"

@@ -89,7 +89,7 @@ function toggleGridlines (gridlineName, newValue) {
 
 function singleInitialLineChooser (selectedStatType) {
   //// all "include" state element neeed to be in global state in order for this to work
-  // debugger
+
   return function (dispatch) {
     if (selectedStatType === "Total") {
       // console.log("Selecgted stat type = ", selectedStatType)
@@ -104,7 +104,7 @@ function singleInitialLineChooser (selectedStatType) {
 
 
 function setMultiSelectedStates (selected) {
-  // debugger
+
   return function (dispatch) {
     dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: selected})
   }

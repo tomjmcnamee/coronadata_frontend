@@ -73,7 +73,7 @@ class App extends React.Component {
    
   formChangeHandler = (event) => {
     console.log("running form change handler")
-    // debugger
+
     // This handles the BUTTONS
     if (event.target.dataset.buttontype) {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph

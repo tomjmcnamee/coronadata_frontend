@@ -122,7 +122,7 @@ class ChartBuilder extends React.Component {
         datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[1]),  new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))],
         displayDates: [...this.props.staticDatesArr]
       })
-      // debugger
+
     } else {
       // The page is being reloaded after a 'get all data' fetch
       this.setState({
@@ -208,7 +208,7 @@ class ChartBuilder extends React.Component {
     //    })
     // } else {
     // }
-    // debugger
+
   }  
 
 
@@ -272,7 +272,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
           tempObj = {state_id: 100, "count_type": countT}
           for (let day of this.props.staticDatesArr) {
-          // debugger
+
             tempObj[day] = filteredArrayOfTypes.reduce(
               function(prev, curr) {
                 return prev + curr[day]
@@ -653,7 +653,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
               // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
               
-              // debugger    
+    
               for (let dataSetObj of singleStateChartDataSet) {
                 let tempAveragesArr = []
                 if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
@@ -738,7 +738,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
               // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
               
-              // debugger    
+    
               for (let dataSetObj of multiStateChartDataSet) {
                 let tempAveragesArr = []
                 if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
