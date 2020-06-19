@@ -895,8 +895,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           return( 
             <>
 
-          <h5>Select States to Include In Chart</h5>
-
+                {dateRangePicker()}
+                <h5>Select States to Include In Chart</h5>
                 {/* <pre>{JSON.stringify(this.props.multiSelectedStatesIdsArr.map(obj => obj.stateabbreviation))}</pre> */}
                 <MultiSelect
                   options={dropdownOptions}
@@ -911,8 +911,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                     "search": "Search"
                   }}
                 />
-<br />
-            {dateRangePicker()}
             {/* {this.legendPayload(chartData)} */}
             <ResponsiveContainer width="95%" height={300}>                        
             <LineChart  data={chartData}  
