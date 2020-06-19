@@ -18,7 +18,7 @@ const buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr, 
   // let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
   // let tempTestsTaken
   // let tempPosResults
-  // console.log("Building US Percentages")
+  // ("Building US Percentages")
   // for (let day of allDatesArr) {
   //   tempPosResults = newPositive.reduce( 
   //       function(prev, curr) {

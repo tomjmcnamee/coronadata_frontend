@@ -72,7 +72,7 @@ class App extends React.Component {
   }
    
   formChangeHandler = (event) => {
-    console.log("running form change handler")
+    ("running form change handler")
 
     // This handles the BUTTONS
     if (event.target.dataset.buttontype) {

@@ -15,7 +15,7 @@ let backendURL = "http://localhost:3000/api/v1/"
 function fetchAllStatesData (numberOfDays, fromToDatesValue) {
   let startTime = (+ new Date())
   return function (dispatch) {
-    console.log("fetching from actoins")
+    ("fetching from actoins")
     dispatch({ type: "SET TOTAL DEATH", payload: []})
       
       fetch(process.env.REACT_APP_FETCH_LOCATION + "total_stats", {
@@ -96,7 +96,7 @@ function singleInitialLineChooser (selectedStatType) {
 
   return function (dispatch) {
     if (selectedStatType === "Total") {
-      // console.log("Selecgted stat type = ", selectedStatType)
+      // ("Selecgted stat type = ", selectedStatType)
       dispatch({ type: "SET GRID LINE AS TRUE", payload: "includeTested"})
     } else if (selectedStatType === "Hospitalized" || selectedStatType === "PositivePercent") {
       dispatch({ type: "SET GRID LINE AS TRUE", payload: `include${selectedStatType}`})
