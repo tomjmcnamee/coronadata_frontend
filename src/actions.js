@@ -101,8 +101,16 @@ function singleInitialLineChooser (selectedStatType) {
     }
   }
 }
-  
-  
+
+
+function setMultiSelectedStates (selected) {
+  // debugger
+  return function (dispatch) {
+    dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: selected})
+  }
+}
+
+
 export { 
   fetchAllStatesData,
   jumpToDisplayAndState,
@@ -111,5 +119,6 @@ export {
   setDisplayType,
   setIdOfStateInSingleStateGrid,
   toggleGridlines,
-  singleInitialLineChooser
+  singleInitialLineChooser,
+  setMultiSelectedStates
 }

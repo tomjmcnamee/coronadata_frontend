@@ -14,7 +14,6 @@ import { connect } from 'react-redux'
 import fetchingALLdata from './assets/fetchingALLdata.gif'
 import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
 import { tableDescription } from './HelperFunctions/dynamicLabels'
-import  MultiSelectDropdown  from './components/MultiSelectDropdown'
 import { Button } from 'rsuite';
 import './App.css';
 import { 
@@ -25,7 +24,8 @@ import {
     setDisplayType,
     setIdOfStateInSingleStateGrid,
     toggleGridlines,
-    singleInitialLineChooser
+    singleInitialLineChooser,
+    setMultiSelectedStates
         } from './actions'
 
 
@@ -60,10 +60,8 @@ class App extends React.Component {
 
 
   componentDidMount(){
-
     // document.title = "CoronaVirus Data"        
     this.props.fetchAllStatesData("30")
-    
   }
   
   percentageLogicHandler = (event) => {
@@ -79,7 +77,7 @@ class App extends React.Component {
     // This handles the BUTTONS
     if (event.target.dataset.buttontype) {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
-      if (event.target.name === "singleStateChart") {
+      if (event.target.name === "singleStateChart" || "multiStateChart") {
         this.props.singleInitialLineChooser(this.props.selectedStatType)
       }
       
@@ -180,7 +178,7 @@ class App extends React.Component {
                   {this.props.displayType === "multiStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="multiStateChart" active >
-                      Multi-State and<br />Regional Chart
+                      Multi-State<br />Aggregate Chart
                     </Button>
                   :
                     <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="multiStateChart"  onClick={this.formChangeHandler}>
@@ -273,7 +271,7 @@ class App extends React.Component {
           :
           null
           }
-          {this.props.displayType === "singleStateChart" || this.props.displayType === "rateOfGrowthChart"
+          {this.props.displayType === "singleStateChart" || this.props.displayType === "rateOfGrowthChart" || this.props.displayType === "multiStateChart"
           ? 
           <Row>
               {this.props.includeGridLines.includeTested
@@ -378,8 +376,9 @@ class App extends React.Component {
                   :
                   (this.props.displayType === "multiStateChart")
                   ?
-                    <MultiSelectDropdown 
-                                          // gridType="top10s"
+                    // <div id="LineChart" >
+                    <ChartBuilder 
+                                          gridType="multiStateChart"
                     />
                   :
                   (this.props.displayType === "top10s")
@@ -454,7 +453,8 @@ function msp(state) {
     displayType: state.displayType,
     selectedStatType: state.selectedStatType,
     newOrTotal: state.newOrTotal,
-    includeGridLines: state.includeGridLines
+    includeGridLines: state.includeGridLines,
+    // multiSelectedStatesIdsArr: state.multiSelectedStatesIdsArr
   }
 }
 

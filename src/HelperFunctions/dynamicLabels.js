@@ -35,7 +35,7 @@ import { mapStateIdToStateName } from './mappingIDtoSomething'
       } else {
         return `Rates of growth of Total 7-day average numbers from ${mapStateIdToStateName(parseInt(idOfStateInSingleStateGrid))}`
       }
-    } else {
+    } else if (displayType === "singleStateChart") {
         if (newOrTotal === "new") {
           return `All daily increases for ${mapStateIdToStateName(parseInt(idOfStateInSingleStateGrid))}`
         } else {
