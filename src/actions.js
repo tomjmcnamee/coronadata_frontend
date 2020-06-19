@@ -1,6 +1,6 @@
 import { buildPercentageArrays } from './HelperFunctions/mathFunctions'
 import { mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
-import { returnSingleStateDropdownOptionObjWithStateName } from './HelperFunctions/stateRelatedReferences'
+import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptionsForStateMultiselect } from './HelperFunctions/stateRelatedReferences'
 
 
 
@@ -56,7 +56,13 @@ function jumpToDisplayAndState (displayType, stateName) {
     // dispatch({ type: "SET ID OF STATE IN SINGLE STATE GRID", payload: mapStateNameToStateId(stateName)})
     // debugger
     // dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: mapStateNameToStateId(stateName)})
-    dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: returnSingleStateDropdownOptionObjWithStateName(stateName)})
+    if (stateName === "US Totals") {
+      dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: returnAllDropdownOptionsForStateMultiselect()})
+
+    } else {
+      dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: returnSingleStateDropdownOptionObjWithStateName(stateName)})
+    }
+
     dispatch({ type: "SET DISPLAY TYPE", payload: displayType})
   }
 }
