@@ -910,6 +910,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                     "selectAll": "Select/Clear All",
                     "search": "Search"
                   }}
+                  disableSearch
                 />
             {/* {this.legendPayload(chartData)} */}
             <ResponsiveContainer width="95%" height={300}>                        
