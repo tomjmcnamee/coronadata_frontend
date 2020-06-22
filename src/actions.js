@@ -1,5 +1,4 @@
 import { buildPercentageArrays } from './HelperFunctions/mathFunctions'
-import { mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
 import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptionsForStateMultiselect } from './HelperFunctions/stateRelatedReferences'
 
 
@@ -16,7 +15,7 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
   let startTime = (+ new Date())
   return function (dispatch) {
     ("fetching from actoins")
-    dispatch({ type: "SET TOTAL DEATH", payload: []})
+    dispatch({ type: "SET NEW DEATH", payload: []})
       
       fetch(process.env.REACT_APP_FETCH_LOCATION + "total_stats", {
         method: "GET",

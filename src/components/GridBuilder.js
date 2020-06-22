@@ -21,20 +21,35 @@ function GridBuilder(props) {
     props.jumpToDisplayAndState("multiStateChart", innerHTML)
   }
 
-    let formattedGridLinesArr = [...props.gridLinesArray]
+  const tableDataToDisplay = () => {
+    let outputArr
+    let lastDate = props.staticDatesArr[props.staticDatesArr.length - 1]
+    
+    if (props.columnToSort === "state_name") {
+      outputArr = [...props[props.newOrTotal + props.selectedStatType]]
+    } else if (props.columnToSort === "first_number_col") {
+      outputArr = [...props[props.newOrTotal + props.selectedStatType]].sort(function (a, b) { 
+        if (a[lastDate] > b[lastDate]) return -1;
+        if (a[lastDate] < b[lastDate]) return 1;
+      }  )
+    }
+    return outputArr
+  }
+    let gridLinesArray = tableDataToDisplay()
+    let formattedGridLinesArr = [...gridLinesArray]
 
     switch(props.gridType) {
       case "AllStates-PerDay":
         let xAxisDates
         
-        if (props.gridLinesArray.length > 0 ) {
+        if (gridLinesArray.length > 0 ) {
           
           // This builds the line for US SUMS   for RAW only
             let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
             // if statement adds US Totals to dataset IF its not a percentage vierwe
             if (props.selectedStatType !== "PositivePercent") {
               for (let day of props.allDatesArr) {
-              US_Totals_Gridline[day] = props.gridLinesArray.reduce( 
+              US_Totals_Gridline[day] = gridLinesArray.reduce( 
                 function(prev, curr) {
                   return prev + curr[day]
                 }, 0)

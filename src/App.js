@@ -1,20 +1,15 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'rsuite/dist/styles/rsuite-default.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
-// import Tabs from 'react-bootstrap/Tabs'
-// import Tab  from 'react-bootstrap/Tab'
-
-
-import loadingMap from './assets/USSpreadMap.gif'
 import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
-import fetchingALLdata from './assets/fetchingALLdata.gif'
-import { mapStateIdToStateName, mapStateNameToStateId } from './HelperFunctions/mappingIDtoSomething'
-import { tableDescription } from './HelperFunctions/dynamicLabels'
 import { Button } from 'rsuite';
+import loadingMap from './assets/USSpreadMap.gif'
+import fetchingALLdata from './assets/fetchingALLdata.gif'
+import { mapStateIdToStateName} from './HelperFunctions/mappingIDtoSomething'
+import { tableDescription } from './HelperFunctions/dynamicLabels'
 import './App.css';
 import { 
     fetchAllStatesData,
@@ -24,38 +19,14 @@ import {
     setDisplayType,
     setIdOfStateInSingleStateGrid,
     toggleGridlines,
-    singleInitialLineChooser,
-    setMultiSelectedStates
+    singleInitialLineChooser
         } from './actions'
 
 
 
 class App extends React.Component {
   state = {
-    // allDatesArr: [],     //in reducer
-    // staticDatesArr: [],   //in reducer
-    // newPositive: [],   //in reducer
-    // newNegative: [],   //in reducer
-    // newPositivePercent: [],   //in reducer
-    // newDeath: [],   //in reducer
-    // newTotal: [],   //in reducer
-    // newHospitalized: [],   //in reducer
-    // totalPositive: [],   //in reducer
-    // totalNegative: [],   //in reducer
-    // totalDeath: [],   //in reducer
-    // totalTotal: [],   //in reducer
-    // totalHospitalized: [],   //in reducer
-
-    // selectedStatType: "Death",  //in reducer
-    // newOrTotal: "new",//in reducer
-
-    // displayType: "table",  //in reducer
-    // idOfStateInSingleStateGrid: "99",    //in reducer
-
-
-    columnToSort: "state_name",
-
-    fromToDatesValue: [] //in reducer
+    columnToSort: "state_name"
   }
 
 
@@ -77,7 +48,7 @@ class App extends React.Component {
     // This handles the BUTTONS
     if (event.target.dataset.buttontype) {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
-      if (event.target.name === "singleStateChart" || "multiStateChart") {
+      if (event.target.name === "multiStateChart") {
         this.props.singleInitialLineChooser(this.props.selectedStatType)
       }
       
@@ -125,20 +96,7 @@ class App extends React.Component {
   }
   
   render() {
-    const tableDataToDisplay = () => {
-      let outputArr
-      let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
-      
-      if (this.state.columnToSort === "state_name") {
-        outputArr = [...this.props[this.props.newOrTotal + this.props.selectedStatType]]
-      } else if (this.state.columnToSort === "first_number_col") {
-        outputArr = [...this.props[this.props.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
-          if (a[lastDate] > b[lastDate]) return -1;
-	        if (a[lastDate] < b[lastDate]) return 1;
-        }  )
-      }
-      return outputArr
-    }
+
     
     
     return (
@@ -165,16 +123,6 @@ class App extends React.Component {
                       Raw Numbers<br />Tables
                     </Button>
                   }
-                  {/* {this.props.displayType === "singleStateChart"
-                  ?
-                    <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="singleStateChart" active >
-                      Single State<br />(and U.S.) Charts
-                    </Button>
-                  :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="singleStateChart"  onClick={this.formChangeHandler}>
-                      Single State<br />(and U.S.) Charts 
-                    </Button>
-                  }   */}
                   {this.props.displayType === "multiStateChart"
                   ?
                     <Button className="maintypebuttonSelected" data-buttontype="displayType"  color="cyan" appearance="primary" size="sm" name="multiStateChart" active >
@@ -254,24 +202,7 @@ class App extends React.Component {
               </Form>
             </Col>
           </Row>
-          {this.props.displayType === "singleStateChart" || this.props.displayType === "rateOfGrowthChart"
-          ?
-          <Row>
-            <Form >
-                <Form.Row>
-                  <Form.Group  >
-                      <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.props.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} > 
-                      <option value={99}>Entire U.S.</option>
-                        {this.dropdownOptionsForStates()}
-                      </Form.Control>
-                  </Form.Group  >
-                </Form.Row>
-              </Form>
-          </Row>  
-          :
-          null
-          }
-          {this.props.displayType === "singleStateChart" || this.props.displayType === "rateOfGrowthChart" || this.props.displayType === "multiStateChart"
+          {this.props.displayType === "multiStateChart"
           ? 
           <Row>
               {this.props.includeGridLines.includeTested
@@ -344,34 +275,22 @@ class App extends React.Component {
           }
           <Row>
             <Col sm={12} >
-              <h5>{this.props.totalDeath.length > 0 ? tableDescription(this.props.newOrTotal, this.props.selectedStatType, this.props.displayType, this.props.idOfStateInSingleStateGrid) : null }</h5>
+              <h5>{this.props.newDeath.length > 0 ? tableDescription(this.props.newOrTotal, this.props.selectedStatType, this.props.displayType, this.props.idOfStateInSingleStateGrid) : null }</h5>
             </Col>
           </Row>
           <Row  className="justify-content-md-center" >
             <Col md="auto" >
-                {this.props.totalDeath.length > 0
+                {this.props.newDeath.length > 0
                 ?  
                   this.props.displayType === "table"
                   ?
                   <div id="statesTable" >
                     <GridBuilder
                       gridType="AllStates-PerDay"
-                      allDatesArr={this.props.allDatesArr}
-                      gridLinesArray={tableDataToDisplay()}
-                      selectedStatType={this.props.selectedStatType} //ex: Pos, Neg, Total, Death
                       sortHandler={this.sortHandler}
+                      columnToSort={this.state.columnToSort}
                     />
                   </div>
-                  :
-
-
-                  (this.props.displayType === "singleStateChart")
-                  ?
-                    // <div id="LineChart" >
-                    <ChartBuilder 
-                                          gridType="singleStateChart"
-                                          filteredStayAtHomeOrders={this.props.stayAtHomeOrders.filter(obj => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid) )}
-                    />
                   :
                   (this.props.displayType === "multiStateChart")
                   ?
@@ -433,13 +352,20 @@ function mdp(dispatch) {
 // this comes from reduct.js - K is local reference, V is foreign state attribute
 function msp(state) {
   return { 
-    fromToDatesValue: state.fromToDatesValue,
     allDatesArr: state.allDatesArr,
     staticDatesArr: state.staticDatesArr,
+    newDeath: state.newDeath,
+    stayAtHomeOrders: state.stayAtHomeOrders,
+    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
+    displayType: state.displayType,
+    selectedStatType: state.selectedStatType,
+    newOrTotal: state.newOrTotal,
+    includeGridLines: state.includeGridLines,
+
+
     newPositive: state.newPositive,
     newNegative: state.newNegative,
     newPositivePercent: state.newPositivePercent,
-    newDeath: state.newDeath,
     newTotal: state.newTotal,
     newHospitalized: state.newHospitalized,
     totalPositive: state.totalPositive,
@@ -447,13 +373,6 @@ function msp(state) {
     totalDeath: state.totalDeath,
     totalTotal: state.totalTotal,
     totalHospitalized: state.totalHospitalized,
-    stayAtHomeOrders: state.stayAtHomeOrders,
-    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
-    displayType: state.displayType,
-    selectedStatType: state.selectedStatType,
-    newOrTotal: state.newOrTotal,
-    includeGridLines: state.includeGridLines,
-    // multiSelectedStatesIdsArr: state.multiSelectedStatesIdsArr
   }
 }
 

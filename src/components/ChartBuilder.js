@@ -22,78 +22,8 @@ import { returnAllDropdownOptionsForStateMultiselect } from '../HelperFunctions/
 class ChartBuilder extends React.Component {
 
   state = {
-    width: {
-      "Positive": 3,
-      "Negative": 3,
-      "Tested": 3,
-      "Deaths" : 3,
-      "Hospitalized" : 3,
-      "Positive %" : 3,
-      "Alabama": 3,
-      "Alaska": 3,
-      "Arizona": 3,
-      "Arkansas": 3,
-      "California": 3,
-      "Colorado": 3,
-      "Connecticut": 3,
-      "Delaware": 3,
-      "Florida": 3,
-      "Georgia": 3,
-      "Hawaii": 3,
-      "Idaho": 3,
-      "Illinois": 3,
-      "Indiana": 3,
-      "Iowa": 3,
-      "Kansas": 3,
-      "Kentucky": 3,
-      "Louisiana": 3,
-      "Maine": 3,
-      "Maryland": 3,
-      "Massachusetts": 3,
-      "Michigan": 3,
-      "Minnesota": 3,
-      "Mississippi": 3,
-      "Missouri": 3,
-      "Montana": 3,
-      "Nebraska": 3,
-      "Nevada": 3,
-      "New Hampshire": 3,
-      "New Jersey": 3,
-      "New Mexico": 3,
-      "New York": 3,
-      "North Carolina": 3,
-      "North Dakota": 3,
-      "Ohio": 3,
-      "Oklahoma": 3,
-      "Oregon": 3,
-      "Pennsylvania": 3,
-      "Rhode Island": 3,
-      "South Carolina": 3,
-      "South Dakota": 3,
-      "Tennessee": 3,
-      "Texas": 3,
-      "Utah": 3,
-      "Vermont": 3,
-      "Virginia": 3,
-      "Washington": 3,
-      "Washington DC": 3,
-      "West Virginia": 3,
-      "Wisconsin": 3,
-      "Wyoming": 3,
-      "American Samoa": 3,
-      "Puerto Rico": 3,
-      "US Virgin Islands": 3,
-      "Guam": 3,
-      "Northern Mariana Islands": 3
-      // "Total Tested": 2,
-      // "Total Positive": 2,
-      // "Total Negative": 2,
-      // "Total Deaths" :2
-    },
     datePickerValue: [],
     displayDates: [],
-    average: false,
-    selected: [],
     colors: {
       death: "purple",
       hospitalized: "red",
@@ -132,35 +62,6 @@ class ChartBuilder extends React.Component {
       })
     }
   }
-
-
-  // handleMouseEnter = (o) => {
-  //   const { dataKey } = o;
-  //   const { width } = this.state;
-  //   this.setState({
-  //     width: { ...width, [dataKey]: 6 },
-  //   });
-  // }
-
-  // handleMouseLeave = (o) => {
-  //   const { dataKey } = o;
-  //   const { width } = this.state;
-  //   this.setState({
-  //     width: { ...width, [dataKey]: 3 },
-  //   });
-  // }
-
-  // handleLegendClick = (o) => {
-  //   const { dataKey } = o;
-  //   const { width } = this.state;
-  //   let newWidth = 6
-  //   if (this.state.width[dataKey] === 6) {
-  //     newWidth = 3
-  //   }
-  //   this.setState({
-  //     width: { ...width, [dataKey]: newWidth },
-  //   });
-  // }
 
   formatYAxisForRateOfGrowth = (tickItem) => { return tickItem + "%" }
 
@@ -201,15 +102,6 @@ class ChartBuilder extends React.Component {
         displayDates: this.newDisplayDateArr(value)
        })
     }
-    // if (value.length === 0) {
-    //   // This denotes the "CLEAN 'X' "
-    //   this.setState({ 
-    //     datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[0]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1 )],
-    //     displayDates: [...this.props.staticDatesArr]
-    //    })
-    // } else {
-    // }
-
   }  
 
 
@@ -305,15 +197,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     return output
   }
 
-  // setMultiSelect = (event) => {
-  //   this.setState({
-  //     selected: event
-  //   })
-  //   
-  // }
-
-
-
   
   render () {
     
@@ -330,11 +213,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     }
 
     const {
-      // allowedMaxDays,
-      // allowedDays,
-      // beforeToday,
-      // afterToday,
-      // combine,
       allowedRange
     } = DateRangePicker;
 
@@ -349,7 +227,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
         ranges={[{
           label: 'Last 7',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 7]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
-          // value: [dateFns.addDays(new Date(), -1), dateFns.addDays(new Date(), -1)]
         }, {
           label: 'Last 14',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 14]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
@@ -368,11 +245,9 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
       // backgroundImage: 'url(' + imgUrl + ')',
     };
 
-    // let formattedGridLinesArr = [...this.props.gridLinesArray]
     let top10sDataSet = this.top10sData()
     // let singleStateChartDataSet = this.singleStateData()
     let multiStateChartDataSet = this.multiStateData()
-    const { width } = this.state
     let chartData = []
     let chartLines = []
     const top10Colors = ["#FF0000", "#00BFFF", "#EE82EE", "#00FF00", "#8A2BE2", "#FF8C00", "#D2691E", "#20B2AA", "#FF1493", "#0000FF"]
@@ -551,7 +426,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
     const dropdownOptions = returnAllDropdownOptionsForStateMultiselect()
    
-    // const [selected, setSelected] = useState([]);
     
     switch(this.props.gridType) {
       case "top10s":
@@ -565,7 +439,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               dataObject[stateDataObj.state_name] = stateDataObj[this.state.displayDates[index]]
             )
           )
-          chartLines = top10sDataSet.map((obj, index) => <Line key={index} dot={false} type="monotone" dataKey={obj.state_name} strokeWidth={width[obj.state_name]} stroke={top10Colors[index]} />)
+          chartLines = top10sDataSet.map((obj, index) => <Line key={index} dot={false} type="monotone" dataKey={obj.state_name} strokeWidth={1} stroke={top10Colors[index]} />)
           // for (let obj of )
         } // ends GridLines IF statement
 
@@ -708,7 +582,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               )
             )
           } // ends GridLines IF statement
-console.log("Chart Data = ", chartData)
           return( 
             <>
                 {dateRangePicker()}
@@ -744,18 +617,18 @@ console.log("Chart Data = ", chartData)
 
               {/* isAnimationActive={false} */}
 
-              {this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke={this.state.colors.negative}   /> :null }
-              {this.props.includeGridLines.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
-              {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
-              {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
-              {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
-              { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
+              {this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={2} stroke={this.state.colors.negative}   /> :null }
+              {this.props.includeGridLines.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={2} stroke={this.state.colors.tested}/> :null }
+              {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={2} stroke={this.state.colors.positive}   /> :null }
+              {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={2} stroke={this.state.colors.hospitalized}   /> :null }
+              {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={2}  stroke={this.state.colors.death}   /> :null }
+              { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={2} stroke={this.state.colors.positivePercent}    /> : null : null}
               
-              { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={2} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={2} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={2} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={3} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={3} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={3} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={3} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={3} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
               
               
 
