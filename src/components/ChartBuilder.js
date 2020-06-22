@@ -213,47 +213,47 @@ class ChartBuilder extends React.Component {
   }  
 
 
-  singleStateData = () => {
-    let output = []
-    let count_types = []
-    let state_type = []
+  // singleStateData = () => {
+  //   let output = []
+  //   let count_types = []
+  //   let state_type = []
 
-    //This IF builds all 'Etire US' data sets to send along
-    if (this.props.idOfStateInSingleStateGrid == "99") {
-      /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-        count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
-        state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
+  //   //This IF builds all 'Etire US' data sets to send along
+  //   if (this.props.idOfStateInSingleStateGrid == "99") {
+  //     /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
+  //       count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
+  //       state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
 
-        let index = 0
-        let tempObj
-        for (let countT of count_types) {
-          tempObj = {state_id: 99, "count_type": countT}
-          for (let day of this.props.staticDatesArr) {
-            tempObj[day] = this.props[state_type[index]].reduce(
-              function(prev, curr) {
-                return prev + curr[day]
-              }, 0)
-            }
-          index++
-          output.push(tempObj)
-        }
-        //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
-        if (this.props.newOrTotal === "new") {
-          output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
-        }
+  //       let index = 0
+  //       let tempObj
+  //       for (let countT of count_types) {
+  //         tempObj = {state_id: 99, "count_type": countT}
+  //         for (let day of this.props.staticDatesArr) {
+  //           tempObj[day] = this.props[state_type[index]].reduce(
+  //             function(prev, curr) {
+  //               return prev + curr[day]
+  //             }, 0)
+  //           }
+  //         index++
+  //         output.push(tempObj)
+  //       }
+  //       //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
+  //       if (this.props.newOrTotal === "new") {
+  //         output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
+  //       }
 
-    } else {
-      output.push(this.props[this.props.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)  ))
-      output.push(this.props[this.props.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      output.push(this.props[this.props.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      output.push(this.props[this.props.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      output.push(this.props[this.props.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      if (this.props.newOrTotal === "new") {
-        output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-      }
-    }
-    return output
-  }
+  //   } else {
+  //     output.push(this.props[this.props.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)  ))
+  //     output.push(this.props[this.props.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+  //     output.push(this.props[this.props.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+  //     output.push(this.props[this.props.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+  //     output.push(this.props[this.props.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+  //     if (this.props.newOrTotal === "new") {
+  //       output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
+  //     }
+  //   }
+  //   return output
+  // }
 
   multiStateData = () => {
     let output = []
@@ -270,10 +270,10 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
         let selectedStateIdsArr = this.props.multiSelectedStatesIdsArr.map(obj => obj.value)
         for (let countT of count_types) {
           filteredArrayOfTypes = this.props[state_type[index]].filter(({state_id}) => selectedStateIdsArr.includes(state_id));
-
+          
           tempObj = {state_id: 100, "count_type": countT}
           for (let day of this.props.staticDatesArr) {
-
+            
             tempObj[day] = filteredArrayOfTypes.reduce(
               function(prev, curr) {
                 return prev + curr[day]
@@ -286,7 +286,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
         if (this.props.newOrTotal === "new") {
           output.push(aggregateForPosPercentages(this.props.staticDatesArr, this.props.newPositive, this.props.newTotal, this.props.multiSelectedStatesIdsArr))
         }
-
         return output
       }
   }
@@ -371,7 +370,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
     // let formattedGridLinesArr = [...this.props.gridLinesArray]
     let top10sDataSet = this.top10sData()
-    let singleStateChartDataSet = this.singleStateData()
+    // let singleStateChartDataSet = this.singleStateData()
     let multiStateChartDataSet = this.multiStateData()
     const { width } = this.state
     let chartData = []
@@ -591,89 +590,89 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
 
 
-          case "singleStateChart":
-            // let averageDeaths = {}
-            if (singleStateChartDataSet.length > 0 ) {
-              /// This builds the 7-day Average numbers
+          // case "singleStateChart":
+          //   // let averageDeaths = {}
+          //   if (singleStateChartDataSet.length > 0 ) {
+          //     /// This builds the 7-day Average numbers
               
-              // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
-              // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
+          //     // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
+          //     // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
               
     
-              for (let dataSetObj of singleStateChartDataSet) {
-                let tempAveragesArr = []
-                if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
-                  let tempAveragesObj = {}
-                  let dates = Object.keys(dataSetObj).filter( k => k.startsWith("2020"))
-                  sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
-                  let tempCountType = dataSetObj["count_type"]
-                  tempAveragesObj["count_type"] = tempCountType + "-avg"
-                  tempAveragesArr.push(tempAveragesObj)
-                }
+          //     for (let dataSetObj of singleStateChartDataSet) {
+          //       let tempAveragesArr = []
+          //       if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
+          //         let tempAveragesObj = {}
+          //         let dates = Object.keys(dataSetObj).filter( k => k.startsWith("2020"))
+          //         sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
+          //         let tempCountType = dataSetObj["count_type"]
+          //         tempAveragesObj["count_type"] = tempCountType + "-avg"
+          //         tempAveragesArr.push(tempAveragesObj)
+          //       }
 
-                singleStateChartDataSet = [ ...singleStateChartDataSet, ...tempAveragesArr]
+          //       singleStateChartDataSet = [ ...singleStateChartDataSet, ...tempAveragesArr]
 
-              } //  Ends For...In formattedFridlineArr
+          //     } //  Ends For...In formattedFridlineArr
           
 
-          //This checks to see if its for the WHOLE US or not
-            for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
-            chartData.forEach((dataObject, index) => 
-              singleStateChartDataSet.forEach(stateTypeObj =>
-                dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
-              )
-            )
-          } // ends GridLines IF statement
+          // //This checks to see if its for the WHOLE US or not
+          //   for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
+          //   chartData.forEach((dataObject, index) => 
+          //     singleStateChartDataSet.forEach(stateTypeObj =>
+          //       dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
+          //     )
+          //   )
+          // } // ends GridLines IF statement
 
-          let stayAtHomeOrderXReferences
-          if (this.props.filteredStayAtHomeOrders.length > 0 ) {
-            stayAtHomeOrderXReferences = this.props.filteredStayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
-                <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
-              </ReferenceLine>)
-          }
+          // let stayAtHomeOrderXReferences
+          // if (this.props.filteredStayAtHomeOrders.length > 0 ) {
+          //   stayAtHomeOrderXReferences = this.props.filteredStayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
+          //       <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
+          //     </ReferenceLine>)
+          // }
           
 
           
 
 
-          return( 
-            <>
+          // return( 
+          //   <>
 
-            {dateRangePicker()}
-            <ResponsiveContainer width="95%" height={300}>                        
-            <LineChart  data={chartData}  
-              margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis   />
-              <Tooltip offset={60} itemStyle={tooltipStyle} />
-              {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
-              {stayAtHomeOrderXReferences}
-              {/* <Legend onClick={this.handleLegendClick} iconType="plainline"  iconSize={30} /> */}
-              <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
+          //   {dateRangePicker()}
+          //   <ResponsiveContainer width="95%" height={300}>                        
+          //   <LineChart  data={chartData}  
+          //     margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
+          //     <CartesianGrid strokeDasharray="3 3" />
+          //     <XAxis dataKey="date" />
+          //     <YAxis   />
+          //     <Tooltip offset={60} itemStyle={tooltipStyle} />
+          //     {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
+          //     {stayAtHomeOrderXReferences}
+          //     {/* <Legend onClick={this.handleLegendClick} iconType="plainline"  iconSize={30} /> */}
+          //     <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
             
 
-              {/* isAnimationActive={false} */}
+          //     {/* isAnimationActive={false} */}
 
-              {this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke={this.state.colors.negative}   /> :null }
-              {this.props.includeGridLines.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
-              {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
-              {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
-              {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
-              { this.props.includeGridLines.includePositivePercent ? singleStateChartDataSet[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
+          //     {this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={width["Negative"]} stroke={this.state.colors.negative}   /> :null }
+          //     {this.props.includeGridLines.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={width["Tested"]} stroke={this.state.colors.tested}/> :null }
+          //     {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={width["Positive"]} stroke={this.state.colors.positive}   /> :null }
+          //     {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={width["Hospitalized"]} stroke={this.state.colors.hospitalized}   /> :null }
+          //     {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={width["Deaths"]}  stroke={this.state.colors.death}   /> :null }
+          //     { this.props.includeGridLines.includePositivePercent ? singleStateChartDataSet[0]["count_type"].startsWith("new") ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={width["Positive %"]} stroke={this.state.colors.positivePercent}    /> : null : null}
               
-              { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={2} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={2} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={2} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
+          //     { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={2} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
+          //     { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={2} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
+          //     { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={2} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
+          //     { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={2} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
+          //     { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={2} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
               
               
 
-            </LineChart>
-            </ResponsiveContainer>                        
-          </>
-          ) // ends "singleStateChart" RETURN
+          //   </LineChart>
+          //   </ResponsiveContainer>                        
+          // </>
+          // ) // ends "singleStateChart" RETURN
 
           case "multiStateChart":
 
@@ -710,191 +709,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
             )
           } // ends GridLines IF statement
 
-          // let stayAtHomeOrderXReferences
-          // if (this.props.filteredStayAtHomeOrders.length > 0 ) {
-          //   stayAtHomeOrderXReferences = this.props.filteredStayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
-          //       <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
-          //     </ReferenceLine>)
-          // }
-          
-          
-
-          // legendPayload = [
-          //   { color:this.state.colors.tested,
-          //     dataKey:"Tested",
-          //     inactive:false,
-          //     type:this.props.includeGridLines.includeTested?"plainline":"none",
-          //     value:"Tested",
-          //     payload:{dot:false,
-          //       dataKey:"Tested",
-          //       strokeWidth:3,
-          //       stroke:this.state.colors.tested,
-          //       xAxisId:0,
-          //       yAxisId:0,
-          //       connectNulls:false,
-          //       activeDot:true,
-          //       legendType:"line",
-          //       fill:"#fff",
-          //       points:[],
-          //       isAnimationActive:true,
-          //       animateNewValues:true,
-          //       animationBegin:0,
-          //       animationDuration:1500,
-          //       animationEasing:"ease",
-          //       hide:false
-          //     }
-          //   },
-          //   { color:this.state.colors.negative,
-          //     dataKey:"Negative",
-          //     inactive:false,
-          //     type:this.props.includeGridLines.includeNegatives?"plainline":"none",
-          //     value:"Negative",
-          //     payload:{dot:false,
-          //       dataKey:"Negative",
-          //       strokeWidth:3,
-          //       stroke:this.state.colors.negative,
-          //       xAxisId:0,
-          //       yAxisId:0,
-          //       connectNulls:false,
-          //       activeDot:true,
-          //       legendType:"line",
-          //       fill:"#fff",
-          //       points:[],
-          //       isAnimationActive:true,
-          //       animateNewValues:true,
-          //       animationBegin:0,
-          //       animationDuration:1500,
-          //       animationEasing:"ease",
-          //       hide:false
-          //     }
-          //   },
-          //   { color: this.state.colors.positive,
-          //     dataKey:"Positive",
-          //     inactive:false,
-          //     type:this.props.includeGridLines.includePositives?"plainline":"none",
-          //     value:"Positive",
-          //     payload:{dot:false,
-          //         dataKey:"Positive",
-          //         strokeWidth:3,
-          //         stroke:this.state.colors.positive,
-          //         xAxisId:0,
-          //         yAxisId:0,
-          //         connectNulls:false,
-          //         activeDot:true,
-          //         legendType:"line",
-          //         fill:"#fff",
-          //         points:[],
-          //         isAnimationActive:true,
-          //         animateNewValues:true,
-          //         animationBegin:0,
-          //         animationDuration:1500,
-          //         animationEasing:"ease",
-          //         hide:false
-          //       }
-          //     } ,
-          //     { color:this.state.colors.hospitalized,
-          //       dataKey:"Hospitalized",
-          //       inactive:false,
-          //     type:this.props.includeGridLines.includeHospitalized?"plainline":"none",
-          //     value:"Hospitalized",
-          //     payload:{dot:false,
-          //       dataKey:"Hospitalized ",
-          //       strokeWidth:3,
-          //       stroke:this.state.colors.hospitalized,
-          //       xAxisId:0,
-          //       yAxisId:0,
-          //       connectNulls:false,
-          //       activeDot:true,
-          //       legendType:"line",
-          //       fill:"#fff",
-          //       points:[],
-          //       isAnimationActive:true,
-          //       animateNewValues:true,
-          //       animationBegin:0,
-          //       animationDuration:1500,
-          //       animationEasing:"ease",
-          //       hide:false
-          //     }
-          //   },
-          //   { color:this.state.colors.death,
-          //     dataKey:"Deaths",
-          //     inactive:false,
-          //     type:this.props.includeGridLines.includeDeaths?"plainline":"none",
-          //     value:"Deaths",
-          //     payload:{dot:false,
-          //       dataKey:"Deaths",
-          //       strokeWidth:3,
-          //       stroke:this.state.colors.death,
-          //       xAxisId:0,
-          //       yAxisId:0,
-          //       connectNulls:false,
-          //       activeDot:true,
-          //       legendType:"line",
-          //       fill:"#fff",
-          //       points:[],
-          //       isAnimationActive:true,
-          //       animateNewValues:true,
-          //       animationBegin:0,
-          //       animationDuration:1500,
-          //       animationEasing:"ease",
-          //       hide:false
-          //     }
-          //   },
-          //   { color:this.state.colors.positivePercent,
-          //     dataKey:"Positive %",
-          //     inactive:false,
-          //     type:(multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? this.props.includeGridLines.includePositivePercent ? "plainline" : "none" : "none",
-          //     value:"Positive %",
-          //     payload:{dot:false,
-          //       dataKey:"Positive %",
-          //       strokeWidth:3,
-          //       stroke:this.state.colors.positivePercent,
-          //       xAxisId:0,
-          //       yAxisId:0,
-          //       connectNulls:false,
-          //       activeDot:true,
-          //       legendType:"line",
-          //       fill:"#fff",
-          //       points:[],
-          //       isAnimationActive:true,
-          //       animateNewValues:true,
-          //       animationBegin:0,
-          //       animationDuration:1500,
-          //       animationEasing:"ease",
-          //       hide:false
-          //     }
-          //   },
-          //   { color:"black",
-          //     dataKey:"Deaths: 7 day average",
-          //     inactive:false,
-          //     type: multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new") && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
-          //     value:"7 day averages",
-          //     payload:{dot:false,
-          //       dataKey:"Deaths: 7 day average",
-          //       strokeWidth:3,
-          //       strokeDasharray:"3 3",
-          //       stroke:"black",
-          //       xAxisId:0,
-          //       yAxisId:0,
-          //       connectNulls:false,
-          //       activeDot:true,
-          //       legendType:"line",
-          //       fill:"#fff",
-          //       points:[],
-          //       isAnimationActive:true,
-          //       animateNewValues:true,
-          //       animationBegin:0,
-          //       animationDuration:1500,
-          //       animationEasing:"ease",
-          //       hide:false
-          //     }
-          //   }
-          // ]
-
-          // let lData = () => this.legendPayload(chartData)
           return( 
             <>
-
                 {dateRangePicker()}
                 <h5>Select States to Include In Chart</h5>
                 {/* <pre>{JSON.stringify(this.props.multiSelectedStatesIdsArr.map(obj => obj.stateabbreviation))}</pre> */}
@@ -918,7 +734,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
-              <YAxis   />
+              <YAxis type="number"/>
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {/* {stayAtHomeOrderXReferences} */}
@@ -946,7 +762,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
             </LineChart>
             </ResponsiveContainer>                        
           </>
-          ) // ends "singleStateChart" RETURN
+          ) // ends "multiStateChart" RETURN
 
 
 
