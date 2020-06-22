@@ -134,33 +134,33 @@ class ChartBuilder extends React.Component {
   }
 
 
-  handleMouseEnter = (o) => {
-    const { dataKey } = o;
-    const { width } = this.state;
-    this.setState({
-      width: { ...width, [dataKey]: 6 },
-    });
-  }
+  // handleMouseEnter = (o) => {
+  //   const { dataKey } = o;
+  //   const { width } = this.state;
+  //   this.setState({
+  //     width: { ...width, [dataKey]: 6 },
+  //   });
+  // }
 
-  handleMouseLeave = (o) => {
-    const { dataKey } = o;
-    const { width } = this.state;
-    this.setState({
-      width: { ...width, [dataKey]: 3 },
-    });
-  }
+  // handleMouseLeave = (o) => {
+  //   const { dataKey } = o;
+  //   const { width } = this.state;
+  //   this.setState({
+  //     width: { ...width, [dataKey]: 3 },
+  //   });
+  // }
 
-  handleLegendClick = (o) => {
-    const { dataKey } = o;
-    const { width } = this.state;
-    let newWidth = 6
-    if (this.state.width[dataKey] === 6) {
-      newWidth = 3
-    }
-    this.setState({
-      width: { ...width, [dataKey]: newWidth },
-    });
-  }
+  // handleLegendClick = (o) => {
+  //   const { dataKey } = o;
+  //   const { width } = this.state;
+  //   let newWidth = 6
+  //   if (this.state.width[dataKey] === 6) {
+  //     newWidth = 3
+  //   }
+  //   this.setState({
+  //     width: { ...width, [dataKey]: newWidth },
+  //   });
+  // }
 
   formatYAxisForRateOfGrowth = (tickItem) => { return tickItem + "%" }
 
@@ -501,7 +501,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
       { color:this.state.colors.positivePercent,
         dataKey:"Positive %",
         inactive:false,
-        type:!!chartData[0] && chartData[0]["count_type"].startsWith("new") ? this.props.includeGridLines.includePositivePercent ? "plainline" : "none" : "none",
+        type: this.props.newOrTotal === "new" ? this.props.includeGridLines.includePositivePercent ? "plainline" : "none" : "none",
         value:"Positive %",
         payload:{dot:false,
           dataKey:"Positive %",
@@ -525,7 +525,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
       { color:"black",
         dataKey:"Deaths: 7 day average",
         inactive:false,
-        type: chartData[0] && chartData[0]["count_type"].startsWith("new") && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
+        type: this.props.newOrTotal === "new" && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
         value:"7 day averages",
         payload:{dot:false,
           dataKey:"Deaths: 7 day average",
@@ -580,7 +580,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                 <XAxis dataKey="date" />
                 <YAxis   />
                 <Tooltip offset={60} itemStyle={tooltipStyle} />
-                <Legend onClick={this.handleLegendClick} iconType="wye"  />
+                <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
                 {chartLines}
               </LineChart>
               </ResponsiveContainer>
@@ -708,7 +708,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               )
             )
           } // ends GridLines IF statement
-
+console.log("Chart Data = ", chartData)
           return( 
             <>
                 {dateRangePicker()}
