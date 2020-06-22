@@ -580,7 +580,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                 <XAxis dataKey="date" />
                 <YAxis   />
                 <Tooltip offset={60} itemStyle={tooltipStyle} />
-                <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
+                <Legend iconType="plainline"  iconSize={30}  />
                 {chartLines}
               </LineChart>
               </ResponsiveContainer>
