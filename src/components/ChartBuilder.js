@@ -159,7 +159,10 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
         let index = 0
         let tempObj
         let filteredArrayOfTypes
+        
+        // this FILTER function ensures only the 'state groups' aree not seleected when you click "Select All"
         let selectedStateIdsArr = this.props.multiSelectedStatesIdsArr.map(obj => obj.value)
+
         for (let countT of count_types) {
           filteredArrayOfTypes = this.props[state_type[index]].filter(({state_id}) => selectedStateIdsArr.includes(state_id));
           
