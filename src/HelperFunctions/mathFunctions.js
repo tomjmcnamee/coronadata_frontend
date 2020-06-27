@@ -63,13 +63,56 @@ const aggregateForPosPercentages = (allDatesArr, newPositive, newTotal, arrOfSel
           return prev + curr[day]
         }, 
       0)
-      aggPosPercentagesObj[day] = parseFloat(((tempPosResults * 100)/tempTestsTaken).toFixed(1))
+      aggPosPercentagesObj[day] = parseFloat(((tempPosResults * 100)/tempTestsTaken).toFixed(2))
     } // ends FOR OF Loop
     return aggPosPercentagesObj
 } /// ends aggregateForPosPercentages function
 
 
+const sevenDayAverageCalculator = (inputObj, outputObj, datesArr) => {
+  let i = 6
+  while (i < datesArr.length) {
+    outputObj[datesArr[i]] = Math.trunc((inputObj[datesArr[i]] + (inputObj[datesArr[i-1]]) + (inputObj[datesArr[i-2]]) + (inputObj[datesArr[i-3]]) + (inputObj[datesArr[i-4]]) + 
+    (inputObj[datesArr[i-5]]) + (inputObj[datesArr[i-6]]))/7)
+    i++
+  }
+}
+
+const posPercentageSevenDayAverageCalculator = (totalArr, posArr, outputObj, datesArr) => {
+  let i = 6
+  while (i < datesArr.length) {
+    outputObj[datesArr[i]] = parseFloat(Math.trunc((posArr[datesArr[i]] + (posArr[datesArr[i-1]]) + (posArr[datesArr[i-2]]) + (posArr[datesArr[i-3]]) + (posArr[datesArr[i-4]]) + 
+    (posArr[datesArr[i-5]]) + (posArr[datesArr[i-6]]))/7)/((totalArr[datesArr[i]] + (totalArr[datesArr[i-1]]) + (totalArr[datesArr[i-2]]) + (totalArr[datesArr[i-3]]) + (totalArr[datesArr[i-4]]) + 
+    (totalArr[datesArr[i-5]]) + (totalArr[datesArr[i-6]]))/7)*100).toFixed(2) 
+    i++
+  }
+}
+
+const averageCalcultorExtractBuildInject = (multiStateChartDataSet) => {  
+  for (let dataSetObj of multiStateChartDataSet) {
+    
+    let tempAveragesArr = []
+    let tempAveragesObj = {}
+    let dates = Object.keys(dataSetObj).filter( k => k.startsWith("202"))
+    let tempCountType = dataSetObj["count_type"]
+    tempAveragesObj["count_type"] = tempCountType + "-avg"
+    if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "new-positivePercent") {
+      sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
+    } else if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type === "new-positivePercent") {
+      let tempTotalTestsArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-total")
+      let tempPosTestsArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-positive")
+      posPercentageSevenDayAverageCalculator(tempTotalTestsArray, tempPosTestsArray, tempAveragesObj, dates)
+    }
+    tempAveragesArr.push(tempAveragesObj)
+    multiStateChartDataSet = [ ...multiStateChartDataSet, ...tempAveragesArr]
+  } //  Ends for loop for each in the multiStateChartDataSet var array
+  return multiStateChartDataSet
+} // ends averageCalcultorExtractBuildInject function
+
+
 export { 
   buildPercentageArrays,
-  aggregateForPosPercentages
+  aggregateForPosPercentages,
+  sevenDayAverageCalculator,
+  averageCalcultorExtractBuildInject
 }

@@ -209,7 +209,6 @@ const mapCountTypeToHumanReadableType = (counttype) => {
     case "new-hospitalized": return "Hospitalized"
     case "new-death": return "Deaths"
     case "new-positivePercent": return "Positive %"
-    case "new-negativePercent": return "Negative %"
     case "total-total": return "Tested"
     case "total-positive": return "Positive"
     case "total-negative": return "Negative"
@@ -220,17 +219,8 @@ const mapCountTypeToHumanReadableType = (counttype) => {
     case "new-negative-avg": return "Negative-avg"
     case "new-hospitalized-avg": return "Hospitalized-avg"
     case "new-death-avg": return "Deaths-avg"
+    case "new-positivePercent-avg": return "PositivePercent-avg"
     default: return "mapCountTypeToHumanReadableType switch  case in HelperFunctions/mappingIDtoSomething.js"
-  } // ends switch/case 
-}
-const mapMultiDropdownValueToRegionIDsArr = (v) => {
-  switch (v) {
-    case 80: return [47,37,5, 3,28,31,44,6,51,26,12] // "REGION - West"
-    case 81: return [34,41,27,16,23,15,26, 50,13,14,35,22] // "REGION - MidWest"
-    case 82: return [43,36,4,18, 17,42,24,1, 49,29,48,8,46,33,40,10,9] // "REGION - South"
-    case 83: return [19,29,45,21,7,39, 32,30,38] // "REGION - NorthEast"
-    
-    default: return "mapMultiDropdownValueToRegionIDsArr switch  case in HelperFunctions/mappingIDtoSomething.js"
   } // ends switch/case 
 }
 
@@ -238,5 +228,5 @@ export {
   // mapStateIdToStateAbbreviation,
   mapStateIdToStateName,
   mapStateNameToStateId,
-  mapCountTypeToHumanReadableType,
-  mapMultiDropdownValueToRegionIDsArr  }
+  mapCountTypeToHumanReadableType
+  }

@@ -1,5 +1,5 @@
 import { buildPercentageArrays } from './HelperFunctions/mathFunctions'
-import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptionsForStateMultiselect, returnGroupedStateStateDropdownOptionObjWithStateName } from './HelperFunctions/stateRelatedReferences'
+import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptionsForStateMultiselect, returnGroupedStateStatesDropdownObjects, returnGroupObjLabelFromCastedValuesArrString, returnStateGroupDropdownOptions } from './HelperFunctions/stateRelatedReferences'
 
 
 
@@ -113,10 +113,37 @@ function singleInitialLineChooser (selectedStatType) {
 
 
 function setMultiSelectedStates (selected) {
-
+  debugger
+  let selectedStatesBelongToThisGroup = []
+  selectedStatesBelongToThisGroup.push(returnStateGroupDropdownOptions(returnGroupObjLabelFromCastedValuesArrString(selected.map(obj => obj.value).sort((a,b) => a-b).toString())))
   return function (dispatch) {
     dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: selected})
+    dispatch({ type: "SET SINGLE SELECTED STATE GROUP ARR", payload: selectedStatesBelongToThisGroup})
+
   }
+}
+
+function setStateGroupSelections (selected, existingSelection) {
+  // This set of functions makes the MULTISELECT dropdown function as a SINGLE SELECT dropdowns
+    if (selected.length === 0 ) {
+      return function (dispatch) {
+        dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: []})
+        dispatch({ type: "SET SINGLE SELECTED STATE GROUP ARR", payload: []})
+      }
+    } else if (selected.length === 1 ) {
+      let outputArr = returnGroupedStateStatesDropdownObjects(selected[0].label)
+      return function (dispatch) {
+        dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: outputArr})
+        dispatch({ type: "SET SINGLE SELECTED STATE GROUP ARR", payload: selected})
+      }
+    } else if (selected.length > 1 ) {
+      let newSelected = selected.filter(obj => obj.value != existingSelection[0].value)
+      let outputArr = returnGroupedStateStatesDropdownObjects(newSelected[0].label)
+      return function (dispatch) {
+        dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: outputArr})
+        dispatch({ type: "SET SINGLE SELECTED STATE GROUP ARR", payload: newSelected})
+      }
+    }
 }
 
 
@@ -129,5 +156,6 @@ export {
   setIdOfStateInSingleStateGrid,
   toggleGridlines,
   singleInitialLineChooser,
-  setMultiSelectedStates
+  setMultiSelectedStates,
+  setStateGroupSelections
 }

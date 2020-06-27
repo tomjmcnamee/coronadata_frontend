@@ -2,8 +2,10 @@ import React, { useState }   from 'react'
 import { DateRangePicker } from 'rsuite'
 import { connect } from 'react-redux'
 import  MultiSelectDropdown  from './MultiSelectDropdown'
-import { setMultiSelectedStates } from '../actions'
-import { aggregateForPosPercentages } from '../HelperFunctions/mathFunctions'
+import { Form, Col, Container, Row} from 'react-bootstrap'
+
+import { setMultiSelectedStates, setStateGroupSelections } from '../actions'
+import { aggregateForPosPercentages, averageCalcultorExtractBuildInject } from '../HelperFunctions/mathFunctions'
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine, LegendPayload
 } from 'recharts';
@@ -16,7 +18,7 @@ import { getMonthDayFromYYYYMMDD,
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 import { fetchAllStatesData } from '../actions'
 import MultiSelect from "react-multi-select-component";
-import { returnAllDropdownOptionsForStateMultiselect } from '../HelperFunctions/stateRelatedReferences'
+import { returnAllDropdownOptionsForStateMultiselect, stateGroupDropdownOptionsArr } from '../HelperFunctions/stateRelatedReferences'
 
 
 class ChartBuilder extends React.Component {
@@ -181,6 +183,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
         if (this.props.newOrTotal === "new") {
           output.push(aggregateForPosPercentages(this.props.staticDatesArr, this.props.newPositive, this.props.newTotal, this.props.multiSelectedStatesIdsArr))
         }
+        
         return output
       }
   }
@@ -206,14 +209,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     
     
 
-      const sevenDayAverageCalculator = (inputObj, outputObj, datesArr) => {
-      let i = 6
-      while (i < datesArr.length) {
-        outputObj[datesArr[i]] = Math.trunc((inputObj[datesArr[i]] + (inputObj[datesArr[i-1]]) + (inputObj[datesArr[i-2]]) + (inputObj[datesArr[i-3]]) + (inputObj[datesArr[i-4]]) + 
-        (inputObj[datesArr[i-5]]) + (inputObj[datesArr[i-6]]))/7)
-        i++
-      }
-    }
+      
 
     const {
       allowedRange
@@ -403,8 +399,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
       { color:"black",
         dataKey:"Deaths: 7 day average",
         inactive:false,
-        type: this.props.newOrTotal === "new" && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized) ? "plainline" : "none" ,
-        value:"7 day averages",
+        type: this.props.newOrTotal === "new" && (this.props.includeGridLines.includeTested || this.props.includeGridLines.includeNegatives || this.props.includeGridLines.includeDeaths || this.props.includeGridLines.includePositives || this.props.includeGridLines.includeHospitalized || this.props.includeGridLines.includePositivePercent) ? "plainline" : "none" ,
+        value:"7 day rolling averages",
         payload:{dot:false,
           dataKey:"Deaths: 7 day average",
           strokeWidth:3,
@@ -427,8 +423,17 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
       }
     ]
 
-    const dropdownOptions = returnAllDropdownOptionsForStateMultiselect()
+    const dropdownOptionsForStates = returnAllDropdownOptionsForStateMultiselect()
+    const dropdownOptionsForStateGroups = stateGroupDropdownOptionsArr
    
+
+    // const dropdownOptionsForStateGroups = () => {	 
+    //   let output = []
+    //   
+    //   debugger
+    //   stateGroupDropdownOptionsArr.forEach(obj => output.push(<option key={obj.value} value={obj.value}>{obj.label}</option>))
+    //   return output	 
+    // }
     
     switch(this.props.gridType) {
       case "top10s":
@@ -560,22 +565,10 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               // let dataTypeArr =  [ "total", "positive", "negative", "death", "hospitalized"  ]
               // let dataTypeVarName =  [ "newtotalObj", "newpositiveObj", "newnegativeObj", "newdeathObj", "newhospitalizedObj"  ]
               
-    
-              for (let dataSetObj of multiStateChartDataSet) {
-                let tempAveragesArr = []
-                if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "PositivePercent") {
-                  let tempAveragesObj = {}
-                  let dates = Object.keys(dataSetObj).filter( k => k.startsWith("2020"))
-                  sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
-                  let tempCountType = dataSetObj["count_type"]
-                  tempAveragesObj["count_type"] = tempCountType + "-avg"
-                  tempAveragesArr.push(tempAveragesObj)
-                }
-
-                multiStateChartDataSet = [ ...multiStateChartDataSet, ...tempAveragesArr]
-
-              } //  Ends For...In formattedFridlineArr
-          
+              
+              
+              multiStateChartDataSet = [...averageCalcultorExtractBuildInject(multiStateChartDataSet)]
+              
 
           //This checks to see if its for the WHOLE US or not
             for ( let date1 of this.state.displayDates) { chartData.push({date: getMonthDayFromYYYYMMDD(date1)})}
@@ -584,26 +577,49 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                 dataObject[mapCountTypeToHumanReadableType(stateTypeObj["count_type"])] = stateTypeObj[this.state.displayDates[index]]
               )
             )
+            
           } // ends GridLines IF statement
+
           return( 
             <>
                 {dateRangePicker()}
-                <h5>Select States to Include In Chart</h5>
+                <h5>Select States or Group to Include In Chart</h5>
                 {/* <pre>{JSON.stringify(this.props.multiSelectedStatesIdsArr.map(obj => obj.stateabbreviation))}</pre> */}
                 <MultiSelect
-                  options={dropdownOptions}
+                  options={dropdownOptionsForStates}
                   value={this.props.multiSelectedStatesIdsArr}
                   onChange={this.props.setMultiSelectedStates}
                   labelledBy={"Select"}
                   hasSelectAll
                   overrideStrings={{ 
                     "selectSomeItems": "Select States",
-                    "allItemsAreSelected": "All States",
+                    "allItemsAreSelected": "All States Selected",
                     "selectAll": "Select/Clear All",
                     "search": "Search"
                   }}
                   disableSearch
                 />
+                <MultiSelect
+                  options={dropdownOptionsForStateGroups}
+                  value={this.props.singleSelectStateGroupArr}
+                  onChange={(selected) => this.props.setStateGroupSelections(selected, this.props.singleSelectStateGroupArr)}
+                  labelledBy={"Select"}
+                  hasSelectAll={false}
+                  overrideStrings={{ 
+                    "selectSomeItems": "State Groups",
+                  }}
+                  disableSearch
+                />
+                {/* <Form >
+                <Form.Row>
+                  <Form.Group  >
+                      <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.state.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} >
+                      <option value={99}>Entire U.S.</option>	
+                        {stateGroupDropdownOptionsArr.map(obj => <option key={obj.value} value={obj.value}>{obj.label}</option>)}	
+                      </Form.Control>	
+                  </Form.Group  >	
+                </Form.Row>
+              </Form> */}
             {/* {this.legendPayload(chartData)} */}
             <ResponsiveContainer width="95%" height={300}>                        
             <LineChart  data={chartData}  
@@ -632,6 +648,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={3} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={3} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={3} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includePositivePercent ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="PositivePercent-avg" strokeWidth={3} stroke={this.state.colors.positivePercent}   strokeDasharray="3 3" /> : null}
               
               
 
@@ -732,6 +749,7 @@ function mdp(dispatch) {
   return { 
     fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue)),
     setMultiSelectedStates: (one, two) => dispatch(setMultiSelectedStates(one, two)),
+    setStateGroupSelections: (one, two) => dispatch(setStateGroupSelections(one, two)),
 
   }
 }
@@ -756,7 +774,8 @@ function msp(state) {
     includeGridLines: state.includeGridLines,
     idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
     selectedStatType: state.selectedStatType,
-    multiSelectedStatesIdsArr: state.multiSelectedStatesIdsArr
+    multiSelectedStatesIdsArr: state.multiSelectedStatesIdsArr,
+    singleSelectStateGroupArr: state.singleSelectStateGroupArr,
 
   }
 }
