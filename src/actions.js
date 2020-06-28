@@ -1,5 +1,5 @@
 import { buildPercentageArrays } from './HelperFunctions/mathFunctions'
-import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptionsForStateMultiselect, returnGroupedStateStatesDropdownObjects, returnGroupObjLabelFromCastedValuesArrString, returnStateGroupDropdownOptions } from './HelperFunctions/stateRelatedReferences'
+import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptionsForStateMultiselect, returnGroupedStateStatesDropdownObjects, returnGroupObjLabelFromCastedValuesArrString, stateGroupDropdownOptionsArr } from './HelperFunctions/stateRelatedReferences'
 
 
 
@@ -113,9 +113,12 @@ function singleInitialLineChooser (selectedStatType) {
 
 
 function setMultiSelectedStates (selected) {
-  debugger
   let selectedStatesBelongToThisGroup = []
-  selectedStatesBelongToThisGroup.push(returnStateGroupDropdownOptions(returnGroupObjLabelFromCastedValuesArrString(selected.map(obj => obj.value).sort((a,b) => a-b).toString())))
+  let orderedIdsString = selected.map(obj => obj.value).sort((a,b) => a-b).toString()
+  let groupObjFromSelectedStatesIdString = returnGroupObjLabelFromCastedValuesArrString(orderedIdsString)
+  let stateGroupDropdownSelectionNEW = stateGroupDropdownOptionsArr.find(obj => obj.label ===  groupObjFromSelectedStatesIdString) || []
+  selectedStatesBelongToThisGroup.push(stateGroupDropdownSelectionNEW)
+  console.log(" selectedStatesBelongToThisGroup AFGTER PUSH = ", selectedStatesBelongToThisGroup)
   return function (dispatch) {
     dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: selected})
     dispatch({ type: "SET SINGLE SELECTED STATE GROUP ARR", payload: selectedStatesBelongToThisGroup})
