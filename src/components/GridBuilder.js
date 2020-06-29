@@ -5,6 +5,7 @@ import 'rsuite-table/dist/css/rsuite-table.css'
 import { connect } from 'react-redux'
 
 import { getMonthDayFromYYYYMMDD } from '../HelperFunctions/DateFormatting' 
+import { abbreviateLargeNumbers } from '../HelperFunctions/mathFunctions' 
 import { mapStateIdToStateName } from '../HelperFunctions/mappingIDtoSomething' 
 import {
   jumpToDisplayAndState,
@@ -14,42 +15,53 @@ import {
 
 
 
-function GridBuilder(props) {
+  class GridBuilder extends React.Component {
 
-  function stateClickHandler(innerHTML){
-    props.singleInitialLineChooser(props.selectedStatType)
-    props.jumpToDisplayAndState("multiStateChart", innerHTML)
+
+  stateClickHandler = (innerHTML) => {
+    this.props.singleInitialLineChooser(this.props.selectedStatType)
+    this.props.jumpToDisplayAndState("multiStateChart", innerHTML)
   }
 
-  const tableDataToDisplay = () => {
-    let outputArr
-    let lastDate = props.staticDatesArr[props.staticDatesArr.length - 1]
-    
-    if (props.columnToSort === "state_name") {
-      outputArr = [...props[props.newOrTotal + props.selectedStatType]]
-    } else if (props.columnToSort === "first_number_col") {
-      outputArr = [...props[props.newOrTotal + props.selectedStatType]].sort(function (a, b) { 
+  tableDataToDisplay = () => {
+    let outputArr = []
+    let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
+    if (this.props.columnToSort === "state_name") {
+
+      outputArr = [...this.props[this.props.newOrTotal + this.props.selectedStatType]]
+    } else if (this.props.columnToSort === "first_number_col") {
+      outputArr = [...this.props[this.props.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
         if (a[lastDate] > b[lastDate]) return -1;
         if (a[lastDate] < b[lastDate]) return 1;
       }  )
     }
     return outputArr
+    // this.setState({
+    //   rawTableData: outputArr
+    // }) 
   }
-    let gridLinesArray = tableDataToDisplay()
-    let formattedGridLinesArr = [...gridLinesArray]
 
-    switch(props.gridType) {
-      case "AllStates-PerDay":
+  // setType = () => {
+  //   this.setState({
+  //     newOrTotal: this.props.newOrTotal,
+  //     dataType: this.props.dataType
+  //   })
+  // }
+
+  render () {
+    let formattedGridLinesArr = []
+    for (let obj of this.tableDataToDisplay()) {
+      formattedGridLinesArr.push({...obj})
+    }
+
         let xAxisDates
-        
-        if (gridLinesArray.length > 0 ) {
-          
+        if (formattedGridLinesArr.length > 0 ) {
           // This builds the line for US SUMS   for RAW only
             let US_Totals_Gridline = {state_id: 99, state_name: "US Totals"}
             // if statement adds US Totals to dataset IF its not a percentage vierwe
-            if (props.selectedStatType !== "PositivePercent") {
-              for (let day of props.allDatesArr) {
-              US_Totals_Gridline[day] = gridLinesArray.reduce( 
+            if (this.props.selectedStatType !== "PositivePercent") {
+              for (let day of this.props.allDatesArr) {
+              US_Totals_Gridline[day] = formattedGridLinesArr.reduce( 
                 function(prev, curr) {
                   return prev + curr[day]
                 }, 0)
@@ -58,7 +70,15 @@ function GridBuilder(props) {
             }   // Ends IF re: not 'percentage' view
 
 
-          xAxisDates = props.allDatesArr.map((date, index) => (
+            for (let obj of formattedGridLinesArr) {
+              for (let num in obj ) {
+                if (num.includes(2020)) {
+                  obj[num] = abbreviateLargeNumbers(obj[num],1)
+                }
+              }
+            }
+
+          xAxisDates = this.props.allDatesArr.map((date, index) => (
             index === 0
             ?
               <Column width={80} key={index} sortable >
@@ -75,17 +95,18 @@ function GridBuilder(props) {
 
           formattedGridLinesArr.forEach( obj => !obj.state_name ? obj.state_name = `${mapStateIdToStateName(obj.state_id)}` : null)
           } // ends GridLines IF statement
+
           return( 
               <Table 
                 data={formattedGridLinesArr}
                 rowHeight={32}
                 height={375}
-                onSortColumn={props.sortHandler}
+                onSortColumn={this.props.sortHandler}
               >
                 <Column width={125} align="center"  fixed sortable >
                   <HeaderCell >Sort</HeaderCell>
-                  {/* <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => props.jumpToDisplayAndState("singleStateChart", prop.target.innerHTML)} dataKey="state_name" /> */}
-                  <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => stateClickHandler(prop.target.innerHTML)} dataKey="state_name" />
+                  {/* <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => this.props.jumpToDisplayAndState("singleStateChart", prop.target.innerHTML)} dataKey="state_name" /> */}
+                  <Cell  style={{cursor: "pointer", color:"blue", textDecoration:"underline"}} onClick={(prop) => this.stateClickHandler(prop.target.innerHTML)} dataKey="state_name" />
                 </Column>
                
                 
@@ -100,9 +121,8 @@ function GridBuilder(props) {
                 </tfoot> */}
               </Table>
           ) // 
-      default:
-        break
-    } // ends switch
+
+              }  ///ends Render
 }  // ends GridBuilder class
 
 

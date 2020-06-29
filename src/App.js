@@ -3,7 +3,7 @@ import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
 import 'rsuite/dist/styles/rsuite-default.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
-import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
+// import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button } from 'rsuite';
 import loadingMap from './assets/USSpreadMap.gif'
@@ -95,8 +95,6 @@ class App extends React.Component {
   
   render() {
 
-    
-    
     return (
       
       <div className="App">

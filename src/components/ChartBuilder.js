@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Form, Col, Container, Row} from 'react-bootstrap'
 
 import { setMultiSelectedStates, setStateGroupSelections } from '../actions'
-import { aggregateForPosPercentages, averageCalcultorExtractBuildInject } from '../HelperFunctions/mathFunctions'
+import { aggregateForPosPercentages, averageCalcultorExtractBuildInject, abbreviateLargeNumbers } from '../HelperFunctions/mathFunctions'
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine, LegendPayload
 } from 'recharts';
@@ -86,7 +86,7 @@ class ChartBuilder extends React.Component {
 
 
   datePickerChangeHandler = (value) => {
-    // debugger
+
     if (
         ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
         &&
@@ -215,16 +215,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
       if (axisType === "percentage") {
         return value + "%"
       } else {
-        let stringVal = value.toString()
-        if (stringVal.length === 5 || stringVal.length === 6) {
-          return stringVal.slice(0,-3) + "k"
-        } else if (stringVal.length === 7 || stringVal.length === 8 ) {
-          return stringVal.slice(0,-6) + "mil"
-        } else return value
-
-        // debugger
-        // console.log("length of value = ", value.toString().length)
-        //  value
+        return abbreviateLargeNumbers(value)
       }
     }
 
@@ -407,7 +398,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     // const dropdownOptionsForStateGroups = () => {	 
     //   let output = []
     //   
-    //   debugger
+
     //   stateGroupDropdownOptionsArr.forEach(obj => output.push(<option key={obj.value} value={obj.value}>{obj.label}</option>))
     //   return output	 
     // }
@@ -610,18 +601,18 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               {/* isAnimationActive={false} */}
 
               {this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false}   dataKey="Negative" strokeWidth={2} stroke={this.state.colors.negative}   /> :null }
+              { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={3} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={3} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
               {this.props.includeGridLines.includeTested ? <Line animationDuration={400}  dot={false}   dataKey="Tested" strokeWidth={2} stroke={this.state.colors.tested}/> :null }
               {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={2} stroke={this.state.colors.positive}   /> :null }
-              {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={2} stroke={this.state.colors.hospitalized}   /> :null }
-              {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={2}  stroke={this.state.colors.death}   /> :null }
-              { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} yAxisId="right" dot={false} type="monotone"  dataKey="Positive %" strokeWidth={2} stroke={this.state.colors.positivePercent}    /> : null : null}
-              
-              { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={3} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={3} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={3} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
+              {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={2} stroke={this.state.colors.hospitalized}   /> :null }
               { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={3} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
+              {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={2}  stroke={this.state.colors.death}   /> :null }
               { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={3} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} yAxisId="right" dot={false} type="monotone"  dataKey="Positive %" strokeWidth={2} stroke={this.state.colors.positivePercent}    /> : null : null}
               { this.props.includeGridLines.includePositivePercent ? <Line animationDuration={400} yAxisId="right"  dot={false} type="monotone"  dataKey="PositivePercent-avg" strokeWidth={3} stroke={this.state.colors.positivePercent}   strokeDasharray="3 3" /> : null}
+              
               
 
             </LineChart>

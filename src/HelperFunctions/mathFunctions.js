@@ -110,9 +110,41 @@ const averageCalcultorExtractBuildInject = (multiStateChartDataSet) => {
 } // ends averageCalcultorExtractBuildInject function
 
 
+const abbreviateLargeNumbers = (value, decimals ) => {
+  if (!value) {return 0} else {
+    let stringVal = value.toString() || "0"
+    let length = stringVal.length
+    if (length > 5) {
+      let newValue = value || 0;
+      const suffixes = ["", "K", "M", "B","T"];
+      let suffixNum = 0;
+      while (newValue >= 1000) {
+        newValue /= 1000;
+        suffixNum++;
+      }
+
+      if (parseFloat(newValue) && decimals ) {
+        if (suffixNum === 1) {newValue = newValue.toFixed(1)}
+        else if (suffixNum >= 2 ) {newValue = newValue.toFixed(2)}
+      }
+      newValue += suffixes[suffixNum];
+      return newValue;
+    } else return numberWithCommas(value)
+  }  // ends IF re: a null value
+}
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function numberStringWithCommas(x) {
+  return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 export { 
   buildPercentageArrays,
   aggregateForPosPercentages,
   sevenDayAverageCalculator,
-  averageCalcultorExtractBuildInject
+  averageCalcultorExtractBuildInject,
+  abbreviateLargeNumbers
 }
