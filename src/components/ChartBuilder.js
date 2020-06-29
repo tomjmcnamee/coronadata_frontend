@@ -583,7 +583,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               <YAxis type="number"/>
               <YAxis yAxisId="right" orientation='right' 
                   tickFormatter={(value) => yAxisPercentageLabel(value)}/>
-              <YAxis type="number"/>
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {/* {stayAtHomeOrderXReferences} */}
