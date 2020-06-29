@@ -83,7 +83,7 @@ const posPercentageSevenDayAverageCalculator = (totalArr, posArr, outputObj, dat
   while (i < datesArr.length) {
     outputObj[datesArr[i]] = parseFloat(Math.trunc((posArr[datesArr[i]] + (posArr[datesArr[i-1]]) + (posArr[datesArr[i-2]]) + (posArr[datesArr[i-3]]) + (posArr[datesArr[i-4]]) + 
     (posArr[datesArr[i-5]]) + (posArr[datesArr[i-6]]))/7)/((totalArr[datesArr[i]] + (totalArr[datesArr[i-1]]) + (totalArr[datesArr[i-2]]) + (totalArr[datesArr[i-3]]) + (totalArr[datesArr[i-4]]) + 
-    (totalArr[datesArr[i-5]]) + (totalArr[datesArr[i-6]]))/7)*100).toFixed(2) 
+    (totalArr[datesArr[i-5]]) + (totalArr[datesArr[i-6]]))/7)*100).toFixed(2)
     i++
   }
 }

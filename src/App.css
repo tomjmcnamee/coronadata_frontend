@@ -105,6 +105,25 @@
 
 }
 
+/* .slider-wrapper {
+  display: inline-block;
+  width: 20px;
+  height: 150px;
+  padding: 0;
+  float: right;
+}
+
+.slider-wrapper input {
+  width: 150px;
+  height: 20px;
+  margin: 0;
+  transform-origin: 75px 75px;
+  transform: rotate(-90deg);
+} */
+/* .clearfix{
+  clear:both
+} */
+
 @media only screen and (max-width: 820px) {
       
   .columnL{
