@@ -578,6 +578,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis type="number"/>
+              <YAxis yAxisId="right" orientation='right' 
+                  tickFormatter={(value) => yAxisPercentageLabel(value)}/>
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {/* {stayAtHomeOrderXReferences} */}
@@ -592,15 +594,14 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               {this.props.includeGridLines.includePositives ? <Line animationDuration={400}  dot={false}   dataKey="Positive" strokeWidth={2} stroke={this.state.colors.positive}   /> :null }
               {this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400}  dot={false}   dataKey="Hospitalized" strokeWidth={2} stroke={this.state.colors.hospitalized}   /> :null }
               {this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths" strokeWidth={2}  stroke={this.state.colors.death}   /> :null }
-              { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive %" strokeWidth={2} stroke={this.state.colors.positivePercent}    /> : null : null}
+              { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} yAxisId="right" dot={false} type="monotone"  dataKey="Positive %" strokeWidth={2} stroke={this.state.colors.positivePercent}    /> : null : null}
               
               { this.props.includeGridLines.includeTested ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Total-avg" strokeWidth={3} stroke={this.state.colors.total}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includeNegatives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Negative-avg" strokeWidth={3} stroke={this.state.colors.negative}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includePositives ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Positive-avg" strokeWidth={3} stroke={this.state.colors.positive}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includeHospitalized ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Hospitalized-avg" strokeWidth={3} stroke={this.state.colors.hospitalized}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={3} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
-              { this.props.includeGridLines.includePositivePercent ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="PositivePercent-avg" strokeWidth={3} stroke={this.state.colors.positivePercent}   strokeDasharray="3 3" /> : null}
-              
+              { this.props.includeGridLines.includePositivePercent ? <Line animationDuration={400} yAxisId="right"  dot={false} type="monotone"  dataKey="PositivePercent-avg" strokeWidth={3} stroke={this.state.colors.positivePercent}   strokeDasharray="3 3" /> : null}
               
 
             </LineChart>
