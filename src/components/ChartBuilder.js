@@ -211,8 +211,21 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     let chartLines = []
     const top10Colors = ["#FF0000", "#00BFFF", "#EE82EE", "#00FF00", "#8A2BE2", "#FF8C00", "#D2691E", "#20B2AA", "#FF1493", "#0000FF"]
     
-    const yAxisPercentageLabel = (value) => {
-      return value + "%"
+    const yAxisLabel = (value, axisType) => {
+      if (axisType === "percentage") {
+        return value + "%"
+      } else {
+        let stringVal = value.toString()
+        if (stringVal.length === 5 || stringVal.length === 6) {
+          return stringVal.slice(0,-3) + "k"
+        } else if (stringVal.length === 7 || stringVal.length === 8 ) {
+          return stringVal.slice(0,-6) + "mil"
+        } else return value
+
+        // debugger
+        // console.log("length of value = ", value.toString().length)
+        //  value
+      }
     }
 
     let legendPayload = [
@@ -419,9 +432,10 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           return(     
             <>
             {dateRangePicker()}                    
-              <ResponsiveContainer width="95%" height={300}>                        
+              <ResponsiveContainer width="99%" height={300}>                        
               <LineChart  data={chartData}
-                margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
+                margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis   />
@@ -575,14 +589,17 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                   disableSearch
                 />
 
-            <ResponsiveContainer width="95%" height={300}>                        
+            <ResponsiveContainer width="99%" height={300}>                        
             <LineChart  data={chartData}  
-              margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
+              margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
-              <YAxis type="number"/>
-              <YAxis yAxisId="right" orientation='right' 
-                  tickFormatter={(value) => yAxisPercentageLabel(value)}/>
+              <YAxis type="number"
+                tickFormatter={(value) => yAxisLabel(value, "allothers")}
+              />
+              <YAxis yAxisId="right" orientation='right' width={30}
+                tickFormatter={(value) => yAxisLabel(value, "percentage")}
+              />
               <Tooltip offset={60} itemStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {/* {stayAtHomeOrderXReferences} */}
