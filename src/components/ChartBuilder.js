@@ -206,12 +206,15 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     };
 
     let top10sDataSet = this.top10sData()
-    // let singleStateChartDataSet = this.singleStateData()
     let multiStateChartDataSet = this.multiStateData()
     let chartData = []
     let chartLines = []
     const top10Colors = ["#FF0000", "#00BFFF", "#EE82EE", "#00FF00", "#8A2BE2", "#FF8C00", "#D2691E", "#20B2AA", "#FF1493", "#0000FF"]
     
+    const yAxisPercentageLabel = (value) => {
+      return value + "%"
+    }
+
     let legendPayload = [
       { color:this.state.colors.tested,
         dataKey:"Tested",
