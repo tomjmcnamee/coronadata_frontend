@@ -17,7 +17,6 @@ import {
     setSelectedStatType,
     setNewOrTotal,
     setDisplayType,
-    setIdOfStateInSingleStateGrid,
     toggleGridlines,
     singleInitialLineChooser
         } from './actions'
@@ -32,7 +31,7 @@ class App extends React.Component {
 
   componentDidMount(){
     // document.title = "CoronaVirus Data"        
-    this.props.fetchAllStatesData("30")
+    this.props.fetchAllStatesData("37")
   }
   
   percentageLogicHandler = (event) => {
@@ -61,7 +60,6 @@ class App extends React.Component {
       // This handles the Dropdowns
       this.percentageLogicHandler(event)
       if (event.target.name === "selectedStatType") this.props.setSelectedStatType(event.target.value)
-      if (event.target.name === "idOfStateInSingleStateGrid") this.props.setIdOfStateInSingleStateGrid(event.target.value)
     }
   }
 
@@ -275,7 +273,7 @@ class App extends React.Component {
           }
           <Row>
             <Col sm={12} >
-              <h5>{this.props.newDeath.length > 0 ? tableDescription(this.props.newOrTotal, this.props.selectedStatType, this.props.displayType, this.props.idOfStateInSingleStateGrid) : null }</h5>
+              <h5>{this.props.newDeath.length > 0 ? tableDescription(this.props.newOrTotal, this.props.selectedStatType, this.props.displayType) : null }</h5>
             </Col>
           </Row>
           <Row  className="justify-content-md-center" >
@@ -343,7 +341,6 @@ function mdp(dispatch) {
     setSelectedStatType: (typeName) => dispatch(setSelectedStatType(typeName)),
     setNewOrTotal: (newOrTotal) => dispatch(setNewOrTotal(newOrTotal)),
     setDisplayType: (displayType) => dispatch(setDisplayType(displayType)),
-    setIdOfStateInSingleStateGrid: (stateId) => dispatch(setIdOfStateInSingleStateGrid(stateId)),
     toggleGridlines: (gridline, newValue) => dispatch(toggleGridlines(gridline, newValue)),
     singleInitialLineChooser: (selectedStatType) => dispatch(singleInitialLineChooser(selectedStatType)),
   }
@@ -356,7 +353,6 @@ function msp(state) {
     staticDatesArr: state.staticDatesArr,
     newDeath: state.newDeath,
     stayAtHomeOrders: state.stayAtHomeOrders,
-    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
     displayType: state.displayType,
     selectedStatType: state.selectedStatType,
     newOrTotal: state.newOrTotal,

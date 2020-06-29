@@ -84,11 +84,6 @@ function setDisplayType (displayType) {
   }
 }
   
-function setIdOfStateInSingleStateGrid (stateId) {
-  return function (dispatch) {
-    dispatch({ type: "SET ID OF STATE IN SINGLE STATE GRID", payload: stateId})
-  }
-}
 
 function toggleGridlines (gridlineName, newValue) {
   return function (dispatch) {
@@ -156,7 +151,6 @@ export {
   setSelectedStatType,
   setNewOrTotal,
   setDisplayType,
-  setIdOfStateInSingleStateGrid,
   toggleGridlines,
   singleInitialLineChooser,
   setMultiSelectedStates,

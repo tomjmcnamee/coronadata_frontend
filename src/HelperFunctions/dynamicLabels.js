@@ -1,7 +1,7 @@
 import { mapStateIdToStateName } from './mappingIDtoSomething' 
  
  
- const tableDescription = (newOrTotal, selectedStatType, displayType, idOfStateInSingleStateGrid) => {
+ const tableDescription = (newOrTotal, selectedStatType, displayType) => {
     let newOrCumulative = () => {
       switch (newOrTotal) {
         case "new": return "Daily"
@@ -29,18 +29,6 @@ import { mapStateIdToStateName } from './mappingIDtoSomething'
       } else {
         return `States with the 10 most total ${tableDesc()} as of last date in range`
       }
-    } else if (displayType === "rateOfGrowthChart") {
-      if (newOrTotal === "new") {
-        return `Rates of Growth for Daily 7-day average numbers from ${mapStateIdToStateName(parseInt(idOfStateInSingleStateGrid))}`
-      } else {
-        return `Rates of growth of Total 7-day average numbers from ${mapStateIdToStateName(parseInt(idOfStateInSingleStateGrid))}`
-      }
-    } else if (displayType === "singleStateChart") {
-        if (newOrTotal === "new") {
-          return `All daily increases for ${mapStateIdToStateName(parseInt(idOfStateInSingleStateGrid))}`
-        } else {
-          return `All total counts for ${mapStateIdToStateName(parseInt(idOfStateInSingleStateGrid))}`
-        }
     }
   }
 

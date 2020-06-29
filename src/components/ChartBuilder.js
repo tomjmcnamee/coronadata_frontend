@@ -1,7 +1,7 @@
 import React, { useState }   from 'react'
 import { DateRangePicker } from 'rsuite'
 import { connect } from 'react-redux'
-import  MultiSelectDropdown  from './MultiSelectDropdown'
+// import  MultiSelectDropdown  from './MultiSelectDropdown'
 import { Form, Col, Container, Row} from 'react-bootstrap'
 
 import { setMultiSelectedStates, setStateGroupSelections } from '../actions'
@@ -52,8 +52,8 @@ class ChartBuilder extends React.Component {
         
         //// Use the below to default to ALL available dates
         // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] ).setDate(getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] ).getDate() + 1)],
-        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[1]),  new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))],
-        displayDates: [...this.props.staticDatesArr]
+        datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[8]),  new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))],
+        displayDates: [...this.props.staticDatesArr].slice(7)
       })
 
     } else {
@@ -86,12 +86,13 @@ class ChartBuilder extends React.Component {
 
 
   datePickerChangeHandler = (value) => {
+    // debugger
     if (
         ((getYYYYMMDDfromFormattedDate(value[0]) >= 20200228))
         &&
         (getYYYYMMDDfromFormattedDate(value[0]) < this.props.staticDatesArr[0])
         && 
-        (!!this.props.staticDatesArr && this.props.staticDatesArr.length < 35 )
+        (!!this.props.staticDatesArr && this.props.staticDatesArr.length < 39 )
       ) {
       this.props.fetchAllStatesData("all", value)
       this.setState({ 
@@ -107,47 +108,7 @@ class ChartBuilder extends React.Component {
   }  
 
 
-  // singleStateData = () => {
-  //   let output = []
-  //   let count_types = []
-  //   let state_type = []
-
-  //   //This IF builds all 'Etire US' data sets to send along
-  //   if (this.props.idOfStateInSingleStateGrid == "99") {
-  //     /////This does all the calucaitons APP side and 1 Obj PER DAY to be passed directly to the Chart
-  //       count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
-  //       state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
-
-  //       let index = 0
-  //       let tempObj
-  //       for (let countT of count_types) {
-  //         tempObj = {state_id: 99, "count_type": countT}
-  //         for (let day of this.props.staticDatesArr) {
-  //           tempObj[day] = this.props[state_type[index]].reduce(
-  //             function(prev, curr) {
-  //               return prev + curr[day]
-  //             }, 0)
-  //           }
-  //         index++
-  //         output.push(tempObj)
-  //       }
-  //       //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
-  //       if (this.props.newOrTotal === "new") {
-  //         output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === 99))
-  //       }
-
-  //   } else {
-  //     output.push(this.props[this.props.newOrTotal + "Death"].find((obj) => obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)  ))
-  //     output.push(this.props[this.props.newOrTotal + "Total"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-  //     output.push(this.props[this.props.newOrTotal + "Positive"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-  //     output.push(this.props[this.props.newOrTotal + "Negative"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-  //     output.push(this.props[this.props.newOrTotal + "Hospitalized"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-  //     if (this.props.newOrTotal === "new") {
-  //       output.push(this.props[this.props.newOrTotal + "PositivePercent"].find((obj) =>  obj.state_id === parseInt(this.props.idOfStateInSingleStateGrid)))
-  //     }
-  //   }
-  //   return output
-  // }
+  
 
   multiStateData = () => {
     let output = []
@@ -610,17 +571,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                   }}
                   disableSearch
                 />
-                {/* <Form >
-                <Form.Row>
-                  <Form.Group  >
-                      <Form.Control as="select" name="idOfStateInSingleStateGrid" value={this.state.idOfStateInSingleStateGrid} onChange={this.formChangeHandler} >
-                      <option value={99}>Entire U.S.</option>	
-                        {stateGroupDropdownOptionsArr.map(obj => <option key={obj.value} value={obj.value}>{obj.label}</option>)}	
-                      </Form.Control>	
-                  </Form.Group  >	
-                </Form.Row>
-              </Form> */}
-            {/* {this.legendPayload(chartData)} */}
+
             <ResponsiveContainer width="95%" height={300}>                        
             <LineChart  data={chartData}  
               margin={{ top: 5, right: 1, left: 0, bottom: 5 }}>
@@ -772,7 +723,6 @@ function msp(state) {
     totalHospitalized: state.totalHospitalized,
     newOrTotal: state.newOrTotal,
     includeGridLines: state.includeGridLines,
-    idOfStateInSingleStateGrid: state.idOfStateInSingleStateGrid,
     selectedStatType: state.selectedStatType,
     multiSelectedStatesIdsArr: state.multiSelectedStatesIdsArr,
     singleSelectStateGroupArr: state.singleSelectStateGroupArr,
