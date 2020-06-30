@@ -1,4 +1,49 @@
-const buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr, arrOfMultiSelectedStateIDs) => {
+const buildPercentageArrays = (denominatorArr, numeratorArr, allDatesArr, countType, denomDateDelayInteger) => {
+  let outputPercentArr = []
+  for (let totalObj of denominatorArr) {
+    let newObj = {state_id: totalObj.state_id,  count_type: countType}
+    let tempObj = numeratorArr.find( obj => obj.state_id === totalObj.state_id)
+    let tempTotal = denominatorArr.find( obj => obj.state_id === totalObj.state_id)
+    for (let day of allDatesArr) {
+      // debugger
+      let dayIndex = allDatesArr.indexOf(day)
+      let numeratorDay = day
+      let denominatorDay = allDatesArr[dayIndex - denomDateDelayInteger]
+      debugger
+
+      if (!tempObj[numeratorDay] || !tempTotal[denominatorDay] || !denominatorDay) { // this IF ensure neither Num or Denom are undefined
+        newObj[day] = 0
+      } else {
+        newObj[day] = parseFloat((( tempObj[numeratorDay] * 100) / tempTotal[denominatorDay]).toFixed(1))
+      }
+    } // ends FOR OF allDatesArr loop
+    outputPercentArr.push(newObj)
+  } // ends FOR OF denominatorArrArr loop
+
+  
+  // let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
+  // let tempTestsTaken
+  // let tempPosResults
+  // ("Building US Percentages")
+  // for (let day of allDatesArr) {
+  //   tempPosResults = numeratorArr.reduce( 
+  //       function(prev, curr) {
+  //         return prev + curr[day]
+  //       }, 
+  //       0)
+  //       tempTestsTaken = denominatorArr.reduce( 
+  //         function(prev, curr) {
+  //           return prev + curr[day]
+  //         }, 
+  //     0)
+  //     usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
+  //   } // ends FOR OF Loop
+    let posPercentWithUS = [...outputPercentArr]
+    posPercentWithUS.unshift(aggregateForPosPercentages(allDatesArr, numeratorArr, denominatorArr))
+    return [posPercentWithUS]
+  } // ends buildPercentageArrays function
+
+  const buildHospitalPercentageArrays = (newTotal, newPositive, allDatesArr, arrOfMultiSelectedStateIDs) => {
   let newPositivePercentArr = []
   for (let totalObj of newTotal) {
     let newPosObj = {state_id: totalObj.state_id,  count_type: "new-positivePercent"}
@@ -136,9 +181,7 @@ const abbreviateLargeNumbers = (value, decimals ) => {
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-function numberStringWithCommas(x) {
-  return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+
 
 
 export { 
