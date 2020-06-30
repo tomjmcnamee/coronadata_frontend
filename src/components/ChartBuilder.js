@@ -553,7 +553,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
             <>
                 {dateRangePicker()}
                 <h5>Select States or Group to Include In Chart</h5>
-                {/* <pre>{JSON.stringify(this.props.multiSelectedStatesIdsArr.map(obj => obj.stateabbreviation))}</pre> */}
                 <MultiSelect
                   options={dropdownOptionsForStates}
                   value={this.props.multiSelectedStatesIdsArr}
@@ -564,7 +563,6 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                     "selectSomeItems": "Select States",
                     "allItemsAreSelected": "All States Selected",
                     "selectAll": "Select/Clear All",
-                    "search": "Search"
                   }}
                   disableSearch
                 />
@@ -575,7 +573,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                   labelledBy={"Select"}
                   hasSelectAll={false}
                   overrideStrings={{ 
-                    "selectSomeItems": "State Groups",
+                    "selectSomeItems": "State Groups"
                   }}
                   disableSearch
                 />
