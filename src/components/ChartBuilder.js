@@ -1,13 +1,13 @@
-import React, { useState }   from 'react'
+import React from 'react'
 import { DateRangePicker } from 'rsuite'
 import { connect } from 'react-redux'
 // import  MultiSelectDropdown  from './MultiSelectDropdown'
-import { Form, Col, Container, Row} from 'react-bootstrap'
+// import { Form, Col, Container, Row} from 'react-bootstrap'
 
 import { setMultiSelectedStates, setStateGroupSelections } from '../actions'
 import { aggregateForPosPercentages, averageCalcultorExtractBuildInject, abbreviateLargeNumbers } from '../HelperFunctions/mathFunctions'
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine, LegendPayload
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend
 } from 'recharts';
 
 import { getMonthDayFromYYYYMMDD, 

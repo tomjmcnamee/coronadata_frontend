@@ -136,6 +136,7 @@ const abbreviateLargeNumbers = (value, decimals ) => {
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
 function numberStringWithCommas(x) {
   return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -146,5 +147,6 @@ export {
   aggregateForPosPercentages,
   sevenDayAverageCalculator,
   averageCalcultorExtractBuildInject,
-  abbreviateLargeNumbers
+  abbreviateLargeNumbers,
+  numberStringWithCommas
 }

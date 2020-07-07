@@ -1,4 +1,4 @@
-import { mapStateIdToStateName } from './mappingIDtoSomething' 
+// import { mapStateIdToStateName } from './mappingIDtoSomething' 
  
  
  const tableDescription = (newOrTotal, selectedStatType, displayType) => {
