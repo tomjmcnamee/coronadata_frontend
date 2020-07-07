@@ -1,6 +1,7 @@
 import React from 'react';
 import GridBuilder from './components/GridBuilder'
 import ChartBuilder from './components/ChartBuilder'
+import DataNotes from './components/DataNotes'
 import 'rsuite/dist/styles/rsuite-default.css';
 import { Form, Col, Container, Row} from 'react-bootstrap'
 // import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
@@ -34,10 +35,13 @@ class App extends React.Component {
     this.props.fetchAllStatesData("37")
   }
   
-  percentageLogicHandler = (event) => {
+  percentageLogicHandler = (event) => { // This ensures the selectedStateType gets auto-deselected when newOrTotal === Total
     // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
     if (this.props.newOrTotal === "new" && this.props.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
         this.props.setSelectedStatType("Positive")
+    }
+    if (this.props.newOrTotal === "new" && this.props.selectedStatType === "HospitalizedPercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
+        this.props.setSelectedStatType("Hospitalized")
     }
   }
    
@@ -157,6 +161,7 @@ class App extends React.Component {
                         {/* {this.props.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null } */}
                         <option value="Total">Total Tested</option>
                         <option value="Hospitalized">Total Hospitalized</option>
+                        {this.props.newOrTotal === "new" ? <option value="HospitalizedPercent">Hospitalized Percentage</option> : null }
                         <option value="Death">Corona Deaths</option>
                       </Form.Control>
                     :
@@ -247,13 +252,27 @@ class App extends React.Component {
               }
               {this.props.includeGridLines.includeHospitalized
               ?
-                <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalized" onClick={this.formToggleHandler} active >
+              <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalized" onClick={this.formToggleHandler} active >
                   Hospitalized
               </Button>
               :
-                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeHospitalized"  onClick={this.formToggleHandler}>
+              <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeHospitalized"  onClick={this.formToggleHandler}>
                   Hospitalized
               </Button>
+              }
+              { this.props.newOrTotal === "total" 
+              ?
+                null  // this hides the option to show Pos% on line graph if viewing TOTAL (instead of NEW)
+              :
+              this.props.includeGridLines.includeHospitalizedPercent
+              ?
+                <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalizedPercent" onClick={this.formToggleHandler} active >
+                  Hospitalized Percentage
+                </Button>
+              :
+                <Button className="typebutton"  color="green" appearance="ghost" size="sm" name="includeHospitalizedPercent"  onClick={this.formToggleHandler}>
+                  Hospitalized Percentage
+                </Button>
               }
               {this.props.includeGridLines.includeDeaths
               ?
@@ -314,6 +333,7 @@ class App extends React.Component {
           </Row>
         </Container>
         <p>Updated once daily ~5:30pm Eastern. Data pulled from <a target="_blank" href="https://covidtracking.com/" rel="noopener noreferrer" >CovidTracking.com</a> (for more info, see <a target="_blank" href="https://talkingpointsmemo.com/edblog/key-source-of-covid-19-testing-infection-data"  rel="noopener noreferrer" >this article</a>).</p>
+        {/* <DataNotes /> */}
         {process.env.REACT_APP_VIEW_TRACKER === "true"
         ?
           <>
@@ -367,6 +387,7 @@ function msp(state) {
     totalDeath: state.totalDeath,
     totalTotal: state.totalTotal,
     totalHospitalized: state.totalHospitalized,
+    newHospitalizedPercent: state.newHospitalizedPercent,
   }
 }
 

@@ -10,6 +10,7 @@ let defaultState = {
   newDeath: [],
   newTotal: [],
   newHospitalized: [],
+  newHospitalizedPercent: [],
   totalPositive: [],
   totalNegative: [],
   totalDeath: [],
@@ -29,6 +30,7 @@ let defaultState = {
     includeHospitalized: false,
     includeDeaths: false,
     includePositivePercent: false,
+    includeHospitalizedPercent: false
   }
 }
 
@@ -151,6 +153,15 @@ function newPositivePercentReducer(state = defaultState.newPositivePercent, acti
   }
 }
 
+function newHospitalizedPercentReducer(state = defaultState.newHospitalizedPercent, action) {
+  switch (action.type) {
+      case "SET NEW HOSPITALIZED PERCENT":
+          return action.payload
+      default:
+          return state
+  }
+}
+
 function stayAtHomeOrdersReducer(state = defaultState.stayAtHomeOrders, action) {
   switch (action.type) {
       case "SET STAY AT HOME ORDERS":
@@ -265,8 +276,8 @@ let reducer = combineReducers({
   newOrTotal: newOrTotalReducer,
   includeGridLines: includeGridLinesReducer,
   multiSelectedStatesIdsArr: multiSelectedStatesIdsArrReducer,
-  singleSelectStateGroupArr: singleSelectStateGroupArrReducer
-
+  singleSelectStateGroupArr: singleSelectStateGroupArrReducer,
+  newHospitalizedPercent: newHospitalizedPercentReducer
 })
 
 export default reducer

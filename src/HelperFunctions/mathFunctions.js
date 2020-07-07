@@ -5,11 +5,14 @@ const buildPercentageArrays = (denominatorArr, numeratorArr, allDatesArr, countT
     let tempObj = numeratorArr.find( obj => obj.state_id === totalObj.state_id)
     let tempTotal = denominatorArr.find( obj => obj.state_id === totalObj.state_id)
     for (let day of allDatesArr) {
-      // debugger
+      // if (countType === "new-hospitalizedPercent") {
+
+      //   debugger
+      // }
       let dayIndex = allDatesArr.indexOf(day)
       let numeratorDay = day
-      let denominatorDay = allDatesArr[dayIndex - denomDateDelayInteger]
-      debugger
+      let denominatorDay = allDatesArr[dayIndex + denomDateDelayInteger]
+      // debugger
 
       if (!tempObj[numeratorDay] || !tempTotal[denominatorDay] || !denominatorDay) { // this IF ensure neither Num or Denom are undefined
         newObj[day] = 0
@@ -18,100 +21,86 @@ const buildPercentageArrays = (denominatorArr, numeratorArr, allDatesArr, countT
       }
     } // ends FOR OF allDatesArr loop
     outputPercentArr.push(newObj)
+
   } // ends FOR OF denominatorArrArr loop
 
   
-  // let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
-  // let tempTestsTaken
-  // let tempPosResults
+  let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
+  let tempTestsTaken
+  let tempPosResults
   // ("Building US Percentages")
-  // for (let day of allDatesArr) {
-  //   tempPosResults = numeratorArr.reduce( 
-  //       function(prev, curr) {
-  //         return prev + curr[day]
-  //       }, 
-  //       0)
-  //       tempTestsTaken = denominatorArr.reduce( 
-  //         function(prev, curr) {
-  //           return prev + curr[day]
-  //         }, 
-  //     0)
-  //     usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
-  //   } // ends FOR OF Loop
-    let posPercentWithUS = [...outputPercentArr]
-    posPercentWithUS.unshift(aggregateForPosPercentages(allDatesArr, numeratorArr, denominatorArr))
-    return [posPercentWithUS]
+  for (let day of allDatesArr) {
+    tempPosResults = numeratorArr.reduce( 
+        function(prev, curr) {
+          return prev + curr[day]
+        }, 
+        0)
+        tempTestsTaken = denominatorArr.reduce( 
+          function(prev, curr) {
+            return prev + curr[day]
+          }, 
+      0)
+      usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
+    } // ends FOR OF Loop
+    // debugger 
+    let outputPercentArrWithUS = [...outputPercentArr]
+    outputPercentArrWithUS.unshift(aggregateForMultiStateChartPercentages(allDatesArr, numeratorArr, denominatorArr))
+    // outputPercentArrWithUS.unshift(usPosPercentages)  // THIS WORKS FOR THE GRID PERCENTAGES
+    return [outputPercentArrWithUS]
   } // ends buildPercentageArrays function
 
-  const buildHospitalPercentageArrays = (newTotal, newPositive, allDatesArr, arrOfMultiSelectedStateIDs) => {
-  let newPositivePercentArr = []
-  for (let totalObj of newTotal) {
-    let newPosObj = {state_id: totalObj.state_id,  count_type: "new-positivePercent"}
-    let tempPosObj = newPositive.find( obj => obj.state_id === totalObj.state_id)
-    let tempTotal = newTotal.find( obj => obj.state_id === totalObj.state_id)
-    for (let day of allDatesArr) {
-      if (!tempPosObj[day] || !tempTotal[day]) {
-        newPosObj[day] = 0
-        } else {
-        newPosObj[day] = parseFloat((( tempPosObj[day] * 100) / tempTotal[day]).toFixed(1))
-      }
-    } // ends FOR OF allDatesArr loop
-    newPositivePercentArr.push(newPosObj)
-  } // ends FOR OF newTotalArr loop
-
-  
-  // let usPosPercentages = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
-  // let tempTestsTaken
-  // let tempPosResults
-  // ("Building US Percentages")
-  // for (let day of allDatesArr) {
-  //   tempPosResults = newPositive.reduce( 
-  //       function(prev, curr) {
-  //         return prev + curr[day]
-  //       }, 
-  //       0)
-  //       tempTestsTaken = newTotal.reduce( 
-  //         function(prev, curr) {
-  //           return prev + curr[day]
-  //         }, 
-  //     0)
-  //     usPosPercentages[day] = ((tempPosResults * 100)/tempTestsTaken).toFixed(1)
-  //   } // ends FOR OF Loop
-    let posPercentWithUS = [...newPositivePercentArr]
-    posPercentWithUS.unshift(aggregateForPosPercentages(allDatesArr, newPositive, newTotal))
-    return [posPercentWithUS]
-  } // ends buildPercentageArrays function
   
   // This calculates ALL or SELECTED state's data for pos %
-const aggregateForPosPercentages = (allDatesArr, newPositive, newTotal, arrOfSelectedStateObjs) => {
+const aggregateForMultiStateChartPercentages = (allDatesArr, numeratorArr, denominatorArr, arrOfSelectedStateObjs, countType) => {
+  debugger
   let aggPosPercentagesObj
   if (arrOfSelectedStateObjs) {
 
     let arrOfSelectedStateIDs = arrOfSelectedStateObjs.map(obj => obj.value)
-    newPositive = newPositive.filter(({ state_id }) =>  arrOfSelectedStateIDs.includes(state_id))
-    newTotal = newTotal.filter(({ state_id }) =>  arrOfSelectedStateIDs.includes(state_id))
-    aggPosPercentagesObj = {state_id: 100, state_name: "MultiSelected States", count_type: "new-positivePercent"}
+    numeratorArr = numeratorArr.filter(({ state_id }) =>  arrOfSelectedStateIDs.includes(state_id))
+    denominatorArr = denominatorArr.filter(({ state_id }) =>  arrOfSelectedStateIDs.includes(state_id))
+    aggPosPercentagesObj = {state_id: 100, state_name: "MultiSelected States", count_type: countType}
   } else {
-    aggPosPercentagesObj = {state_id: 99, state_name: "US Totals", count_type: "new-positivePercent"}
+    aggPosPercentagesObj = {state_id: 99, state_name: "US Totals", count_type: countType}
   }
+
+
+  
+  
+  let tempNumerator
+  let tempDenominator
+  let indexCount = (numeratorArr.length - 1)
+  let filteredDenominatorArr = []
+  for (let day of allDatesArr) {
+  
+    // This group only counts Positive Results for the states posting a Hospitalized number on the same day
+     if (numeratorArr[0].count_type = "new-hospitalized" ) {
+       let index = 0
+       for ( let stateObj of denominatorArr) {
+         if (!numeratorArr[index][day]) {
+          // debugger
+            filteredDenominatorArr.splice(index,1)
+          }
+        index++
+       }
+     } else if (numeratorArr[0].count_type = "new-positive" ) {
+      filteredDenominatorArr = denominatorArr
+     }
+console.log("[DAY] --filteredDenominatorArr ---------- ", day, filteredDenominatorArr  )
     
-  let tempTestsTaken
-    let tempPosResults
-    for (let day of allDatesArr) {
-      tempPosResults = newPositive.reduce( 
-        function(prev, curr) {
-          return prev + curr[day]
-        }, 
-      0)
-      tempTestsTaken = newTotal.reduce( 
-        function(prev, curr) {
-          return prev + curr[day]
-        }, 
-      0)
-      aggPosPercentagesObj[day] = parseFloat(((tempPosResults * 100)/tempTestsTaken).toFixed(2))
-    } // ends FOR OF Loop
-    return aggPosPercentagesObj
-} /// ends aggregateForPosPercentages function
+    tempNumerator = numeratorArr.reduce( 
+      function(prev, curr) {
+        return prev + curr[day]
+      }, 
+    0)
+    tempDenominator = filteredDenominatorArr.reduce( 
+      function(prev, curr) {
+        return prev + curr[day]
+      }, 0)
+    aggPosPercentagesObj[day] = parseFloat(((tempNumerator * 100)/tempDenominator).toFixed(2))
+  } // ends FOR OF Loop
+  return aggPosPercentagesObj
+} /// ends aggregateForMultiStateChartPercentages function
 
 
 const sevenDayAverageCalculator = (inputObj, outputObj, datesArr) => {
@@ -134,19 +123,25 @@ const posPercentageSevenDayAverageCalculator = (totalArr, posArr, outputObj, dat
 }
 
 const averageCalcultorExtractBuildInject = (multiStateChartDataSet) => {  
-  for (let dataSetObj of multiStateChartDataSet) {
-    
+  for (let dataSetObj of multiStateChartDataSet) {    
     let tempAveragesArr = []
     let tempAveragesObj = {}
     let dates = Object.keys(dataSetObj).filter( k => k.startsWith("202"))
     let tempCountType = dataSetObj["count_type"]
     tempAveragesObj["count_type"] = tempCountType + "-avg"
-    if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type !== "new-positivePercent") {
+    if ( Object.keys(dataSetObj).length > 0 && (dataSetObj.count_type !== "new-positivePercent" && dataSetObj.count_type !== "new-hospitalizedPercent" ) ) {
       sevenDayAverageCalculator(dataSetObj, tempAveragesObj, dates)
-    } else if ( Object.keys(dataSetObj).length > 0 && dataSetObj.count_type === "new-positivePercent") {
-      let tempTotalTestsArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-total")
-      let tempPosTestsArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-positive")
-      posPercentageSevenDayAverageCalculator(tempTotalTestsArray, tempPosTestsArray, tempAveragesObj, dates)
+    } else if ( Object.keys(dataSetObj).length > 0 && (dataSetObj.count_type === "new-positivePercent" || dataSetObj.count_type === "new-hospitalizedPercent") ) {
+      let tempNumeratorArray
+      let tempDenominatorArray
+      if (dataSetObj.count_type === "new-positivePercent" ) {
+        tempNumeratorArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-positive")
+        tempDenominatorArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-total")
+      } else if (dataSetObj.count_type === "new-hospitalizedPercent" ) {
+        tempNumeratorArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-hospitalized")
+        tempDenominatorArray = multiStateChartDataSet.find(obj => obj["count_type"] === "new-positive")
+      }
+      posPercentageSevenDayAverageCalculator(tempDenominatorArray, tempNumeratorArray, tempAveragesObj, dates)
     }
     tempAveragesArr.push(tempAveragesObj)
     multiStateChartDataSet = [ ...multiStateChartDataSet, ...tempAveragesArr]
@@ -156,7 +151,7 @@ const averageCalcultorExtractBuildInject = (multiStateChartDataSet) => {
 
 
 const abbreviateLargeNumbers = (value, decimals ) => {
-  if (!value) {return 0} else {
+  if (!value) {return null} else {
     let stringVal = value.toString() || "0"
     let length = stringVal.length
     if (length > 5) {
@@ -186,7 +181,7 @@ function numberWithCommas(x) {
 
 export { 
   buildPercentageArrays,
-  aggregateForPosPercentages,
+  aggregateForMultiStateChartPercentages,
   sevenDayAverageCalculator,
   averageCalcultorExtractBuildInject,
   abbreviateLargeNumbers

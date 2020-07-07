@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Form, Col, Container, Row} from 'react-bootstrap'
 
 import { setMultiSelectedStates, setStateGroupSelections } from '../actions'
-import { aggregateForPosPercentages, averageCalcultorExtractBuildInject, abbreviateLargeNumbers } from '../HelperFunctions/mathFunctions'
+import { aggregateForMultiStateChartPercentages, averageCalcultorExtractBuildInject, abbreviateLargeNumbers } from '../HelperFunctions/mathFunctions'
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ReferenceLine, LegendPayload
 } from 'recharts';
@@ -32,7 +32,8 @@ class ChartBuilder extends React.Component {
       positive: "#12F315",
       tested: "#1973E5",
       negative: "#F39C12",
-      positivePercent: "grey"
+      positivePercent: "grey",
+      hospitalizedPercent: "#B912F3"
     }
   };
 
@@ -142,7 +143,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
         }
         //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
         if (this.props.newOrTotal === "new") {
-          output.push(aggregateForPosPercentages(this.props.staticDatesArr, this.props.newPositive, this.props.newTotal, this.props.multiSelectedStatesIdsArr))
+          output.push(aggregateForMultiStateChartPercentages(this.props.staticDatesArr, this.props.newPositive, this.props.newTotal, this.props.multiSelectedStatesIdsArr, "new-positivePercent"))
+          output.push(aggregateForMultiStateChartPercentages(this.props.staticDatesArr, this.props.newHospitalized, this.props.newPositive, this.props.multiSelectedStatesIdsArr, "new-hospitalizedPercent"))
         }
         
         return output
@@ -349,6 +351,30 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           dataKey:"Positive %",
           strokeWidth:3,
           stroke:this.state.colors.positivePercent,
+          xAxisId:0,
+          yAxisId:0,
+          connectNulls:false,
+          activeDot:true,
+          legendType:"line",
+          fill:"#fff",
+          points:[],
+          isAnimationActive:true,
+          animateNewValues:true,
+          animationBegin:0,
+          animationDuration:1500,
+          animationEasing:"ease",
+          hide:false
+        }
+      },
+      { color:this.state.colors.hospitalizedPercent,
+        dataKey:"Hospitalized %",
+        inactive:false,
+        type: this.props.newOrTotal === "new" ? this.props.includeGridLines.includeHospitalizedPercent ? "plainline" : "none" : "none",
+        value:"Hospitalized %",
+        payload:{dot:false,
+          dataKey:"Hospitalized %",
+          strokeWidth:3,
+          stroke:this.state.colors.hospitalizedPercent,
           xAxisId:0,
           yAxisId:0,
           connectNulls:false,
@@ -610,6 +636,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               { this.props.includeGridLines.includeDeaths ? <Line animationDuration={400} dot={false} type="monotone"  dataKey="Deaths-avg" strokeWidth={3} stroke={this.state.colors.death}   strokeDasharray="3 3" /> : null}
               { this.props.includeGridLines.includePositivePercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} yAxisId="right" dot={false} type="monotone"  dataKey="Positive %" strokeWidth={2} stroke={this.state.colors.positivePercent}    /> : null : null}
               { this.props.includeGridLines.includePositivePercent ? <Line animationDuration={400} yAxisId="right"  dot={false} type="monotone"  dataKey="PositivePercent-avg" strokeWidth={3} stroke={this.state.colors.positivePercent}   strokeDasharray="3 3" /> : null}
+              { this.props.includeGridLines.includeHospitalizedPercent ? (!!multiStateChartDataSet && multiStateChartDataSet[0]["count_type"].startsWith("new")) ? <Line animationDuration={400} yAxisId="right" dot={false} type="monotone"  dataKey="Hospitalized %" strokeWidth={2} stroke={this.state.colors.hospitalizedPercent}    /> : null : null}
+              { this.props.includeGridLines.includeHospitalizedPercent ? <Line animationDuration={400} yAxisId="right"  dot={false} type="monotone"  dataKey="HospitalizedPercent-avg" strokeWidth={3} stroke={this.state.colors.hospitalizedPercent}   strokeDasharray="3 3" /> : null}
               
               
 
@@ -726,6 +754,7 @@ function msp(state) {
     newDeath: state.newDeath,
     newTotal: state.newTotal,
     newHospitalized: state.newHospitalized,
+    newHospitalizedPercent: state.newHospitalizedPercent,
     totalPositive: state.totalPositive,
     totalNegative: state.totalNegative,
     totalDeath: state.totalDeath,
