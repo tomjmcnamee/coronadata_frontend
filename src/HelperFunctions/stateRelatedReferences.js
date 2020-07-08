@@ -65,18 +65,18 @@ const returnGroupedStateStatesDropdownObjects = (label) => {
     case "GOVERNOR - Dem": return [{value: 5, label: "California", stateabbreviation: "CA"},{value: 6, label: "Colorado", stateabbreviation: "CO"},{value: 7, label: "Connecticut", stateabbreviation: "CT"},{value: 8, label: "Delaware", stateabbreviation: "DE"},{value: 11, label: "Hawaii", stateabbreviation: "HI"},{value: 13, label: "Illinois", stateabbreviation: "IL"},{value: 16, label: "Kansas", stateabbreviation: "KS"},{value: 17, label: "Kentucky", stateabbreviation: "KY"},{value: 18, label: "Louisiana", stateabbreviation: "LA"},{value: 19, label: "Maine", stateabbreviation: "ME"},{value: 22, label: "Michigan", stateabbreviation: "MI"},{value: 23, label: "Minnesota", stateabbreviation: "MN"},{value: 26, label: "Montana", stateabbreviation: "MT"},{value: 28, label: "Nevada", stateabbreviation: "NV"},{value: 30, label: "New Jersey", stateabbreviation: "NJ"},{value: 31, label: "New Mexico", stateabbreviation: "NM"},{value: 32, label: "New York", stateabbreviation: "NY"},{value: 33, label: "North Carolina", stateabbreviation: "NC"},{value: 37, label: "Oregon", stateabbreviation: "OR"},{value: 38, label: "Pennsylvania", stateabbreviation: "PA"},{value: 39, label: "Rhode Island", stateabbreviation: "RI"},{value: 46, label: "Virginia", stateabbreviation: "VA"},{value: 47, label: "Washington", stateabbreviation: "WA"},{value: 50, label: "Wisconsin", stateabbreviation: "WI"}]
     case "GOVERNOR - Rep": return [{value: 1, label: "Alabama", stateabbreviation: "AL"},{value: 2, label: "Alaska", stateabbreviation: "AK"},{value: 3, label: "Arizona", stateabbreviation: "AZ"},{value: 4, label: "Arkansas", stateabbreviation: "AR"}, {value: 9, label: "Florida", stateabbreviation: "FL"}, {value: 10, label: "Georgia", stateabbreviation: "GA"},{value: 12, label: "Idaho", stateabbreviation: "ID"},{value: 14, label: "Indiana", stateabbreviation: "IN"},{value: 15, label: "Iowa", stateabbreviation: "IA"},{value: 20, label: "Maryland", stateabbreviation: "MD"},{value: 21, label: "Massachusetts", stateabbreviation: "MA"},{value: 24, label: "Mississippi", stateabbreviation: "MS"},{value: 25, label: "Missouri", stateabbreviation: "MO"},{value: 27, label: "Nebraska", stateabbreviation: "NE"},{value: 29, label: "New Hampshire", stateabbreviation: "NH"},{value: 34, label: "North Dakota", stateabbreviation: "ND"},{value: 35, label: "Ohio", stateabbreviation: "OH"},{value: 36, label: "Oklahoma", stateabbreviation: "OK"},{value: 40, label: "South Carolina", stateabbreviation: "SC"},{value: 41, label: "South Dakota", stateabbreviation: "SD"},{value: 42, label: "Tennessee", stateabbreviation: "TN"},{value: 43, label: "Texas", stateabbreviation: "TX"},{value: 44, label: "Utah", stateabbreviation: "UT"},{value: 45, label: "Vermont", stateabbreviation: "VT"},{value: 49, label: "West Virginia", stateabbreviation: "WV"},{value: 51, label: "Wyoming", stateabbreviation: "WY"}]
     case "REGION - NorthEast": return [{value: 7, label: "Connecticut", stateabbreviation: "CT"},{value: 19, label: "Maine", stateabbreviation: "ME"},{value: 21, label: "Massachusetts", stateabbreviation: "MA"}, {value: 29, label: "New Hampshire", stateabbreviation: "NH"},{value: 39, label: "Rhode Island", stateabbreviation: "RI"},{value: 45, label: "Vermont", stateabbreviation: "VT"},{value: 30, label: "New Jersey", stateabbreviation: "NJ"},{value: 32, label: "New York", stateabbreviation: "NY"},{value: 38, label: "Pennsylvania", stateabbreviation: "PA"}]
-    case "DIV - New England": return [{value: 7, label: "Connecticut", stateabbreviation: "CT"},{value: 19, label: "Maine", stateabbreviation: "ME"},{value: 21, label: "Massachusetts", stateabbreviation: "MA"}, {value: 29, label: "New Hampshire", stateabbreviation: "NH"},{value: 39, label: "Rhode Island", stateabbreviation: "RI"},{value: 45, label: "Vermont", stateabbreviation: "VT"}]
-    case "DIV - Mid-Atlantic": return [{value: 30, label: "New Jersey", stateabbreviation: "NJ"},{value: 32, label: "New York", stateabbreviation: "NY"},{value: 38, label: "Pennsylvania", stateabbreviation: "PA"}]
+    case ".    DIV - New England": return [{value: 7, label: "Connecticut", stateabbreviation: "CT"},{value: 19, label: "Maine", stateabbreviation: "ME"},{value: 21, label: "Massachusetts", stateabbreviation: "MA"}, {value: 29, label: "New Hampshire", stateabbreviation: "NH"},{value: 39, label: "Rhode Island", stateabbreviation: "RI"},{value: 45, label: "Vermont", stateabbreviation: "VT"}]
+    case ".    DIV - Mid-Atlantic": return [{value: 30, label: "New Jersey", stateabbreviation: "NJ"},{value: 32, label: "New York", stateabbreviation: "NY"},{value: 38, label: "Pennsylvania", stateabbreviation: "PA"}]
     case "REGION - Midwest": return [{value: 13, label: "Illinois", stateabbreviation: "IL"},{value: 14, label: "Indiana", stateabbreviation: "IN"},{value: 22, label: "Michigan", stateabbreviation: "MI"},{value: 35, label: "Ohio", stateabbreviation: "OH"},{value: 50, label: "Wisconsin", stateabbreviation: "WI"},{value: 15, label: "Iowa", stateabbreviation: "IA"},{value: 16, label: "Kansas", stateabbreviation: "KS"},{value: 23, label: "Minnesota", stateabbreviation: "MN"},{value: 25, label: "Missouri", stateabbreviation: "MO"},{value: 27, label: "Nebraska", stateabbreviation: "NE"},{value: 34, label: "North Dakota", stateabbreviation: "ND"},{value: 41, label: "South Dakota", stateabbreviation: "SD"}]
-    case "DIV - E.N. Central": return [{value: 13, label: "Illinois", stateabbreviation: "IL"},{value: 14, label: "Indiana", stateabbreviation: "IN"},{value: 22, label: "Michigan", stateabbreviation: "MI"},{value: 35, label: "Ohio", stateabbreviation: "OH"},{value: 50, label: "Wisconsin", stateabbreviation: "WI"}]
-    case "DIV - W.N. Central": return [{value: 15, label: "Iowa", stateabbreviation: "IA"},{value: 16, label: "Kansas", stateabbreviation: "KS"},{value: 23, label: "Minnesota", stateabbreviation: "MN"},{value: 25, label: "Missouri", stateabbreviation: "MO"},{value: 27, label: "Nebraska", stateabbreviation: "NE"},{value: 34, label: "North Dakota", stateabbreviation: "ND"},{value: 41, label: "South Dakota", stateabbreviation: "SD"}]
+    case ".    DIV - E.N. Central": return [{value: 13, label: "Illinois", stateabbreviation: "IL"},{value: 14, label: "Indiana", stateabbreviation: "IN"},{value: 22, label: "Michigan", stateabbreviation: "MI"},{value: 35, label: "Ohio", stateabbreviation: "OH"},{value: 50, label: "Wisconsin", stateabbreviation: "WI"}]
+    case ".    DIV - W.N. Central": return [{value: 15, label: "Iowa", stateabbreviation: "IA"},{value: 16, label: "Kansas", stateabbreviation: "KS"},{value: 23, label: "Minnesota", stateabbreviation: "MN"},{value: 25, label: "Missouri", stateabbreviation: "MO"},{value: 27, label: "Nebraska", stateabbreviation: "NE"},{value: 34, label: "North Dakota", stateabbreviation: "ND"},{value: 41, label: "South Dakota", stateabbreviation: "SD"}]
     case "REGION - South": return [{value: 8, label: "Delaware", stateabbreviation: "DE"},{value: 9, label: "Florida", stateabbreviation: "FL"},{value: 10, label: "Georgia", stateabbreviation: "GA"},{value: 20, label: "Maryland", stateabbreviation: "MD"},{value: 33, label: "North Carolina", stateabbreviation: "NC"},{value: 40, label: "South Carolina", stateabbreviation: "SC"},{value: 46, label: "Virginia", stateabbreviation: "VA"},{value: 48, label: "Washington DC", stateabbreviation: "DC"},{value: 49, label: "West Virginia", stateabbreviation: "WV"},{value: 1, label: "Alabama", stateabbreviation: "AL"},{value: 17, label: "Kentucky", stateabbreviation: "KY"},{value: 24, label: "Mississippi", stateabbreviation: "MS"},{value: 42, label: "Tennessee", stateabbreviation: "TN"},{value: 4, label: "Arkansas", stateabbreviation: "AR"},{value: 18, label: "Louisiana", stateabbreviation: "LA"},{value: 36, label: "Oklahoma", stateabbreviation: "OK"},{value: 43, label: "Texas", stateabbreviation: "TX"}]
-    case "DIV - S. Atlantic": return [{value: 8, label: "Delaware", stateabbreviation: "DE"},{value: 9, label: "Florida", stateabbreviation: "FL"},{value: 10, label: "Georgia", stateabbreviation: "GA"},{value: 20, label: "Maryland", stateabbreviation: "MD"},{value: 33, label: "North Carolina", stateabbreviation: "NC"},{value: 40, label: "South Carolina", stateabbreviation: "SC"},{value: 46, label: "Virginia", stateabbreviation: "VA"},{value: 48, label: "Washington DC", stateabbreviation: "DC"},{value: 49, label: "West Virginia", stateabbreviation: "WV"}]
-    case "DIV - E.S. Central": return [{value: 1, label: "Alabama", stateabbreviation: "AL"},{value: 17, label: "Kentucky", stateabbreviation: "KY"},{value: 24, label: "Mississippi", stateabbreviation: "MS"},{value: 42, label: "Tennessee", stateabbreviation: "TN"}]
-    case "DIV - W.S. Central": return [{value: 4, label: "Arkansas", stateabbreviation: "AR"},{value: 18, label: "Louisiana", stateabbreviation: "LA"},{value: 36, label: "Oklahoma", stateabbreviation: "OK"},{value: 43, label: "Texas", stateabbreviation: "TX"}]
+    case ".    DIV - S. Atlantic": return [{value: 8, label: "Delaware", stateabbreviation: "DE"},{value: 9, label: "Florida", stateabbreviation: "FL"},{value: 10, label: "Georgia", stateabbreviation: "GA"},{value: 20, label: "Maryland", stateabbreviation: "MD"},{value: 33, label: "North Carolina", stateabbreviation: "NC"},{value: 40, label: "South Carolina", stateabbreviation: "SC"},{value: 46, label: "Virginia", stateabbreviation: "VA"},{value: 48, label: "Washington DC", stateabbreviation: "DC"},{value: 49, label: "West Virginia", stateabbreviation: "WV"}]
+    case ".    DIV - E.S. Central": return [{value: 1, label: "Alabama", stateabbreviation: "AL"},{value: 17, label: "Kentucky", stateabbreviation: "KY"},{value: 24, label: "Mississippi", stateabbreviation: "MS"},{value: 42, label: "Tennessee", stateabbreviation: "TN"}]
+    case ".    DIV - W.S. Central": return [{value: 4, label: "Arkansas", stateabbreviation: "AR"},{value: 18, label: "Louisiana", stateabbreviation: "LA"},{value: 36, label: "Oklahoma", stateabbreviation: "OK"},{value: 43, label: "Texas", stateabbreviation: "TX"}]
     case "REGION - West": return [{value: 3, label: "Arizona", stateabbreviation: "AZ"},{value: 6, label: "Colorado", stateabbreviation: "CO"},{value: 12, label: "Idaho", stateabbreviation: "ID"},{value: 26, label: "Montana", stateabbreviation: "MT"},{value: 28, label: "Nevada", stateabbreviation: "NV"},{value: 31, label: "New Mexico", stateabbreviation: "NM"},{value: 44, label: "Utah", stateabbreviation: "UT"},{value: 51, label: "Wyoming", stateabbreviation: "WY"},{value: 2, label: "Alaska", stateabbreviation: "AK"},{value: 5, label: "California", stateabbreviation: "CA"},{value: 11, label: "Hawaii", stateabbreviation: "HI"},{value: 37, label: "Oregon", stateabbreviation: "OR"},{value: 47, label: "Washington", stateabbreviation: "WA"}]
-    case "DIV - Mountain": return [{value: 3, label: "Arizona", stateabbreviation: "AZ"},{value: 6, label: "Colorado", stateabbreviation: "CO"},{value: 12, label: "Idaho", stateabbreviation: "ID"},{value: 26, label: "Montana", stateabbreviation: "MT"},{value: 28, label: "Nevada", stateabbreviation: "NV"},{value: 31, label: "New Mexico", stateabbreviation: "NM"},{value: 44, label: "Utah", stateabbreviation: "UT"},{value: 51, label: "Wyoming", stateabbreviation: "WY"}]
-    case "DIV - Pacific": return [{value: 2, label: "Alaska", stateabbreviation: "AK"},{value: 5, label: "California", stateabbreviation: "CA"},{value: 11, label: "Hawaii", stateabbreviation: "HI"},{value: 37, label: "Oregon", stateabbreviation: "OR"},{value: 47, label: "Washington", stateabbreviation: "WA"}]
+    case ".    DIV - Mountain": return [{value: 3, label: "Arizona", stateabbreviation: "AZ"},{value: 6, label: "Colorado", stateabbreviation: "CO"},{value: 12, label: "Idaho", stateabbreviation: "ID"},{value: 26, label: "Montana", stateabbreviation: "MT"},{value: 28, label: "Nevada", stateabbreviation: "NV"},{value: 31, label: "New Mexico", stateabbreviation: "NM"},{value: 44, label: "Utah", stateabbreviation: "UT"},{value: 51, label: "Wyoming", stateabbreviation: "WY"}]
+    case ".    DIV - Pacific": return [{value: 2, label: "Alaska", stateabbreviation: "AK"},{value: 5, label: "California", stateabbreviation: "CA"},{value: 11, label: "Hawaii", stateabbreviation: "HI"},{value: 37, label: "Oregon", stateabbreviation: "OR"},{value: 47, label: "Washington", stateabbreviation: "WA"}]
     default: return []
   } // ends switch/case 
 }
@@ -91,15 +91,15 @@ const returnGroupObjLabelFromCastedValuesArrString = (CastedValuesArrString) => 
     case "13,14,15,16,22,23,25,27,34,35,41,50": return "REGION - Midwest"
     case "1,4,8,9,10,17,18,20,24,33,36,40,42,43,46,48,49": return "REGION - South"
     case "2,3,5,6,11,12,26,28,31,37,44,47,51": return "REGION - West"
-    case "7,19,21,29,39,45": return "DIV - New England"
-    case "30,32,38": return "DIV - Mid-Atlantic"
-    case "13,14,22,35,50": return "DIV - E.N. Central"
-    case "15,16,23,25,27,34,41": return "DIV - W.N. Central"
-    case "8,9,10,20,33,40,46,48,49": return "DIV - S. Atlantic"
-    case "1,17,24,42": return "DIV - E.S. Central"
-    case "4,18,36,43": return "DIV - W.S. Central"
-    case "3,6,12,26,28,31,44,51": return "DIV - Mountain"
-    case "2,5,11,37,47": return "DIV - Pacific"
+    case "7,19,21,29,39,45": return ".    DIV - New England"
+    case "30,32,38": return ".    DIV - Mid-Atlantic"
+    case "13,14,22,35,50": return ".    DIV - E.N. Central"
+    case "15,16,23,25,27,34,41": return ".    DIV - W.N. Central"
+    case "8,9,10,20,33,40,46,48,49": return ".    DIV - S. Atlantic"
+    case "1,17,24,42": return ".    DIV - E.S. Central"
+    case "4,18,36,43": return ".    DIV - W.S. Central"
+    case "3,6,12,26,28,31,44,51": return ".    DIV - Mountain"
+    case "2,5,11,37,47": return ".    DIV - Pacific"
     default: return "returnGroupedStateStatesDropdownObjects switch  case in HelperFunctions/stateRelatedReferences.js"
   } // ends switch/case 
 }
@@ -162,25 +162,25 @@ const returnAllDropdownOptionsForStateMultiselect = () => {
 }
 
 const stateGroupDropdownOptionsArr = [
-    {value: 116, label: "2016 Clinton States", stateabbreviation: "Clinton"},
-    {value: 117, label: "2016 Trump States", stateabbreviation: "Trump"},
-    {value: 101, label: "GOVERNOR - Dem", stateabbreviation: "DEM"},
-    {value: 102, label: "GOVERNOR - Rep", stateabbreviation: "REP"},
-    {value: 103, label: "REGION - NorthEast", stateabbreviation: "NorthEast"},
-    {value: 107, label: "DIV - New England", stateabbreviation: "NewEngland"},
-    {value: 108, label: "DIV - Mid-Atlantic", stateabbreviation: "MidAtl"},
-    {value: 104, label: "REGION - Midwest", stateabbreviation: "MidWest"},
-    {value: 109, label: "DIV - E.N. Central", stateabbreviation: "ENC"},
-    {value: 110, label: "DIV - W.N. Central", stateabbreviation: "WNC"},
-    {value: 105, label: "REGION - South", stateabbreviation: "South"},
-    {value: 111, label: "DIV - S. Atlantic", stateabbreviation: "SAtlantic"},
-    {value: 112, label: "DIV - E.S. Central", stateabbreviation: "ES Central"},
-    {value: 113, label: "DIV - W.S. Central", stateabbreviation: "WS Central"},
-    {value: 106, label: "REGION - West", stateabbreviation: "West"},
-    {value: 114, label: "DIV - Mountain", stateabbreviation: "Mountain"},
-    {value: 115, label: "DIV - Pacific", stateabbreviation: "Pacific"}
-    ]
-
+  {value: 103, label: "REGION - NorthEast", stateabbreviation: "NorthEast"},
+  {value: 107, label: ".    DIV - New England", stateabbreviation: "NewEngland"},
+  {value: 108, label: ".    DIV - Mid-Atlantic", stateabbreviation: "MidAtl"},
+  {value: 104, label: "REGION - Midwest", stateabbreviation: "MidWest"},
+  {value: 109, label: ".    DIV - E.N. Central", stateabbreviation: "ENC"},
+  {value: 110, label: ".    DIV - W.N. Central", stateabbreviation: "WNC"},
+  {value: 105, label: "REGION - South", stateabbreviation: "South"},
+  {value: 111, label: ".    DIV - S. Atlantic", stateabbreviation: "SAtlantic"},
+  {value: 112, label: ".    DIV - E.S. Central", stateabbreviation: "ES Central"},
+  {value: 113, label: ".    DIV - W.S. Central", stateabbreviation: "WS Central"},
+  {value: 106, label: "REGION - West", stateabbreviation: "West"},
+  {value: 114, label: ".    DIV - Mountain", stateabbreviation: "Mountain"},
+  {value: 115, label: ".    DIV - Pacific", stateabbreviation: "Pacific"},
+  {value: 101, label: "GOVERNOR - Dem", stateabbreviation: "DEM"},
+  {value: 102, label: "GOVERNOR - Rep", stateabbreviation: "REP"},
+  {value: 116, label: "2016 Clinton States", stateabbreviation: "Clinton"},
+  {value: 117, label: "2016 Trump States", stateabbreviation: "Trump"}
+  ]
+  
 
 export { 
   returnAllDropdownOptionsForStateMultiselect,
