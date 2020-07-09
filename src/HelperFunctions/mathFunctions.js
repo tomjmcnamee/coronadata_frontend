@@ -64,7 +64,11 @@ const aggregateForPosPercentages = (allDatesArr, newPositive, newTotal, arrOfSel
         }, 
       0)
       aggPosPercentagesObj[day] = parseFloat(((tempPosResults * 100)/tempTestsTaken).toFixed(2))
+      if (!aggPosPercentagesObj[day] ) {
+        aggPosPercentagesObj[day] = 0
+      }
     } // ends FOR OF Loop
+    console.log("aggPosPercentagesObj  --- ", aggPosPercentagesObj)
     return aggPosPercentagesObj
 } /// ends aggregateForPosPercentages function
 
