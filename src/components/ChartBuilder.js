@@ -429,7 +429,9 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
-                <YAxis   />
+                <YAxis type="number"
+                  tickFormatter={(value) => yAxisLabel(value, "allothers")}
+                />
                 <Tooltip offset={60} itemStyle={tooltipStyle} />
                 <Legend iconType="plainline"  iconSize={30}  />
                 {chartLines}

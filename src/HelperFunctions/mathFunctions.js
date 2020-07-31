@@ -68,7 +68,6 @@ const aggregateForPosPercentages = (allDatesArr, newPositive, newTotal, arrOfSel
         aggPosPercentagesObj[day] = 0
       }
     } // ends FOR OF Loop
-    console.log("aggPosPercentagesObj  --- ", aggPosPercentagesObj)
     return aggPosPercentagesObj
 } /// ends aggregateForPosPercentages function
 
@@ -118,7 +117,7 @@ const abbreviateLargeNumbers = (value, decimals ) => {
   if (!value) {return 0} else {
     let stringVal = value.toString() || "0"
     let length = stringVal.length
-    if (length > 5) {
+    if (length > 4) {
       let newValue = value || 0;
       const suffixes = ["", "K", "M", "B","T"];
       let suffixNum = 0;

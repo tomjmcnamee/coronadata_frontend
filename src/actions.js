@@ -112,7 +112,6 @@ function setMultiSelectedStates (selected) {
   let groupObjFromSelectedStatesIdString = returnGroupObjLabelFromCastedValuesArrString(orderedIdsString)
   let stateGroupDropdownSelectionNEW = stateGroupDropdownOptionsArr.find(obj => obj.label ===  groupObjFromSelectedStatesIdString) || []
   selectedStatesBelongToThisGroup.push(stateGroupDropdownSelectionNEW)
-  console.log(" selectedStatesBelongToThisGroup AFGTER PUSH = ", selectedStatesBelongToThisGroup)
   return function (dispatch) {
     dispatch({ type: "SET MULTIPLE SELECTED STATE OBJS", payload: selected})
     dispatch({ type: "SET SINGLE SELECTED STATE GROUP ARR", payload: selectedStatesBelongToThisGroup})
