@@ -554,31 +554,33 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           return( 
             <>
                 {dateRangePicker()}
-                <h5>Select States or Group to Include In Chart</h5>
-                <MultiSelect
-                  options={dropdownOptionsForStates}
-                  value={this.props.multiSelectedStatesIdsArr}
-                  onChange={this.props.setMultiSelectedStates}
-                  labelledBy={"Select"}
-                  hasSelectAll
-                  overrideStrings={{ 
-                    "selectSomeItems": "Select States",
-                    "allItemsAreSelected": "All States Selected",
-                    "selectAll": "Select/Clear All",
-                  }}
-                  disableSearch
-                />
-                <MultiSelect
-                  options={dropdownOptionsForStateGroups}
-                  value={this.props.singleSelectStateGroupArr}
-                  onChange={(selected) => this.props.setStateGroupSelections(selected, this.props.singleSelectStateGroupArr)}
-                  labelledBy={"Select"}
-                  hasSelectAll={false}
-                  overrideStrings={{ 
-                    "selectSomeItems": "State Groups"
-                  }}
-                  disableSearch
-                />
+                <div className="dropdownBorder">
+                  <h5>Select States or Group to Include In Chart</h5>
+                  <MultiSelect 
+                    options={dropdownOptionsForStates}
+                    value={this.props.multiSelectedStatesIdsArr}
+                    onChange={this.props.setMultiSelectedStates}
+                    labelledBy={"Select"}
+                    hasSelectAll
+                    overrideStrings={{ 
+                      "selectSomeItems": "Select States",
+                      "allItemsAreSelected": "All States Selected",
+                      "selectAll": "Select/Clear All",
+                    }}
+                    disableSearch
+                  />
+                  <MultiSelect 
+                    options={dropdownOptionsForStateGroups}
+                    value={this.props.singleSelectStateGroupArr}
+                    onChange={(selected) => this.props.setStateGroupSelections(selected, this.props.singleSelectStateGroupArr)}
+                    labelledBy={"Select"}
+                    hasSelectAll={false}
+                    overrideStrings={{ 
+                      "selectSomeItems": "State Groups"
+                    }}
+                    disableSearch
+                  />
+                </div>
 
             <ResponsiveContainer width="99%" height={300}>                        
             <LineChart  data={chartData}  

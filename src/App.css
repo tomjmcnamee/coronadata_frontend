@@ -51,6 +51,14 @@
   margin: 3px;
 }
 
+.dropdownBorder {
+  width: max-content;
+  margin-right: auto; margin-left: auto;
+  border: 1px solid red;
+  border-radius: 10px;
+  padding: 1px 3px;
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
