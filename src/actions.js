@@ -12,9 +12,7 @@ import { returnSingleStateDropdownOptionObjWithStateName, returnAllDropdownOptio
 function fetchAllStatesData (numberOfDays, fromToDatesValue) {
   let startTime = (+ new Date())
   return function (dispatch) {
-    ("fetching from actoins")
     dispatch({ type: "SET NEW DEATH", payload: []})
-      
       fetch(process.env.REACT_APP_FETCH_LOCATION + "total_stats", {
         method: "GET",
         headers: {

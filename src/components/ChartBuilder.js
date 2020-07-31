@@ -97,7 +97,8 @@ class ChartBuilder extends React.Component {
       this.props.fetchAllStatesData("all", value)
       this.setState({ 
         datePickerValue: value,
-        displayDates: this.newDisplayDateArr(value)
+        displayDates: this.newDisplayDateArr(value),
+        newDeath: []
        })
     } else {
       this.setState({ 

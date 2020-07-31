@@ -304,7 +304,7 @@ class App extends React.Component {
                   
                   null
                 :
-                  this.props.newDeath.length === 0 
+                  this.props.allDatesArr.length === 0 
                   ?
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                   :
