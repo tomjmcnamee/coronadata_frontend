@@ -54,9 +54,10 @@
 .dropdownBorder {
   width: max-content;
   margin-right: auto; margin-left: auto;
-  border: 1px solid red;
+  border: 1px solid #CBF0F7;
   border-radius: 10px;
   padding: 1px 3px;
+  background-color:#CBF0F7;
 }
 
 
