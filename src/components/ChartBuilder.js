@@ -597,7 +597,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                 tickFormatter={(value) => yAxisLabel(value, "allothers")}
               />
               <YAxis 
-                type="number"
+                // type="number"
                 yAxisId="right" 
                 orientation='right' 
                 width={35} 
