@@ -12,7 +12,6 @@ import {
 
 import { getMonthDayFromYYYYMMDD, 
   getDashSeperatedInDATEFormatFromYYYYMMDD, 
-  getDashSeperatedDateFromYYYYMMDD,
   getYYYYMMDDfromFormattedDate,
   buildSecondIndexOfDatePickerValue  } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
@@ -178,11 +177,13 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     } = DateRangePicker;
 
 
+
+
     let dateRangePicker = () => {
       return <DateRangePicker 
                 cleanable={false}
                 showOneCalendar
-                disabledDate={allowedRange(getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), getDashSeperatedDateFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1))}         
+                disabledDate={allowedRange(getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr)))}   // IN PROD
                 value={(!!this.props.staticDatesArr && this.props.staticDatesArr.length < 35 ) ? this.state.datePickerValue : this.state.datePickerValue }
                 onChange={(value) => this.datePickerChangeHandler(value) }
         ranges={[{

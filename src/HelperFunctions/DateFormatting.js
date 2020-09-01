@@ -21,12 +21,6 @@ const getDashSeperatedInDATEFormatFromYYYYMMDD = (YYYYMMDDint) => {
   }
 };
 
-const getDashSeperatedDateFromYYYYMMDD = (YYYYMMDDint) => {
-  if (YYYYMMDDint) {
-    return YYYYMMDDint.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')
-    ;
-  }
-};
 
 // this should always be invoke with "new Date(buildSecondIndexOfDatePickerValue(var))"
 const buildSecondIndexOfDatePickerValue = (arrOrDate) => {
@@ -71,7 +65,6 @@ function getYYYYMMDDfromFormattedDate(d) {
 export { 
   getMonthDayFromYYYYMMDD, 
   getDashSeperatedInDATEFormatFromYYYYMMDD, 
-  getDashSeperatedDateFromYYYYMMDD,
   getYYYYMMDDfromFormattedDate ,
   buildSecondIndexOfDatePickerValue 
 }
