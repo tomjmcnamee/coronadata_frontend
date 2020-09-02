@@ -18,8 +18,8 @@ import {
     setNewOrTotal,
     setDisplayType,
     toggleGridlines,
-    singleInitialLineChooser
-        } from './actions'
+    singleInitialLineChooser,
+} from './actions'
 
 
 
@@ -29,7 +29,7 @@ class App extends React.Component {
   }
 
 
-  componentDidMount(){
+  componentWillMount(){
     // document.title = "CoronaVirus Data"        
     this.props.fetchAllStatesData("37")
   }
@@ -42,9 +42,11 @@ class App extends React.Component {
   }
    
   formChangeHandler = (event) => {
-    ("running form change handler")
-
     // This handles the BUTTONS
+    // if(event.target.value === "PositivePercent") {
+      // this.props.setPositivePercentagesArray(this.props.newTotal, this.props.newPositive, this.props.allDatesArr)
+    // }
+
     if (event.target.dataset.buttontype) {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
       if (event.target.name === "multiStateChart") {
@@ -94,6 +96,7 @@ class App extends React.Component {
   }
   
   render() {
+    // debugger
 
     return (
       
@@ -292,13 +295,13 @@ class App extends React.Component {
                   ?
                     // <div id="LineChart" >
                     <ChartBuilder 
-                                          gridType="multiStateChart"
+                      gridType="multiStateChart"
                     />
                   :
                   (this.props.displayType === "top10s")
                   ?
                     <ChartBuilder 
-                                          gridType="top10s"
+                      gridType="top10s"
                     />
                   :
                   
@@ -348,9 +351,9 @@ function mdp(dispatch) {
 function msp(state) {
   return { 
     allDatesArr: state.allDatesArr,
-    staticDatesArr: state.staticDatesArr,
+    // staticDatesArr: state.staticDatesArr,
     newDeath: state.newDeath,
-    stayAtHomeOrders: state.stayAtHomeOrders,
+    // stayAtHomeOrders: state.stayAtHomeOrders,
     displayType: state.displayType,
     selectedStatType: state.selectedStatType,
     newOrTotal: state.newOrTotal,
@@ -358,15 +361,15 @@ function msp(state) {
 
 
     newPositive: state.newPositive,
-    newNegative: state.newNegative,
-    newPositivePercent: state.newPositivePercent,
+    // newNegative: state.newNegative,
+    // newPositivePercent: state.newPositivePercent,
     newTotal: state.newTotal,
-    newHospitalized: state.newHospitalized,
-    totalPositive: state.totalPositive,
-    totalNegative: state.totalNegative,
-    totalDeath: state.totalDeath,
-    totalTotal: state.totalTotal,
-    totalHospitalized: state.totalHospitalized,
+    // newHospitalized: state.newHospitalized,
+    // totalPositive: state.totalPositive,
+    // totalNegative: state.totalNegative,
+    // totalDeath: state.totalDeath,
+    // totalTotal: state.totalTotal,
+    // totalHospitalized: state.totalHospitalized,
   }
 }
 

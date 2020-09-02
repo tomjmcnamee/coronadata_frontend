@@ -24,9 +24,9 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
       })
       .then(resp => resp.json())
       .then((response) => {
-        let percentages = buildPercentageArrays(response.newTotal, response.newNegative, response.newPositive, response.allDatesArr) 
-        if (!!fromToDatesValue)  
-        dispatch({ type: "SET FROMTO DATES VALUES", payload: fromToDatesValue}) 
+        if (!!fromToDatesValue) {
+          dispatch({ type: "SET FROMTO DATES VALUES", payload: fromToDatesValue}) 
+        }
         dispatch({ type: "SET ALL DATES ARRAY", payload: response.allDatesArr})
         dispatch({ type: "SET STATIC DATES ARRAY", payload: [...response.allDatesArr  ].reverse()})
         dispatch({ type: "SET TOTAL NEGATIVE", payload: response.totalNegative})
@@ -38,10 +38,12 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
         dispatch({ type: "SET NEW NEGATIVE", payload: response.newNegative})
         dispatch({ type: "SET NEW TOTAL", payload: response.newTotal})
         dispatch({ type: "SET NEW HOSPITALIZED", payload: response.newHospitalized})
-        dispatch({ type: "SET NEW POSITIVE PERCENT", payload: percentages[0]})
         dispatch({ type: "SET STAY AT HOME ORDERS", payload: response.stayAtHomeOrders})
         dispatch({ type: "SET NEW DEATH", payload: response.newDeath})
+        let percentages = buildPercentageArrays(response.newTotal, response.newPositive, response.allDatesArr) 
+        dispatch({ type: "SET NEW POSITIVE PERCENT", payload: percentages[0]})
         console.log("Processing Time for TOTAL Fetch = ", ((+ new Date()) - startTime)/1000 )
+
       })        
   } // ends Thunk middlewear function
 } // END fetchStateArr function
@@ -150,5 +152,4 @@ export {
   toggleGridlines,
   singleInitialLineChooser,
   setMultiSelectedStates,
-  setStateGroupSelections
-}
+  setStateGroupSelections}

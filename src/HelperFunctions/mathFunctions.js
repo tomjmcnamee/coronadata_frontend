@@ -1,4 +1,4 @@
-const buildPercentageArrays = (newTotal, newNegative, newPositive, allDatesArr, arrOfMultiSelectedStateIDs) => {
+const buildPercentageArrays = (newTotal, newPositive, allDatesArr) => {
   let newPositivePercentArr = []
   for (let totalObj of newTotal) {
     let newPosObj = {state_id: totalObj.state_id,  count_type: "new-positivePercent"}

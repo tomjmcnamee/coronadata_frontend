@@ -40,23 +40,12 @@ class ChartBuilder extends React.Component {
   
 
   componentDidMount(){
-
-
-
-
     //// This IF statement checks to see if a 'get all data' fetch was run
     if (!this.props.fromToDatesValue) {
       this.setState({
-        //// These two defaults to the last 30 days
-        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1 )],
-        // displayDates: this.newDisplayDateArr([getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 30]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] + 1 )])
-        
-        //// Use the below to default to ALL available dates
-        // datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[1]), getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] ).setDate(getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 1] ).getDate() + 1)],
         datePickerValue: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[8]),  new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))],
         displayDates: [...this.props.staticDatesArr].slice(7)
       })
-
     } else {
       // The page is being reloaded after a 'get all data' fetch
       this.setState({
@@ -66,15 +55,15 @@ class ChartBuilder extends React.Component {
     }
   }
 
-  formatYAxisForRateOfGrowth = (tickItem) => { return tickItem + "%" }
+  // formatYAxisForRateOfGrowth = (tickItem) => { return tickItem + "%" }
 
-  yLabel = () => {
-    if (this.props.newOrTotal==="new") {
-      return 'RoG = (current - previous) / previous'
-    } else {
-      return 'RoG = (present - total) / total'
-    }
-  }
+  // yLabel = () => {
+  //   if (this.props.newOrTotal==="new") {
+  //     return 'RoG = (current - previous) / previous'
+  //   } else {
+  //     return 'RoG = (present - total) / total'
+  //   }
+  // }
 
   toggleShowDailyNumbersInChart = () => {
     let newVal = !this.state.showDailyNumbers
@@ -123,38 +112,38 @@ class ChartBuilder extends React.Component {
     let count_types = []
     let state_type = []
 
-if (this.props.multiSelectedStatesIdsArr.length > 0) {
-        count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
-        state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
+    if (this.props.multiSelectedStatesIdsArr.length > 0) {
+      count_types = [this.props.newOrTotal + "-total",this.props.newOrTotal + "-positive",this.props.newOrTotal + "-negative",this.props.newOrTotal + "-death",this.props.newOrTotal + "-hospitalized"]
+      state_type =  [this.props.newOrTotal + "Total",this.props.newOrTotal + "Positive",this.props.newOrTotal + "Negative",this.props.newOrTotal + "Death",this.props.newOrTotal + "Hospitalized"]
 
-        let index = 0
-        let tempObj
-        let filteredArrayOfTypes
+      let index = 0
+      let tempObj
+      let filteredArrayOfTypes
+      
+      // this FILTER function ensures only the 'state groups' aree not seleected when you click "Select All"
+      let selectedStateIdsArr = this.props.multiSelectedStatesIdsArr.map(obj => obj.value)
+
+      for (let countT of count_types) {
+        filteredArrayOfTypes = this.props[state_type[index]].filter(({state_id}) => selectedStateIdsArr.includes(state_id));
         
-        // this FILTER function ensures only the 'state groups' aree not seleected when you click "Select All"
-        let selectedStateIdsArr = this.props.multiSelectedStatesIdsArr.map(obj => obj.value)
-
-        for (let countT of count_types) {
-          filteredArrayOfTypes = this.props[state_type[index]].filter(({state_id}) => selectedStateIdsArr.includes(state_id));
+        tempObj = {state_id: 100, "count_type": countT}
+        for (let day of this.props.staticDatesArr) {
           
-          tempObj = {state_id: 100, "count_type": countT}
-          for (let day of this.props.staticDatesArr) {
-            
-            tempObj[day] = filteredArrayOfTypes.reduce(
-              function(prev, curr) {
-                return prev + curr[day]
-              }, 0)
-            }
-          index++
-          output.push(tempObj)
-        }
-        //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
-        if (this.props.newOrTotal === "new") {
-          output.push(aggregateForPosPercentages(this.props.staticDatesArr, this.props.newPositive, this.props.newTotal, this.props.multiSelectedStatesIdsArr))
-        }
-        
-        return output
+          tempObj[day] = filteredArrayOfTypes.reduce(
+            function(prev, curr) {
+              return prev + curr[day]
+            }, 0)
+          }
+        index++
+        output.push(tempObj)
       }
+        //This next if statement doesn't send Postive% data to grid if t.s.newOrTotal = total
+      if (this.props.newOrTotal === "new") {
+        output.push(aggregateForPosPercentages(this.props.staticDatesArr, this.props.newPositive, this.props.newTotal, this.props.multiSelectedStatesIdsArr))
+      }
+        
+      return output
+    }
   }
   
   top10sData = () => {
@@ -162,8 +151,10 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     let lastDate = this.props.staticDatesArr[this.props.staticDatesArr.length - 1]
 
     let sortedObjects = [...this.props[this.props.newOrTotal + this.props.selectedStatType]].sort(function (a, b) { 
-      if (a[lastDate] > b[lastDate]) return -1;
-      if (a[lastDate] < b[lastDate]) return 1;
+      let rtn
+      if (a[lastDate] > b[lastDate]) rtn = -1;
+      if (a[lastDate] < b[lastDate]) rtn = 1;
+      return rtn
     }  )
     let top10StateIDs = sortedObjects.slice(0,10).map(obj => obj.state_id)
     for (let id of top10StateIDs) {
@@ -174,7 +165,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
   
   render () {
-    
+
 
     const {
       allowedRange
@@ -632,12 +623,17 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
               
 
             </LineChart>
-            </ResponsiveContainer>                  
-            <div >
-              <Button color="cyan" appearance="primary" size="sm" onClick={this.toggleShowDailyNumbersInChart}>
-                <span style={{fontWeight:"bold"}}>{this.state.showDailyNumbers ? "HIDE" : "SHOW" }</span> daily reported numbers
-              </Button>
-            </div>      
+            </ResponsiveContainer>   
+            {this.props.newOrTotal === "new"
+            ?            
+              <div >
+                <Button color="cyan" appearance="primary" size="sm" onClick={this.toggleShowDailyNumbersInChart}>
+                  <span style={{fontWeight:"bold"}}>{this.state.showDailyNumbers ? "HIDE" : "SHOW" }</span> daily reported numbers
+                </Button>
+              </div> 
+            :
+                null  
+            }      
           </>
           ) // ends "multiStateChart" RETURN
 
