@@ -165,7 +165,8 @@ class ChartBuilder extends React.Component {
 
   
   render () {
-
+    //This forces the daily numbers to be included in the chart if 'Total' is selected
+    if (this.props.newOrTotal === "total" && this.state.showDailyNumbers === false ) {this.setState({  showDailyNumbers: true })}
 
     const {
       allowedRange
