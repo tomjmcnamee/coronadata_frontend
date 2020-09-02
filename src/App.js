@@ -6,21 +6,21 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 // import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button } from 'rsuite';
-import loadingMap from './assets/USSpreadMap.gif'
-import fetchingALLdata from './assets/fetchingALLdata.gif'
 import { mapStateIdToStateName} from './HelperFunctions/mappingIDtoSomething'
 import { tableDescription } from './HelperFunctions/dynamicLabels'
 import './App.css';
 import { 
-    fetchAllStatesData,
-    jumpToDisplayAndState,
-    setSelectedStatType,
-    setNewOrTotal,
-    setDisplayType,
-    toggleGridlines,
-    singleInitialLineChooser,
+  fetchAllStatesData,
+  jumpToDisplayAndState,
+  setSelectedStatType,
+  setNewOrTotal,
+  setDisplayType,
+  toggleGridlines,
+  singleInitialLineChooser,
 } from './actions'
 
+const loadingMap = 'https://s3.us-east-2.amazonaws.com/coronadata.tjm/USSpreadMap.gif'
+const fetchingALLdataMapGif = 'https://s3.us-east-2.amazonaws.com/coronadata.tjm/fetchingALLdata.gif'
 
 
 class App extends React.Component {
@@ -29,7 +29,7 @@ class App extends React.Component {
   }
 
 
-  componentWillMount(){
+  componentDidMount(){
     // document.title = "CoronaVirus Data"        
     this.props.fetchAllStatesData("37")
   }
@@ -311,7 +311,7 @@ class App extends React.Component {
                   ?
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                   :
-                  <img src={fetchingALLdata} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
+                  <img src={fetchingALLdataMapGif} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                 }
               </Col>
           </Row>
