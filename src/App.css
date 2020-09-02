@@ -52,7 +52,7 @@
 }
 
 .dropdownBorder {
-  width: max-content;
+  width: 99%;
   margin-right: auto; margin-left: auto;
   border: 1px solid #CBF0F7;
   border-radius: 10px;

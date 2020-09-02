@@ -207,7 +207,9 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
     }
 
     const tooltipStyle = {
-      textAlign: 'left',
+      // textAlign: 'left',
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      lineHeight: '50%'
       // backgroundImage: 'url(' + imgUrl + ')',
     };
 
@@ -245,7 +247,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           isAnimationActive:true,
           animateNewValues:true,
           animationBegin:0,
-          animationDuration:1500,
+          animationDuration:500,
           animationEasing:"ease",
           hide:false
         }
@@ -269,7 +271,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           isAnimationActive:true,
           animateNewValues:true,
           animationBegin:0,
-          animationDuration:1500,
+          animationDuration:500,
           animationEasing:"ease",
           hide:false
         }
@@ -293,7 +295,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
             isAnimationActive:true,
             animateNewValues:true,
             animationBegin:0,
-            animationDuration:1500,
+            animationDuration:500,
             animationEasing:"ease",
             hide:false
           }
@@ -317,7 +319,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           isAnimationActive:true,
           animateNewValues:true,
           animationBegin:0,
-          animationDuration:1500,
+          animationDuration:500,
           animationEasing:"ease",
           hide:false
         }
@@ -341,7 +343,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           isAnimationActive:true,
           animateNewValues:true,
           animationBegin:0,
-          animationDuration:1500,
+          animationDuration:500,
           animationEasing:"ease",
           hide:false
         }
@@ -365,7 +367,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           isAnimationActive:true,
           animateNewValues:true,
           animationBegin:0,
-          animationDuration:1500,
+          animationDuration:500,
           animationEasing:"ease",
           hide:false
         }
@@ -390,7 +392,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
           isAnimationActive:true,
           animateNewValues:true,
           animationBegin:0,
-          animationDuration:1500,
+          animationDuration:500,
           animationEasing:"ease",
           hide:false
         }
@@ -438,7 +440,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                 <YAxis type="number"
                   tickFormatter={(value) => yAxisLabel(value, "allothers")}
                 />
-                <Tooltip offset={60} itemStyle={tooltipStyle} />
+                <Tooltip offset={60} itemStyle={{textAlign: 'left'}} contentStyle={tooltipStyle} />
                 <Legend iconType="plainline"  iconSize={30}  />
                 {chartLines}
               </LineChart>
@@ -561,7 +563,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
             <>
                 {dateRangePicker()}
                 <div className="dropdownBorder">
-                  <h5>Select States or Group to Include In Chart</h5>
+                  <h5>Select States or Group to Include</h5>
                   <MultiSelect 
                     options={dropdownOptionsForStates}
                     value={this.props.multiSelectedStatesIdsArr}
@@ -590,7 +592,7 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
             <ResponsiveContainer width="99%" height={300}>                        
             <LineChart  data={chartData}  
-              margin={{ top: 5, right: 2, left: 0, bottom: 5 }}>
+              margin={{ top: 5, right: 0, left: -20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis type="number"
@@ -602,10 +604,10 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
                 orientation='right' 
                 width={35} 
                 tickFormatter={(value) => yAxisLabel(value, "percentage")}
-                // domain={[0, dataMax => (Math.ceil(dataMax))]}
+                // domain={[0, dataMax => (Math.ceil(dataMax))]} 
               
               />
-              <Tooltip offset={60} itemStyle={tooltipStyle} />
+              <Tooltip offset={60} itemStyle={{textAlign: 'left'}} contentStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
               {/* {stayAtHomeOrderXReferences} */}
               {/* <Legend onClick={this.handleLegendClick} iconType="plainline"  iconSize={30} /> */}
@@ -631,8 +633,8 @@ if (this.props.multiSelectedStatesIdsArr.length > 0) {
 
             </LineChart>
             </ResponsiveContainer>                  
-            <div onClick={this.toggleShowDailyNumbersInChart}>
-              <Button color="cyan" appearance="primary" size="sm">
+            <div >
+              <Button color="cyan" appearance="primary" size="sm" onClick={this.toggleShowDailyNumbersInChart}>
                 <span style={{fontWeight:"bold"}}>{this.state.showDailyNumbers ? "HIDE" : "SHOW" }</span> daily reported numbers
               </Button>
             </div>      
