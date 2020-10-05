@@ -45,12 +45,6 @@ class App extends React.Component {
   }
    
   viewAndNewTotalButtonChangeHandler = (event) => {
-    // This handles the BUTTONS
-    // if(event.target.value === "PositivePercent") {
-      // this.props.setPositivePercentagesArray(this.props.newTotal, this.props.newPositive, this.props.allDatesArr)
-    // }
-
-    if (event.target.dataset.buttontype) {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
       if (event.target.name === "multiStateChart") {
         this.props.singleInitialLineChooser(this.props.selectedStatType)
@@ -62,11 +56,6 @@ class App extends React.Component {
       if (event.target.dataset.buttontype === "displayType") this.props.setDisplayType(event.target.name)
            
       //// WORKING WHN ONLY HAS THE DROPDOWN
-    } else {
-      // This handles the Dropdowns
-      this.percentageForNewOnlyLogicHandler(event)
-      if (event.target.name === "selectedStatType" ) this.props.setSelectedStatType(event.target.value)
-    }
   }
 
   formToggleHandler = (event) => {
