@@ -6,21 +6,24 @@ import { Form, Col, Container, Row} from 'react-bootstrap'
 // import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button } from 'rsuite';
-import loadingMap from './assets/USSpreadMap.gif'
-import fetchingALLdata from './assets/fetchingALLdata.gif'
-import { mapStateIdToStateName} from './HelperFunctions/mappingIDtoSomething'
+import { 
+  mapStateIdToStateName,
+  mapButtonNameToSelectedStatTypeValue
+  } from './HelperFunctions/mappingIDtoSomething'
 import { tableDescription } from './HelperFunctions/dynamicLabels'
 import './App.css';
 import { 
-    fetchAllStatesData,
-    jumpToDisplayAndState,
-    setSelectedStatType,
-    setNewOrTotal,
-    setDisplayType,
-    toggleGridlines,
-    singleInitialLineChooser,
-} from './actions'
+  fetchAllStatesData,
+  jumpToDisplayAndState,
+  setSelectedStatType,
+  setNewOrTotal,
+  setDisplayType,
+  toggleGridlines,
+  singleInitialLineChooser,
+  } from './actions'
 
+const loadingMap = 'https://s3.us-east-2.amazonaws.com/coronadata.tjm/USSpreadMap.gif'
+const fetchingALLdataMapGif = 'https://s3.us-east-2.amazonaws.com/coronadata.tjm/fetchingALLdata.gif'
 
 
 class App extends React.Component {
@@ -29,45 +32,42 @@ class App extends React.Component {
   }
 
 
-  componentWillMount(){
+  componentDidMount(){
     // document.title = "CoronaVirus Data"        
     this.props.fetchAllStatesData("37")
   }
   
-  percentageLogicHandler = (event) => {
+  percentageForNewOnlyLogicHandler = (event) => {
     // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
     if (this.props.newOrTotal === "new" && this.props.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
         this.props.setSelectedStatType("Positive")
     }
   }
    
-  formChangeHandler = (event) => {
-    // This handles the BUTTONS
-    // if(event.target.value === "PositivePercent") {
-      // this.props.setPositivePercentagesArray(this.props.newTotal, this.props.newPositive, this.props.allDatesArr)
-    // }
-
-    if (event.target.dataset.buttontype) {
+  viewAndNewTotalButtonChangeHandler = (event) => {
       // this if statement adds the t.s.selectedStatType line when opening 'Single Single State Chart' line graph
       if (event.target.name === "multiStateChart") {
         this.props.singleInitialLineChooser(this.props.selectedStatType)
       }
       
-      this.percentageLogicHandler(event)
+      this.percentageForNewOnlyLogicHandler(event)
       // This IF block changes StatTyp FROM Pos% if 'Totals' button is clicked 
       if (event.target.dataset.buttontype === "newOrTotal") this.props.setNewOrTotal(event.target.name)
       if (event.target.dataset.buttontype === "displayType") this.props.setDisplayType(event.target.name)
-            
-    } else {
-      // This handles the Dropdowns
-      this.percentageLogicHandler(event)
-      if (event.target.name === "selectedStatType") this.props.setSelectedStatType(event.target.value)
-    }
+           
+      //// WORKING WHN ONLY HAS THE DROPDOWN
   }
 
   formToggleHandler = (event) => {
-    let newVal = !this.props.includeGridLines[event.target.name]
-    this.props.toggleGridlines(event.target.name, newVal)
+    if (this.props.displayType === "multiStateChart" )  {
+      let newVal = !this.props.includeGridLines[event.target.name]
+      this.props.toggleGridlines(event.target.name, newVal)
+
+      if (event.target.name === "selectedStatType" ) this.props.setSelectedStatType(event.target.value)
+    // debugger
+    } else { 
+      this.props.setSelectedStatType(mapButtonNameToSelectedStatTypeValue(event.target.name))
+    }
   }
 
   dropdownOptionsForStates = () => {
@@ -118,7 +118,7 @@ class App extends React.Component {
                       Raw Numbers<br />Tables
                     </Button>
                   :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="table"  onClick={this.formChangeHandler}>
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="table"  onClick={this.viewAndNewTotalButtonChangeHandler}>
                       Raw Numbers<br />Tables
                     </Button>
                   }
@@ -128,7 +128,7 @@ class App extends React.Component {
                       Single State and <br />Aggregate Chart
                     </Button>
                   :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="multiStateChart"  onClick={this.formChangeHandler}>
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="multiStateChart"  onClick={this.viewAndNewTotalButtonChangeHandler}>
                       Single State and <br />Aggregate Chart
                     </Button>
                   }  
@@ -138,38 +138,13 @@ class App extends React.Component {
                       Top 10<br />Charts
                     </Button>
                   :
-                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="top10s"  onClick={this.formChangeHandler}>
+                    <Button className="maintypebuttonNotSelected" data-buttontype="displayType"  color="cyan" appearance="ghost" size="sm" name="top10s"  onClick={this.viewAndNewTotalButtonChangeHandler}>
                       Top 10<br />Charts
                     </Button>
                   }
                 </Form.Group  >
               </Form.Row>
             </Form >
-          </Row>
-          <Row>
-            <Col  sm={3}>
-              <Form >
-                <Form.Row>
-                  <Form.Group  >
-                    {(this.props.displayType === "table" || this.props.displayType === "top10s")
-                    ?
-                      <Form.Control as="select" name="selectedStatType" value={this.props.selectedStatType} onChange={this.formChangeHandler} > 
-                        <option value="Positive">Test Results: Positive</option>
-                        {this.props.newOrTotal === "new" ? <option value="PositivePercent">Positive Results Percentage</option> : null }
-                        <option value="Negative">Test Results: Negative</option>
-                        {/* {this.props.newOrTotal === "new" ? <option value="NegativePercent">Negative Results Percentage</option> : null } */}
-                        <option value="Total">Total Tested</option>
-                        <option value="Hospitalized">Total Hospitalized</option>
-                        <option value="Death">Corona Deaths</option>
-                      </Form.Control>
-                    :
-                    null
-                    }
-                  </Form.Group  >
-                </Form.Row>
-              </Form>
-              
-            </Col>
           </Row>
           <Row>
             <Col className="justify-content-center" sm={3}>
@@ -182,7 +157,7 @@ class App extends React.Component {
                         New Per Day
                       </Button>
                     :
-                      <Button className="typebutton" data-buttontype="newOrTotal" appearance="ghost" size="md" name="new"  onClick={this.formChangeHandler}>
+                      <Button className="typebutton" data-buttontype="newOrTotal" appearance="ghost" size="md" name="new"  onClick={this.viewAndNewTotalButtonChangeHandler}>
                         New Per Day
                       </Button>
                     }
@@ -192,7 +167,7 @@ class App extends React.Component {
                         Total
                     </Button>
                     :
-                      <Button className="typebutton"  data-buttontype="newOrTotal" appearance="ghost" size="md" name="total"  onClick={this.formChangeHandler}>
+                      <Button className="typebutton"  data-buttontype="newOrTotal" appearance="ghost" size="md" name="total"  onClick={this.viewAndNewTotalButtonChangeHandler}>
                         Total
                     </Button>
                     }
@@ -201,10 +176,9 @@ class App extends React.Component {
               </Form>
             </Col>
           </Row>
-          {this.props.displayType === "multiStateChart"
-          ? 
+
           <Row>
-              {this.props.includeGridLines.includeTested
+              {(this.props.displayType === "multiStateChart" && this.props.includeGridLines.includeTested) || (this.props.displayType !== "multiStateChart" && this.props.selectedStatType === "Total")
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeTested" onClick={this.formToggleHandler} active >
                   Total Tested
@@ -214,7 +188,7 @@ class App extends React.Component {
                   Total Tested
                 </Button>
               }
-              {this.props.includeGridLines.includeNegatives
+              {(this.props.displayType === "multiStateChart" && this.props.includeGridLines.includeNegatives) || (this.props.displayType !== "multiStateChart" && this.props.selectedStatType === "Negative")
               ?
               <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeNegatives" onClick={this.formToggleHandler} active >
                   Negative Results
@@ -224,7 +198,7 @@ class App extends React.Component {
                   Negative Results
                 </Button>
               }
-              {this.props.includeGridLines.includePositives
+              {(this.props.displayType === "multiStateChart" && this.props.includeGridLines.includePositives) || (this.props.displayType !== "multiStateChart" && this.props.selectedStatType === "Positive")
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositives" onClick={this.formToggleHandler} active >
                   Positive Results
@@ -238,7 +212,7 @@ class App extends React.Component {
               ?
                 null  // this hides the option to show Pos% on line graph if viewing TOTAL (instead of NEW)
               :
-              this.props.includeGridLines.includePositivePercent
+              (this.props.displayType === "multiStateChart" && this.props.includeGridLines.includePositivePercent) || (this.props.displayType !== "multiStateChart" && this.props.selectedStatType === "PositivePercent")
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includePositivePercent" onClick={this.formToggleHandler} active >
                   Positive Percentage
@@ -248,7 +222,7 @@ class App extends React.Component {
                   Positive Percentage
                 </Button>
               }
-              {this.props.includeGridLines.includeHospitalized
+              {(this.props.displayType === "multiStateChart" && this.props.includeGridLines.includeHospitalized) || (this.props.displayType !== "multiStateChart" && this.props.selectedStatType === "Hospitalized")
               ?
                 <Button className="typebutton"  color="green" appearance="primary" size="sm" name="includeHospitalized" onClick={this.formToggleHandler} active >
                   Hospitalized
@@ -258,7 +232,7 @@ class App extends React.Component {
                   Hospitalized
               </Button>
               }
-              {this.props.includeGridLines.includeDeaths
+              {(this.props.displayType === "multiStateChart" && this.props.includeGridLines.includeDeaths) || (this.props.displayType !== "multiStateChart" && this.props.selectedStatType === "Death")
               ?
                 <Button className="typebutton"   color="green" appearance="primary" size="sm" name="includeDeaths" onClick={this.formToggleHandler} active >
                   Deaths
@@ -269,9 +243,7 @@ class App extends React.Component {
               </Button>
               }
           </Row>  
-          :
-          null
-          }
+
           <Row>
             <Col sm={12} >
               <h5>{this.props.newDeath.length > 0 ? tableDescription(this.props.newOrTotal, this.props.selectedStatType, this.props.displayType) : null }</h5>
@@ -311,7 +283,7 @@ class App extends React.Component {
                   ?
                   <img src={loadingMap} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                   :
-                  <img src={fetchingALLdata} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
+                  <img src={fetchingALLdataMapGif} id="outbreak_map_gif" alt="Loading gif - outbreak map" ></img>
                 }
               </Col>
           </Row>
@@ -374,4 +346,3 @@ function msp(state) {
 }
 
 export default connect(msp, mdp)(App)
-

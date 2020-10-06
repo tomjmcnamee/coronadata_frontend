@@ -1,3 +1,4 @@
+
 // const mapMakeIdToMakeName = (allMakes,id) => {
   
 
@@ -224,9 +225,22 @@ const mapCountTypeToHumanReadableType = (counttype) => {
   } // ends switch/case 
 }
 
+const mapButtonNameToSelectedStatTypeValue = (buttonName) => {
+  switch (buttonName) {
+    case "includeTested": return "Total"
+    case "includeNegatives": return "Negative"
+    case "includePositives": return "Positive"
+    case "includePositivePercent": return "PositivePercent"
+    case "includeHospitalized": return "Hospitalized"
+    case "includeDeaths": return "Death"
+    default: return "mapButtonNameToSelectedStatTypeValue switch  case in HelperFunctions/mappingIDtoSomething.js"
+  } // ends switch/case 
+}
+
 export { 
   // mapStateIdToStateAbbreviation,
   mapStateIdToStateName,
   mapStateNameToStateId,
-  mapCountTypeToHumanReadableType
+  mapCountTypeToHumanReadableType,
+  mapButtonNameToSelectedStatTypeValue
   }
