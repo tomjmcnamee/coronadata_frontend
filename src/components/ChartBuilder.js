@@ -584,7 +584,7 @@ class ChartBuilder extends React.Component {
 
             <ResponsiveContainer width="99%" height={300}>                        
             <LineChart  data={chartData}  
-              margin={{ top: 5, right: 0, left: -20, bottom: 5 }}>
+              margin={{ top: 5, right: 0, left: -10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis type="number"
