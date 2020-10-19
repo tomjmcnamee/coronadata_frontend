@@ -629,7 +629,7 @@ class ChartBuilder extends React.Component {
             ?            
               <div >
                 <Button color="cyan" appearance="primary" size="sm" onClick={this.toggleShowDailyNumbersInChart}>
-                  <span style={{fontWeight:"bold"}}>{this.state.showDailyNumbers ? "HIDE" : "SHOW" }</span> daily reported numbers
+                  <span style={{fontWeight:"bold"}}>{this.state.showDailyNumbers ? "HIDE" : "INCLUDE" }</span> daily reported numbers
                 </Button>
               </div> 
             :
