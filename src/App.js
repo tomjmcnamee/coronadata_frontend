@@ -325,7 +325,6 @@ function msp(state) {
     allDatesArr: state.allDatesArr,
     // staticDatesArr: state.staticDatesArr,
     newDeath: state.newDeath,
-    // stayAtHomeOrders: state.stayAtHomeOrders,
     displayType: state.displayType,
     selectedStatType: state.selectedStatType,
     newOrTotal: state.newOrTotal,

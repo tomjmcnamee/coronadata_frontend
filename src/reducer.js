@@ -14,7 +14,6 @@ let defaultState = {
   newTotal: [],
   newHospitalized: [],
   newPositivePercent: [],
-  stayAtHomeOrders: [],
   newDeath: [],
   
   displayType: "table",
@@ -160,14 +159,7 @@ function newDeathReducer(state = defaultState.newDeath, action) {
   }
 }
 
-function stayAtHomeOrdersReducer(state = defaultState.stayAtHomeOrders, action) {
-  switch (action.type) {
-      case "SET STAY AT HOME ORDERS":
-          return action.payload
-      default:
-          return state
-  }
-}
+
 
 
 
@@ -259,7 +251,6 @@ let reducer = combineReducers({
   totalDeath: totalDeathReducer,
   totalTotal: totalTotalReducer,
   totalHospitalized: totalHospitalizedReducer,
-  stayAtHomeOrders: stayAtHomeOrdersReducer,
   displayType: displayTypeReducer, 
   selectedStatType: selectedStatTypeReducer,
   newOrTotal: newOrTotalReducer,

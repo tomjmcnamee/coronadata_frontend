@@ -477,12 +477,7 @@ class ChartBuilder extends React.Component {
           //   )
           // } // ends GridLines IF statement
 
-          // let stayAtHomeOrderXReferences
-          // if (this.props.filteredStayAtHomeOrders.length > 0 ) {
-          //   stayAtHomeOrderXReferences = this.props.filteredStayAtHomeOrders.map((obj, index) => <ReferenceLine key={index} x={getMonthDayFromYYYYMMDD(obj.date)} stroke={obj.orderAction === "lifted" ? 'green':'red'}  >
-          //       <Label position="insideTop">{obj.order_action === "lifted" ? `Stay At Home: Lifted`:`Stay At Home: Imposed`}</Label>
-          //     </ReferenceLine>)
-          // }
+
           
 
           
@@ -500,7 +495,6 @@ class ChartBuilder extends React.Component {
           //     <YAxis   />
           //     <Tooltip offset={60} itemStyle={tooltipStyle} />
           //     {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
-          //     {stayAtHomeOrderXReferences}
           //     {/* <Legend onClick={this.handleLegendClick} iconType="plainline"  iconSize={30} /> */}
           //     <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
             
@@ -601,7 +595,6 @@ class ChartBuilder extends React.Component {
               />
               <Tooltip offset={60} itemStyle={{textAlign: 'left'}} contentStyle={tooltipStyle} />
               {/* <ReferenceLine x="03/23" stroke="green" label="Min PAGE" /> */}
-              {/* {stayAtHomeOrderXReferences} */}
               {/* <Legend onClick={this.handleLegendClick} iconType="plainline"  iconSize={30} /> */}
               <Legend payload={legendPayload}    iconType="plainline"  iconSize={30}  />
             

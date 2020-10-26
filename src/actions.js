@@ -38,7 +38,6 @@ function fetchAllStatesData (numberOfDays, fromToDatesValue) {
         dispatch({ type: "SET NEW NEGATIVE", payload: response.newNegative})
         dispatch({ type: "SET NEW TOTAL", payload: response.newTotal})
         dispatch({ type: "SET NEW HOSPITALIZED", payload: response.newHospitalized})
-        dispatch({ type: "SET STAY AT HOME ORDERS", payload: response.stayAtHomeOrders})
         dispatch({ type: "SET NEW DEATH", payload: response.newDeath})
         let percentages = buildPercentageArrays(response.newTotal, response.newPositive, response.allDatesArr) 
         dispatch({ type: "SET NEW POSITIVE PERCENT", payload: percentages[0]})
