@@ -164,7 +164,9 @@ class ChartBuilder extends React.Component {
   }
 
   
+  
   render () {
+    
     //This forces the daily numbers to be included in the chart if 'Total' is selected
     if (this.props.newOrTotal === "total" && this.state.showDailyNumbers === false ) {this.setState({  showDailyNumbers: true })}
 
@@ -549,7 +551,7 @@ class ChartBuilder extends React.Component {
             <>
                 {dateRangePicker()}
                 <div className="dropdownBorder">
-                  <h5>Select States or Group to Include</h5>
+                  <h5>Select State/s or Group to Include</h5>
                   <MultiSelect 
                     options={dropdownOptionsForStates}
                     value={this.props.multiSelectedStatesIdsArr}

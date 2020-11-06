@@ -105,7 +105,7 @@
   --rmsc-spacing: 3px;
   --rmsc-border-radius: 4px;
   --rmsc-height: 20px;
-  width: 160px;
+  width: 175px;
   max-width: 400px;
   display: inline-block;
   text-align: left;
@@ -113,6 +113,8 @@
   /* position: relative; */
 
 }
+
+
 
 @media only screen and (max-width: 820px) {
       
@@ -149,6 +151,8 @@ width: 100%;
 float: left;
 width: 100%;
 }
+
+
 
 .row {
 max-width: 370px;
