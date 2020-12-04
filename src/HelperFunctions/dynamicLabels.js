@@ -5,7 +5,7 @@
     let newOrCumulative = () => {
       switch (newOrTotal) {
         case "new": return "Daily"
-        case "total": return "Cumulative"
+        case "total": return "Total"
         default: return
       }
     }
@@ -35,8 +35,13 @@
 
     if (displayType === "table" && selectedStatType === "PositivePercent" ) {
       return 'Percentage of total tests taken that were Positive each day'
+    } else if (selectedStatType === "Hospitalized"){
+      if  (newOrTotal === "new")
+        return "Count of new hospitalizations per day"
+      else
+        return "Count of total hospitalizations per day"
     } else if (displayType === "table"){
-      return `${newOrCumulative()} count of ${tableDesc()}`
+      return `${newOrCumulative()} count of ${tableDesc()}  `
     } else if (displayType === "top10s") {
       if (newOrTotal === "new") {
         return `States with the 10 ${mostOrHighest()} ${tableDesc()} reported on last date in range`
