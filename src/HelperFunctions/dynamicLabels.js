@@ -39,7 +39,7 @@
       if  (newOrTotal === "new")
         return "Count of new hospitalizations per day"
       else
-        return "Count of total hospitalizations per day"
+        return "Count of currently hospitalized per day"
     } else if (displayType === "table"){
       return `${newOrCumulative()} count of ${tableDesc()}  `
     } else if (displayType === "top10s") {

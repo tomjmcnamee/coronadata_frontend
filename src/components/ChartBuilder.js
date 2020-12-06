@@ -14,7 +14,7 @@ import {
 import { getMonthDayFromYYYYMMDD, 
   getDashSeperatedInDATEFormatFromYYYYMMDD, 
   getYYYYMMDDfromFormattedDate,
-  buildSecondIndexOfDatePickerValue  } from '../HelperFunctions/DateFormatting' 
+  buildSecondIndexOfDatePickerValue, allDatesThrough2021  } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
 import { fetchAllStatesData } from '../actions'
 import MultiSelect from "react-multi-select-component";
@@ -185,14 +185,16 @@ class ChartBuilder extends React.Component {
                 value={(!!this.props.staticDatesArr && this.props.staticDatesArr.length < 35 ) ? this.state.datePickerValue : this.state.datePickerValue }
                 onChange={(value) => this.datePickerChangeHandler(value) }
         ranges={[{
-          label: 'Last 7',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 7]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
+          label: 'Last 60',
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(allDatesThrough2021[allDatesThrough2021.indexOf(this.props.staticDatesArr[this.props.staticDatesArr.length - 1]) - 60]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
         }, {
-          label: 'Last 14',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 14]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
+          label: 'Last 120',
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(allDatesThrough2021[allDatesThrough2021.indexOf(this.props.staticDatesArr[this.props.staticDatesArr.length - 1]) - 120]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
         }, {
-          label: 'Last 30',
-          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 30]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
+          label: 'Last 180',
+          // value: [getDashSeperatedInDATEFormatFromYYYYMMDD(this.props.staticDatesArr[this.props.staticDatesArr.length - 100]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
+          value: [getDashSeperatedInDATEFormatFromYYYYMMDD(allDatesThrough2021[allDatesThrough2021.indexOf(this.props.staticDatesArr[this.props.staticDatesArr.length - 1]) - 180]), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
+          // value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200901), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
         }, {
           label: 'since 2-28-20',
           value: [getDashSeperatedInDATEFormatFromYYYYMMDD(20200229), new Date(buildSecondIndexOfDatePickerValue(this.props.staticDatesArr))]
