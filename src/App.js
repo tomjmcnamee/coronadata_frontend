@@ -300,6 +300,10 @@ class App extends React.Component {
             </a>
           </> 
         : null}
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
       </div>
     ) //ends return
   } // ends render
