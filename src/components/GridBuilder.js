@@ -81,7 +81,7 @@ import {
       }   // Ends IF re: not 'percentage' view
       for (let obj of formattedGridLinesArr) {
         for (let num in obj ) {
-          if (num.includes(2020)) {
+          if (num.includes(2020) || num.includes(2021)) {
             obj[num] = abbreviateLargeNumbers(obj[num],1)
           }
         }
