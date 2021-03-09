@@ -105,7 +105,7 @@ class App extends React.Component {
           <Row > 
             <Col sm={12} >
               <h3>Coronavirus in the US: by the numbers</h3>
-              <h4 style={{color:'red'}}>Update: The Covid Tracking Project has <a href='https://covidtracking.com/analysis-updates/covid-tracking-project-end-march-7'>stopped publishing tracking data</a>. Thank you to all the volunteers that gathered the data used by this site. This site had its last update on 3/7/21. I hope you enjoyed staying up to date, and stay healthy out there!</h4>
+              <h4 style={{color:'red'}}>Update: The Covid Tracking Project has <a href='https://covidtracking.com/analysis-updates/covid-tracking-project-end-march-7'>stopped publishing tracking data</a>. Thank you to all the volunteers that gathered the data and made it available. This site had its last update on 3/7/21. I hope you enjoyed staying up to date, and stay healthy out there!</h4>
             </Col>
           </Row>
           <Row>
