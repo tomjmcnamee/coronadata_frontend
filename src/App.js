@@ -38,7 +38,7 @@ class App extends React.Component {
   }
   
   percentageForNewOnlyLogicHandler = (event) => {
-    // This block resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
+    // This block  resets StatType to Positive WHEN Pos% is active and use clicks TOTAL
     if (this.props.newOrTotal === "new" && this.props.selectedStatType === "PositivePercent" && event && event.target.dataset.buttontype === "newOrTotal" ) {
         this.props.setSelectedStatType("Positive")
     }
