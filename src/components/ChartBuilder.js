@@ -16,7 +16,7 @@ import { getMonthDayFromYYYYMMDD,
   getYYYYMMDDfromFormattedDate,
   buildSecondIndexOfDatePickerValue, allDatesThrough2021  } from '../HelperFunctions/DateFormatting' 
 import { mapStateIdToStateName, mapCountTypeToHumanReadableType } from '../HelperFunctions/mappingIDtoSomething' 
-import { fetchAllStatesData } from '../actions'
+// import { fetchAllStatesData } from '../actions'
 import MultiSelect from "react-multi-select-component";
 import { returnAllDropdownOptionsForStateMultiselect, stateGroupDropdownOptionsArr } from '../HelperFunctions/stateRelatedReferences'
 
@@ -90,7 +90,7 @@ class ChartBuilder extends React.Component {
         && 
         (!!this.props.staticDatesArr && this.props.staticDatesArr.length < 39 )
       ) {
-      this.props.fetchAllStatesData("all", value)
+      // this.props.fetchAllStatesData("all", value)
       this.setState({ 
         datePickerValue: value,
         displayDates: this.newDisplayDateArr(value),
@@ -725,7 +725,7 @@ class ChartBuilder extends React.Component {
 
 function mdp(dispatch) {
   return { 
-    fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue)),
+    // fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue)),
     setMultiSelectedStates: (one, two) => dispatch(setMultiSelectedStates(one, two)),
     setStateGroupSelections: (one, two) => dispatch(setStateGroupSelections(one, two)),
 

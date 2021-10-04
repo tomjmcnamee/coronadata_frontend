@@ -13,7 +13,7 @@ import {
 import { tableDescription } from './HelperFunctions/dynamicLabels'
 import './App.css';
 import { 
-  fetchAllStatesData,
+  // fetchAllStatesData,
   jumpToDisplayAndState,
   setSelectedStatType,
   setNewOrTotal,
@@ -33,8 +33,7 @@ class App extends React.Component {
 
 
   componentDidMount(){
-    // document.title = "CoronaVirus Data"        
-    this.props.fetchAllStatesData("37")
+    // this.props.fetchAllStatesData("37")
   }
   
   percentageForNewOnlyLogicHandler = (event) => {
@@ -314,7 +313,7 @@ class App extends React.Component {
 
 function mdp(dispatch) {
   return { 
-    fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue)),
+    // fetchAllStatesData: (countOfDays, fromToDatesValue) => dispatch(fetchAllStatesData(countOfDays, fromToDatesValue)),
     jumpToDisplayAndState: (displayType, stateName) => dispatch(jumpToDisplayAndState(displayType, stateName)),
     setSelectedStatType: (typeName) => dispatch(setSelectedStatType(typeName)),
     setNewOrTotal: (newOrTotal) => dispatch(setNewOrTotal(newOrTotal)),
